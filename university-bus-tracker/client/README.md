@@ -23,6 +23,40 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
+# 🗺️ Site Map
+
+After running `npx expo start` and selecting a device, the app will open at `http://localhost:8081/student`  
+(Note: The port may vary on each machine)
+
+---
+
+## 🔵 `/student` – For Students  
+**Login is required every time**
+
+- `/student/dashboard` – View online buses and filter to report issues  
+- `/student/report` – Submit comments or issue reports  
+- `/student/history` – View the student’s report history
+
+---
+
+## 🟢 `/driver` – For Drivers  
+**Login required on first use only**
+
+- `/driver/scanner` – Scan when getting on or off a bus  
+- `/driver/profile` – View and edit driver profile  
+- `/driver/history` – View driving history
+
+---
+
+## 🔴 `/admin` – For Admins  
+**Login is required every time**
+
+- `/admin/report` – View all student reports  
+- `/admin/driver_dashboard` – Monitor driver status (available, driving, off-duty) and edit driver profiles  
+- `/admin/route` – View and modify bus routes
+
+---
+
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Get a fresh project
