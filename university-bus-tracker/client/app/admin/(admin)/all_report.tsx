@@ -224,17 +224,17 @@ export default function All_Report() {
             <View style={styles.separator} />
 
             <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Report Date:</Text>
+              <Text style={styles.detailLabel}>วันที่ส่งรายงาน:</Text>
               <Text style={styles.detailValue}>{item.reportDate}</Text>
             </View>
 
             <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Report Time:</Text>
+              <Text style={styles.detailLabel}>เวลาที่ส่งรายงาน:</Text>
               <Text style={styles.detailValue}>{item.reportTime}</Text>
             </View>
 
             <View style={styles.reasonContainer}>
-              <Text style={styles.detailLabel}>Reason:</Text>
+              <Text style={styles.detailLabel}>เหตุผล:</Text>
               <Text style={styles.reasonText}>{item.reason}</Text>
             </View>
           </View>
@@ -243,7 +243,7 @@ export default function All_Report() {
         {/* Expand/Collapse Indicator */}
         <View style={styles.expandIndicator}>
           <Text style={styles.expandText}>
-            {isExpanded ? "Tap to collapse" : "Tap for details"}
+            {isExpanded ? "คลิกเพื่อย่อ" : "คลิกเพื่อดูทั้งหมด"}
           </Text>
           <Text style={styles.expandArrow}>{isExpanded ? "▲" : "▼"}</Text>
         </View>
@@ -253,9 +253,9 @@ export default function All_Report() {
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
-      <Text style={styles.title}>All Reports</Text>
+      <Text style={styles.title}>รายงานทั้งหมด</Text>
       <Text style={styles.subtitle}>
-        Total Reports: {reportHistoryData.length}
+        รายงานทั้งหมด: {reportHistoryData.length}
       </Text>
     </View>
   );
