@@ -1,11 +1,19 @@
-import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import React, { useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 interface DriverData {
   driverID: string;
   driverName: string;
-  status: 'driving' | 'waiting' | 'not work time';
-  busNumber: string | null; // Changed to allow null values
+  status: "driving" | "waiting" | "not work time";
+  busNumber: string | null;
 }
 
 const driverData: DriverData[] = [
@@ -132,44 +140,101 @@ const driverData: DriverData[] = [
 ];
 
 export default function Driver_Managing() {
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [editableDrivers, setEditableDrivers] =
+    useState<DriverData[]>(driverData);
+
+  // ตัวแปรเก็บ driver ที่กำลังแก้ไข busNumber
+  const [editingDriverID, setEditingDriverID] = useState<string | null>(null);
+  const [busNumberInput, setBusNumberInput] = useState("");
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'driving':
-        return '#4CAF50'; // Green
-      case 'waiting':
-        return '#FF9800'; // Orange
-      case 'not work time':
-        return '#F44336'; // Red
+      case "driving":
+        return "#4CAF50";
+      case "waiting":
+        return "#FF9800";
+      case "not work time":
+        return "#F44336";
       default:
-        return '#757575';
+        return "#757575";
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'driving':
-        return 'กำลังขับ';
-      case 'waiting':
-        return 'รอขับ';
-      case 'not work time':
-        return 'นอกเวลางาน';
+      case "driving":
+        return "กำลังขับ";
+      case "waiting":
+        return "รอขับ";
+      case "not work time":
+        return "นอกเวลางาน";
       default:
         return status;
     }
   };
 
-  const filteredDrivers = selectedStatus === 'all' 
-    ? driverData 
-    : driverData.filter(driver => driver.status === selectedStatus);
+  // เริ่มแก้ไข เลขรถ (เปิด input พร้อมค่าเดิม)
+  const startEditingBusNumber = (
+    driverID: string,
+    currentBusNumber: string | null
+  ) => {
+    setEditingDriverID(driverID);
+    setBusNumberInput(currentBusNumber ?? "");
+  };
+
+  // ยกเลิกแก้ไข
+  const cancelEditing = () => {
+    setEditingDriverID(null);
+    setBusNumberInput("");
+  };
+
+  // บันทึกเลขรถใหม่
+  const saveBusNumber = () => {
+    if (!busNumberInput.trim()) {
+      // ไม่อนุญาตให้เป็นค่าว่าง
+      return;
+    }
+    setEditableDrivers((prev) =>
+      prev.map((driver) =>
+        driver.driverID === editingDriverID
+          ? { ...driver, busNumber: busNumberInput.trim(), status: "driving" }
+          : driver
+      )
+    );
+    cancelEditing();
+  };
+
+  const handleStatusChange = (
+    driverID: string,
+    newStatus: DriverData["status"]
+  ) => {
+    setEditableDrivers((prev) =>
+      prev.map((driver) =>
+        driver.driverID === driverID
+          ? {
+              ...driver,
+              status: newStatus,
+              busNumber:
+                newStatus === "driving" ? driver.busNumber ?? "1" : null,
+            }
+          : driver
+      )
+    );
+  };
+
+  const filteredDrivers =
+    selectedStatus === "all"
+      ? editableDrivers
+      : editableDrivers.filter((driver) => driver.status === selectedStatus);
 
   const getStatusCounts = () => {
     return {
-      driving: driverData.filter(d => d.status === 'driving').length,
-      waiting: driverData.filter(d => d.status === 'waiting').length,
-      notWorkTime: driverData.filter(d => d.status === 'not work time').length,
-      total: driverData.length
+      driving: editableDrivers.filter((d) => d.status === "driving").length,
+      waiting: editableDrivers.filter((d) => d.status === "waiting").length,
+      notWorkTime: editableDrivers.filter((d) => d.status === "not work time")
+        .length,
+      total: editableDrivers.length,
     };
   };
 
@@ -180,14 +245,16 @@ export default function Driver_Managing() {
       key={status}
       style={[
         styles.filterButton,
-        selectedStatus === status && styles.activeFilterButton
+        selectedStatus === status && styles.activeFilterButton,
       ]}
       onPress={() => setSelectedStatus(status)}
     >
-      <Text style={[
-        styles.filterButtonText,
-        selectedStatus === status && styles.activeFilterButtonText
-      ]}>
+      <Text
+        style={[
+          styles.filterButtonText,
+          selectedStatus === status && styles.activeFilterButtonText,
+        ]}
+      >
         {label}
       </Text>
     </TouchableOpacity>
@@ -200,9 +267,30 @@ export default function Driver_Managing() {
           <Text style={styles.driverName}>{item.driverName}</Text>
           <Text style={styles.driverID}>ID: {item.driverID}</Text>
         </View>
-        
-        {/* Only show bus number if driver has one (i.e., is driving) */}
-        {item.busNumber ? (
+
+        {/* แสดง input หรือ bus number ตามสถานะแก้ไข */}
+        {editingDriverID === item.driverID ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TextInput
+              style={[styles.busNumberInput]}
+              value={busNumberInput}
+              onChangeText={setBusNumberInput}
+              placeholder="เลขรถ"
+              keyboardType="numeric"
+              maxLength={4}
+              autoFocus
+            />
+            <TouchableOpacity onPress={saveBusNumber} style={styles.saveButton}>
+              <Text style={{ color: "#fff" }}>บันทึก</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={cancelEditing}
+              style={styles.cancelButton}
+            >
+              <Text style={{ color: "#fff" }}>ยกเลิก</Text>
+            </TouchableOpacity>
+          </View>
+        ) : item.busNumber ? (
           <View style={styles.busNumberContainer}>
             <Text style={styles.busNumberLabel}>Bus</Text>
             <Text style={styles.busNumber}>{item.busNumber}</Text>
@@ -214,12 +302,46 @@ export default function Driver_Managing() {
           </View>
         )}
       </View>
-      
+
       <View style={styles.statusContainer}>
-        <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(item.status) }]} />
-        <Text style={[styles.statusText, { color: getStatusColor(item.status) }]}>
+        <View
+          style={[
+            styles.statusIndicator,
+            { backgroundColor: getStatusColor(item.status) },
+          ]}
+        />
+        <Text
+          style={[styles.statusText, { color: getStatusColor(item.status) }]}
+        >
           {getStatusText(item.status)}
         </Text>
+      </View>
+
+      {/* Control area */}
+      <View style={styles.controlContainer}>
+        {(item.status === "driving" || item.status === "waiting") &&
+          editingDriverID !== item.driverID && (
+            <TouchableOpacity
+              onPress={() =>
+                startEditingBusNumber(item.driverID, item.busNumber)
+              }
+            >
+              <Text style={styles.editButton}>แก้ไขรถ</Text>
+            </TouchableOpacity>
+          )}
+
+        <Picker
+          selectedValue={item.status}
+          onValueChange={(value) =>
+            handleStatusChange(item.driverID, value as DriverData["status"])
+          }
+          style={styles.picker}
+          dropdownIconColor="#fff"
+        >
+          <Picker.Item label="กำลังขับ" value="driving" />
+          <Picker.Item label="รอขับ" value="waiting" />
+          <Picker.Item label="นอกเวลางาน" value="not work time" />
+        </Picker>
       </View>
     </View>
   );
@@ -227,33 +349,35 @@ export default function Driver_Managing() {
   const renderHeader = () => (
     <View style={styles.headerContainer}>
       <Text style={styles.title}>Driver Dashboard</Text>
-      
-      {/* Status Summary */}
       <View style={styles.summaryContainer}>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryNumber}>{statusCounts.total}</Text>
           <Text style={styles.summaryLabel}>คนขับทั้งหมด</Text>
         </View>
         <View style={styles.summaryItem}>
-          <Text style={[styles.summaryNumber, { color: '#4CAF50' }]}>{statusCounts.driving}</Text>
+          <Text style={[styles.summaryNumber, { color: "#4CAF50" }]}>
+            {statusCounts.driving}
+          </Text>
           <Text style={styles.summaryLabel}>กำลังขับ</Text>
         </View>
         <View style={styles.summaryItem}>
-          <Text style={[styles.summaryNumber, { color: '#FF9800' }]}>{statusCounts.waiting}</Text>
+          <Text style={[styles.summaryNumber, { color: "#FF9800" }]}>
+            {statusCounts.waiting}
+          </Text>
           <Text style={styles.summaryLabel}>รอขับ</Text>
         </View>
         <View style={styles.summaryItem}>
-          <Text style={[styles.summaryNumber, { color: '#F44336' }]}>{statusCounts.notWorkTime}</Text>
+          <Text style={[styles.summaryNumber, { color: "#F44336" }]}>
+            {statusCounts.notWorkTime}
+          </Text>
           <Text style={styles.summaryLabel}>นอกเวลางาน</Text>
         </View>
       </View>
-
-      {/* Filter Buttons */}
       <View style={styles.filterContainer}>
-        {renderFilterButton('all', 'All')}
-        {renderFilterButton('driving', 'กำลังขับ')}
-        {renderFilterButton('waiting', 'รอขับ')}
-        {renderFilterButton('not work time', 'นอกเวลางาน')}
+        {renderFilterButton("all", "All")}
+        {renderFilterButton("driving", "กำลังขับ")}
+        {renderFilterButton("waiting", "รอขับ")}
+        {renderFilterButton("not work time", "นอกเวลางาน")}
       </View>
     </View>
   );
@@ -275,7 +399,7 @@ export default function Driver_Managing() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: "#25292e",
     paddingTop: 50,
   },
   listContainer: {
@@ -286,118 +410,141 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
   },
   summaryContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#333842',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#333842",
     borderRadius: 12,
     paddingVertical: 16,
     marginBottom: 16,
   },
   summaryItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   summaryNumber: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   summaryLabel: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 12,
     marginTop: 4,
   },
   filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: 16,
   },
   filterButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#404855',
+    backgroundColor: "#404855",
   },
   activeFilterButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
   },
   filterButtonText: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   activeFilterButtonText: {
-    color: '#fff',
+    color: "#fff",
   },
   driverCard: {
-    backgroundColor: '#333842',
+    backgroundColor: "#333842",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
   },
   driverHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 12,
   },
   driverInfo: {
     flex: 1,
   },
   driverName: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   driverID: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 12,
   },
   busNumberContainer: {
-    alignItems: 'center',
-    backgroundColor: '#404855',
+    alignItems: "center",
+    backgroundColor: "#404855",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   busNumberLabel: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 10,
     marginBottom: 2,
   },
   busNumber: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  // New styles for no bus assignment
+  busNumberInput: {
+    backgroundColor: "#404855",
+    color: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    width: 80,
+    marginRight: 8,
+    fontSize: 16,
+  },
+  saveButton: {
+    backgroundColor: "#4CAF50",
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginRight: 8,
+  },
+  cancelButton: {
+    backgroundColor: "#F44336",
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
   noBusContainer: {
-    alignItems: 'center',
-    backgroundColor: '#404855',
+    alignItems: "center",
+    backgroundColor: "#404855",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
     opacity: 0.6,
   },
   noBusText: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   noBusSubtext: {
-    color: '#888',
+    color: "#888",
     fontSize: 10,
   },
   statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
   },
   statusIndicator: {
     width: 8,
@@ -407,6 +554,23 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
+  },
+  controlContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  editButton: {
+    color: "#007AFF",
+    fontSize: 12,
+    marginTop: 4,
+  },
+  picker: {
+    height: 40,
+    width: 160,
+    color: "#fff",
+    backgroundColor: "#404855",
+    borderRadius: 8,
   },
 });

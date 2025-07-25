@@ -29,7 +29,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-15",
     reportTime: "14:35",
     reason: "เครื่องยนต์มีปัญหาทำให้รถหยุดกะทันหัน",
-    driverName: "สมชาย วงศ์ใหญ่"
+    driverName: "สมชาย วงศ์ใหญ่",
   },
   {
     id: "2",
@@ -40,7 +40,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-14",
     reportTime: "09:20",
     reason: "ชนรถที่จอดอยู่ที่ป้ายรถเมล์เล็กน้อย",
-    driverName: "สุปราณี จันทร์เพ็ญ"
+    driverName: "สุปราณี จันทร์เพ็ญ",
   },
   {
     id: "3",
@@ -51,7 +51,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-14",
     reportTime: "16:50",
     reason: "ผู้โดยสารได้รับบาดเจ็บจากการเบรกกะทันหัน",
-    driverName: "สมศักดิ์ แสงทอง"
+    driverName: "สมศักดิ์ แสงทอง",
   },
   {
     id: "4",
@@ -62,7 +62,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-13",
     reportTime: "11:25",
     reason: "ยางรถแตกขณะให้บริการปกติ",
-    driverName: "สุกัญญา ทองดี"
+    driverName: "สุกัญญา ทองดี",
   },
   {
     id: "5",
@@ -73,7 +73,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-12",
     reportTime: "13:55",
     reason: "ประตูรถเสียทำให้ผู้โดยสารติดอยู่",
-    driverName: "วิชัย ศรีสวัสดิ์"
+    driverName: "วิชัย ศรีสวัสดิ์",
   },
   {
     id: "6",
@@ -84,7 +84,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-12",
     reportTime: "08:35",
     reason: "เดินทางล่าช้าเนื่องจากอุบัติเหตุบนเส้นทาง",
-    driverName: "นิรมล เจริญสุข"
+    driverName: "นิรมล เจริญสุข",
   },
   {
     id: "7",
@@ -95,7 +95,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-11",
     reportTime: "17:20",
     reason: "เครื่องปรับอากาศเสียในช่วงเวลาเร่งด่วน",
-    driverName: "ประวิทย์ มงคลชัย"
+    driverName: "ประวิทย์ มงคลชัย",
   },
   {
     id: "8",
@@ -106,7 +106,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-10",
     reportTime: "12:45",
     reason: "กระจกหน้าต่างแตกจากการทำลาย",
-    driverName: "สมหญิง ใจดี"
+    driverName: "สมหญิง ใจดี",
   },
   {
     id: "9",
@@ -117,7 +117,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-09",
     reportTime: "07:50",
     reason: "ออกเดินทางล่าช้าจากปัญหาระบบเครื่องยนต์",
-    driverName: "รุ่งโรจน์ พรหมมี"
+    driverName: "รุ่งโรจน์ พรหมมี",
   },
   {
     id: "10",
@@ -128,7 +128,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-08",
     reportTime: "15:25",
     reason: "ชนกันเล็กน้อยที่แยกไฟแดง",
-    driverName: "สุมลลี ดาวเด่น"
+    driverName: "สุมลลี ดาวเด่น",
   },
   {
     id: "11",
@@ -139,7 +139,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-07",
     reportTime: "10:20",
     reason: "ผู้โดยสารล้มขณะรถเบรก",
-    driverName: "อนุชิต บุญเรือง"
+    driverName: "อนุชิต บุญเรือง",
   },
   {
     id: "12",
@@ -150,7 +150,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-06",
     reportTime: "16:35",
     reason: "เครื่องยนต์ร้อนเกินไปในช่วงรถติด",
-    driverName: "จินดา รัตนพงษ์"
+    driverName: "จินดา รัตนพงษ์",
   },
   {
     id: "13",
@@ -161,7 +161,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-05",
     reportTime: "13:25",
     reason: "ระบบเบรกมีปัญหาขณะจอดรถ",
-    driverName: "ธนวัฒน์ สุขใส"
+    driverName: "ธนวัฒน์ สุขใส",
   },
   {
     id: "14",
@@ -172,7 +172,7 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-04",
     reportTime: "11:50",
     reason: "ระบ บไฟฟ้าในรถขัดข้อง",
-    driverName: "พิมพ์ใจ มณีรัตน์"
+    driverName: "พิมพ์ใจ มณีรัตน์",
   },
   {
     id: "15",
@@ -183,8 +183,8 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-03",
     reportTime: "08:15",
     reason: "ชนรถมอเตอร์ไซค์เล็กน้อยที่สี่แยก",
-    driverName: "กฤษณะ ทองคำ"
-  }
+    driverName: "กฤษณะ ทองคำ",
+  },
 ];
 
 export default function All_Report() {
@@ -208,7 +208,7 @@ export default function All_Report() {
           <View style={styles.busInfo}>
             <Text style={styles.busNumber}>{item.busNumber}</Text>
             <View style={styles.driverInfo}>
-              <Text style={styles.driverLabel}>Driver:</Text>
+              <Text style={styles.driverLabel}>คนขับ:</Text>
               <Text style={styles.driverName}>{item.driverName}</Text>
             </View>
           </View>
@@ -222,17 +222,17 @@ export default function All_Report() {
         {isExpanded && (
           <View style={styles.expandedContent}>
             <View style={styles.separator} />
-            
+
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Report Date:</Text>
               <Text style={styles.detailValue}>{item.reportDate}</Text>
             </View>
-            
+
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Report Time:</Text>
               <Text style={styles.detailValue}>{item.reportTime}</Text>
             </View>
-            
+
             <View style={styles.reasonContainer}>
               <Text style={styles.detailLabel}>Reason:</Text>
               <Text style={styles.reasonText}>{item.reason}</Text>
