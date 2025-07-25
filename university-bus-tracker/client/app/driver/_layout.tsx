@@ -8,22 +8,22 @@ export default function Layout() {
       <View style={styles.navbar}>
         <Link href="/driver" asChild>
           <Pressable>
-            <Text style={styles.link}>Home</Text>
+            <Text style={styles.link}>หน้าหลัก</Text>
           </Pressable>
         </Link>
         <Link href="/driver/scanner" asChild>
           <Pressable>
-            <Text style={styles.link}>QR Scan</Text>
+            <Text style={styles.link}>แสกนเพื่อขับ/ออกจากรถ</Text>
           </Pressable>
         </Link>
         <Link href="/driver/profile" asChild>
           <Pressable>
-            <Text style={styles.link}>Profile</Text>
+            <Text style={styles.link}>โปรไฟล์</Text>
           </Pressable>
         </Link>
         <Link href="/driver/history" asChild>
           <Pressable>
-            <Text style={styles.link}>History</Text>
+            <Text style={styles.link}>ประวัติการขับรถ</Text>
           </Pressable>
         </Link>
       </View>

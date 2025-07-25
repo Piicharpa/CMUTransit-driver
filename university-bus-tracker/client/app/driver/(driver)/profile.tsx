@@ -49,7 +49,7 @@ export default function Driver_Profile() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Driver Profile</Text>
+      <Text style={styles.title}>โปรไฟล์คนขับ</Text>
       
       <View style={styles.profileCard}>
         {/* Profile Picture Section */}
@@ -71,7 +71,7 @@ export default function Driver_Profile() {
 
         {/* Name Section */}
         <View style={styles.infoSection}>
-          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.label}>ชื่อ-นามสกุล:</Text>
           {isEditingName ? (
             <View style={styles.editNameContainer}>
               <TextInput
@@ -87,13 +87,13 @@ export default function Driver_Profile() {
                   style={[styles.button, styles.saveButton]}
                   onPress={handleSaveName}
                 >
-                  <Text style={styles.buttonText}>Save</Text>
+                  <Text style={styles.buttonText}>บันทึก</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                   style={[styles.button, styles.cancelButton]}
                   onPress={handleCancelEdit}
                 >
-                  <Text style={styles.buttonText}>Cancel</Text>
+                  <Text style={styles.buttonText}>ยกเลิก</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -104,7 +104,7 @@ export default function Driver_Profile() {
                 style={[styles.button, styles.editButton]}
                 onPress={handleEditName}
               >
-                <Text style={styles.buttonText}>Edit</Text>
+                <Text style={styles.buttonText}>แก้ไขข้อมูล</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -112,8 +112,8 @@ export default function Driver_Profile() {
 
         {/* Additional Info */}
         <View style={styles.additionalInfo}>
-          <Text style={styles.infoText}>Profile created: Jan 2024</Text>
-          <Text style={styles.infoText}>Last updated: {new Date().toLocaleDateString()}</Text>
+          <Text style={styles.infoText}>สร้างโปรไฟล์เมื่อ: 25/07/2025</Text>
+          <Text style={styles.infoText}>อัพเดทล่าสุด: {new Date().toLocaleDateString()}</Text>
         </View>
       </View>
     </View>

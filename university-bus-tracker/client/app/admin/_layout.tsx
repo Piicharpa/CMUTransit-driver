@@ -8,22 +8,22 @@ export default function Layout() {
       <View style={styles.navbar}>
         <Link href="/admin" asChild>
           <Pressable>
-            <Text style={styles.link}>Home</Text>
+            <Text style={styles.link}>หน้าหลัก</Text>
           </Pressable>
         </Link>
         <Link href="/admin/all_report" asChild>
           <Pressable>
-            <Text style={styles.link}>Report</Text>
+            <Text style={styles.link}>รายงานทั้งหมด</Text>
           </Pressable>
         </Link>
         <Link href="/admin/driver_dashboard" asChild>
           <Pressable>
-            <Text style={styles.link}>Driver</Text>
+            <Text style={styles.link}>จัดการคนขับ</Text>
           </Pressable>
         </Link>
         <Link href="/admin/route" asChild>
           <Pressable>
-            <Text style={styles.link}>Route</Text>
+            <Text style={styles.link}>จัดการสายรถ</Text>
           </Pressable>
         </Link>
       </View>

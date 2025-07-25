@@ -124,7 +124,7 @@ export default function Report_History() {
           </View>
           <Text style={styles.route}>{item.route}</Text>
           <Text style={styles.dateTime}>
-            Accident: {item.accidentDate} at {item.accidentTime}
+            วัน/เวลาที่เกิดเหตุ: {item.accidentDate}, {item.accidentTime}
           </Text>
         </View>
 
@@ -134,17 +134,17 @@ export default function Report_History() {
             <View style={styles.separator} />
 
             <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Report Date:</Text>
+              <Text style={styles.detailLabel}>วันที่รายงาน:</Text>
               <Text style={styles.detailValue}>{item.reportDate}</Text>
             </View>
 
             <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Report Time:</Text>
+              <Text style={styles.detailLabel}>เวลาที่ส่งรายงาน:</Text>
               <Text style={styles.detailValue}>{item.reportTime}</Text>
             </View>
 
             <View style={styles.reasonContainer}>
-              <Text style={styles.detailLabel}>Reason:</Text>
+              <Text style={styles.detailLabel}>เนื้อหา:</Text>
               <Text style={styles.reasonText}>{item.reason}</Text>
             </View>
           </View>
@@ -153,7 +153,7 @@ export default function Report_History() {
         {/* Expand/Collapse Indicator */}
         <View style={styles.expandIndicator}>
           <Text style={styles.expandText}>
-            {isExpanded ? "Tap to collapse" : "Tap for details"}
+            {isExpanded ? "กดเพื่อปิด" : "กดเพื่อดูเนื้อหาทั้งหมด"}
           </Text>
           <Text style={styles.expandArrow}>{isExpanded ? "▲" : "▼"}</Text>
         </View>
@@ -163,16 +163,16 @@ export default function Report_History() {
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
-      <Text style={styles.title}>Report History</Text>
+      <Text style={styles.title}>ประวัติการรายงาน</Text>
       <Text style={styles.subtitle}>
-        Total Reports: {reportHistoryData.length}
+        รายงานทั้งหมด: {reportHistoryData.length}
       </Text>
     </View>
   );
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No reports found</Text>
+      <Text style={styles.emptyText}>ยังไม่เคยรายงาน</Text>
     </View>
   );
 

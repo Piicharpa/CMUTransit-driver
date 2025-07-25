@@ -288,7 +288,7 @@ export default function Bus_Dashboard() {
         <Text style={styles.busNumber}>{item.busNumber}</Text>
         <View style={styles.statusContainer}>
           <View style={styles.onlineStatus} />
-          <Text style={styles.statusText}>Online</Text>
+          <Text style={styles.statusText}>กำลังขับ</Text>
         </View>
       </View>
       <View style={styles.routeColumn}>
@@ -307,7 +307,7 @@ export default function Bus_Dashboard() {
           style={styles.reportButton}
           onPress={() => handleReport(item.busNumber)}
         >
-          <Text style={styles.reportButtonText}>Report</Text>
+          <Text style={styles.reportButtonText}>รายงาน</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -315,13 +315,13 @@ export default function Bus_Dashboard() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Online Bus Dashboard</Text>
+      <Text style={styles.title}>รถม่วงที่กำลังขับในตอนนี้</Text>
 
       <View style={styles.filterContainer}>
-        <Text style={styles.filterTitle}>Filters</Text>
+        <Text style={styles.filterTitle}>ตัวกรอง</Text>
         <View style={styles.filterRow}>
           <View style={styles.filterInput}>
-            <Text style={styles.filterLabel}>Date</Text>
+            <Text style={styles.filterLabel}>วันที่</Text>
             <TextInput
               style={styles.filterTextInput}
               value={filterDate}
@@ -331,7 +331,7 @@ export default function Bus_Dashboard() {
             />
           </View>
           <View style={styles.filterInput}>
-            <Text style={styles.filterLabel}>Last Update Time</Text>
+            <Text style={styles.filterLabel}>เวลาที่เกิดเหตุ</Text>
             <TextInput
               style={styles.filterTextInput}
               value={filterTime}
@@ -343,21 +343,21 @@ export default function Bus_Dashboard() {
         </View>
         <View style={styles.filterButtons}>
           <TouchableOpacity style={styles.clearButton} onPress={clearFilters}>
-            <Text style={styles.clearButtonText}>Clear Filters</Text>
+            <Text style={styles.clearButtonText}>ล้างตัวกรอง</Text>
           </TouchableOpacity>
           <Text style={styles.resultsText}>
-            Showing {filteredBuses.length} of {busData.length} buses
+            กำลังแสดง {filteredBuses.length} จาก {busData.length}
           </Text>
         </View>
       </View>
 
       <View style={styles.tableContainer}>
         <View style={styles.tableHeader}>
-          <Text style={[styles.headerText, styles.busNumberColumn]}>Bus #</Text>
-          <Text style={[styles.headerText, styles.routeColumn]}>Route</Text>
-          <Text style={[styles.headerText, styles.dateColumn]}>Date</Text>
-          <Text style={[styles.headerText, styles.timeColumn]}>Time</Text>
-          <Text style={[styles.headerText, styles.actionColumn]}>Action</Text>
+          <Text style={[styles.headerText, styles.busNumberColumn]}>หมายเลขรถ</Text>
+          <Text style={[styles.headerText, styles.routeColumn]}>สายรถ</Text>
+          <Text style={[styles.headerText, styles.dateColumn]}>วันที่</Text>
+          <Text style={[styles.headerText, styles.timeColumn]}>เวลา</Text>
+          <Text style={[styles.headerText, styles.actionColumn]} />
         </View>
         <FlatList
           data={filteredBuses}
@@ -376,25 +376,25 @@ export default function Bus_Dashboard() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>
-              Report Accident - {selectedBus}
+              รายงานรถหมายเลข {selectedBus}
             </Text>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Accident Time</Text>
+              <Text style={styles.inputLabel}>เวลาเกิดเหตุ</Text>
               <TextInput
                 style={styles.textInput}
                 value={accidentTime}
                 onChangeText={setAccidentTime}
-                placeholder="Enter accident time (e.g., 14:30)"
+                placeholder="ระบุเวลาที่เกิดเหตุโดยประมาณ (เช่น 14:30)"
                 placeholderTextColor="#888"
               />
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Reason</Text>
+              <Text style={styles.inputLabel}>เหตุผล</Text>
               <TextInput
                 style={[styles.textInput, styles.multilineInput]}
                 value={reason}
                 onChangeText={setReason}
-                placeholder="Describe the accident or issue..."
+                placeholder="กรุณาระบุเหตุผล"
                 placeholderTextColor="#888"
                 multiline={true}
                 numberOfLines={4}
@@ -406,13 +406,13 @@ export default function Bus_Dashboard() {
                 style={styles.cancelButton}
                 onPress={handleCloseModal}
               >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
+                <Text style={styles.cancelButtonText}>ยกเลิก</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.sendButton}
                 onPress={handleSendReport}
               >
-                <Text style={styles.sendButtonText}>Send Report</Text>
+                <Text style={styles.sendButtonText}>ส่งรายงาน</Text>
               </TouchableOpacity>
             </View>
           </View>

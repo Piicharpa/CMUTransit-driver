@@ -9,17 +9,17 @@ export default function Layout() {
     <View style={styles.navbar}>
       <Link href="/student" asChild>
         <Pressable style={styles.navItem}>
-          <Text style={styles.link}>Home</Text>
+          <Text style={styles.link}>หน้าหลัก</Text>
         </Pressable>
       </Link>
       <Link href="/student/dashboard" asChild>
         <Pressable style={styles.navItem}>
-          <Text style={styles.link}>Dashboard</Text>
+          <Text style={styles.link}>เลือกสายรถม่วง</Text>
         </Pressable>
       </Link>
       <Link href="/student/history" asChild>
         <Pressable style={styles.navItem}>
-          <Text style={styles.link}>History</Text>
+          <Text style={styles.link}>ประวัติการรายงาน</Text>
         </Pressable>
       </Link>
     </View>
