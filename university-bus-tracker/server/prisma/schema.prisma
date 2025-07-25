@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+//Roles
+model Student {
+  id        Int      @id @default(autoincrement())
+  name      String
+  studentId Int      @unique @map("student_id")
+  email     String   @unique
+  role      String   @default("student")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Report  Report[]
+
+  @@map("students")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  fname      String 
+  lname      String
+  username  String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+model Driver {
+  id        Int      @id @default(autoincrement())
+  fname     String
+  lname     String
+  email     String   @unique
+  role      String   @default("driver")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  History History[]
+
+  @@map("drivers")
+}
+
+//Report
+model Report {
+  id         Int      @id @default(autoincrement())
+  studentId  Int      @map("student_id")
+  busId      Int      @map("bus_id")
+  report     String
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  Student Student @relation(fields: [studentId], references: [id])
+  Bus Bus @relation(fields: [busId], references: [id])
+  Category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("reports")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Report Report[]
+
+  @@map("categories")
+}
+
+
+//Bus
+model History {
+  id        Int      @id @default(autoincrement())
+  busId     Int      @map("bus_id")
+  driverId  Int      @map("driver_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Bus Bus @relation(fields: [busId], references: [id])
+  Driver Driver @relation(fields: [driverId], references: [id])
+
+
+  @@map("histories")
+}
+
+model Bus {
+  id          Int      @id @default(autoincrement())
+  routeNumber Int      @map("route_number")
+  busNumber   Int      @map("bus_number")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  History History[]
+  Report Report[]
+
+  @@map("buses")
+}

@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:15
+    container_name: cmu_postgres
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_DB: cmutransit
+      POSTGRES_USER: piicharpa
+      POSTGRES_PASSWORD: secret123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - cmu-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U piicharpa -d cmutransit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  backend:
+    build:
+      context: ./server
+    container_name: cmu_backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=piicharpa
+      - DB_NAME=cmutransit
+      - DB_PASSWORD=secret123
+      - DB_PORT=5432
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - "5001:5000"
+    networks:
+      - cmu-network
+  
+  frontend:
+    build:
+      context: ./client
+    container_name: cmu_frontend
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - cmu-network
+
+volumes:
+  pgdata:
+
+networks:
+  cmu-network:

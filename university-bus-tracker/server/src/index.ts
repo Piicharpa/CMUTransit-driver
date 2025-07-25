@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { pool } from "./db";
+import itemsRouter from "./routes/items";
 
 
 const app = express();
@@ -22,13 +23,15 @@ app.get('/test-db', async (req, res) => {
   res.json(result.rows[0]);
 });
 
-// io.on("connection", (socket) => {
-//   console.log("a user connected:", socket.id);
+app.use('/items', itemsRouter);
 
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected:", socket.id);
-//   });
-// });
+io.on("connection", (socket) => {
+  console.log("a user connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected:", socket.id);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
