@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   postgres:
-    image: postgres:15
+    image: timescale/timescaledb:latest-pg15
     container_name: cmu_postgres
     ports:
       - "5431:5432"
@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: cmutransit
       POSTGRES_USER: piicharpa
       POSTGRES_PASSWORD: secret123
+      TZ: "Asian/Bangkok"
+      POSTGRES_SHARED_PRELOAD_LIBRARIES: "timescaledb"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
