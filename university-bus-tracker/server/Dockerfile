@@ -11,7 +11,7 @@ COPY . .
 # Generate Prisma client
 RUN npx prisma generate
 
-EXPOSE 5000
+EXPOSE 5001
 
 # Update your CMD to run migrations prior to starting the app
 CMD ["sh", "-c", "npx prisma generate && npm start"]

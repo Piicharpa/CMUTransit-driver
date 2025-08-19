@@ -14,30 +14,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
-const socket_io_1 = require("socket.io");
+// import { Server } from "socket.io";
 const cors_1 = __importDefault(require("cors"));
 const db_1 = require("./db");
 const items_1 = __importDefault(require("./routes/items"));
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
-const io = new socket_io_1.Server(server, {
-    cors: {
-        origin: "*",
-    },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",
+//   },
+// });
 app.use((0, cors_1.default)());
-const PORT = 3001;
+const PORT = 5001;
 app.get('/test-db', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_1.pool.query('SELECT NOW()');
     res.json(result.rows[0]);
 }));
 app.use('/items', items_1.default);
-io.on("connection", (socket) => {
-    console.log("a user connected:", socket.id);
-    socket.on("disconnect", () => {
-        console.log("user disconnected:", socket.id);
-    });
-});
+// io.on("connection", (socket) => {
+//   console.log("a user connected:", socket.id);
+//   socket.on("disconnect", () => {
+//     console.log("user disconnected:", socket.id);
+//   });
+// });
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

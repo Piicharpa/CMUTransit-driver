@@ -24,6 +24,7 @@ services:
   backend:
     build:
       context: ./server
+      dockerfile: Dockerfile
     container_name: cmu_backend
     depends_on:
       postgres:
@@ -38,21 +39,7 @@ services:
       - ./server:/app
       - /app/node_modules
     ports:
-      - "5001:5000"
-    networks:
-      - cmu-network
-  
-  frontend:
-    build:
-      context: ./client
-    container_name: cmu_frontend
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - "5001:5001"
     networks:
       - cmu-network
 
