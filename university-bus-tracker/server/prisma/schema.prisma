@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -67,8 +61,8 @@ model Report {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
-  Student Student @relation(fields: [studentId], references: [id])
-  Bus Bus @relation(fields: [busId], references: [id])
+  Student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  Bus      Bus      @relation(fields: [busId], references: [id])
   Category Category @relation(fields: [categoryId], references: [id])
 
   @@map("reports")
@@ -88,18 +82,19 @@ model Category {
 
 //Bus
 model History {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())   // Primary key only on id
   busId     Int      @map("bus_id")
   driverId  Int      @map("driver_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  startTime DateTime @map("start_time")
+  endTime   DateTime? @map("end_time")
+  duration  Int?      @map("duration")
 
-  Bus Bus @relation(fields: [busId], references: [id])
-  Driver Driver @relation(fields: [driverId], references: [id])
-
+  Bus    Bus    @relation(fields: [busId], references: [id], onDelete: Cascade)
+  Driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
 
   @@map("histories")
 }
+
 
 model Bus {
   id          Int      @id @default(autoincrement())

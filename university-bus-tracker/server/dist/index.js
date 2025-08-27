@@ -13,25 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const http_1 = __importDefault(require("http"));
-// import { Server } from "socket.io";
 const cors_1 = __importDefault(require("cors"));
 const db_1 = require("./db");
-const items_1 = __importDefault(require("./routes/items"));
+const students_1 = __importDefault(require("./routes/students"));
+const admins_1 = __importDefault(require("./routes/admins"));
+const buses_1 = __importDefault(require("./routes/buses"));
+const drivers_1 = __importDefault(require("./routes/drivers"));
+const categories_1 = __importDefault(require("./routes/categories")); // This line is crucial
+const scans_1 = __importDefault(require("./routes/scans"));
 const app = (0, express_1.default)();
-const server = http_1.default.createServer(app);
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+const PORT = 5001;
+// Code for debugging
+app.get('/test-db', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_1.pool.query('SELECT NOW()');
+    res.json(result.rows[0]);
+}));
+app.use('/students', students_1.default);
+app.use('/admins', admins_1.default);
+app.use('/buses', buses_1.default);
+app.use('/drivers', drivers_1.default);
+app.use('/categories', categories_1.default); // This line is correct
+app.use("/scans", scans_1.default);
+// const server = http.createServer(app);
 // const io = new Server(server, {
 //   cors: {
 //     origin: "*",
 //   },
 // });
-app.use((0, cors_1.default)());
-const PORT = 5001;
-app.get('/test-db', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield db_1.pool.query('SELECT NOW()');
-    res.json(result.rows[0]);
-}));
-app.use('/items', items_1.default);
 // io.on("connection", (socket) => {
 //   console.log("a user connected:", socket.id);
 //   socket.on("disconnect", () => {

@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   postgres:
     image: timescale/timescaledb:latest-pg15
@@ -11,6 +10,7 @@ services:
       POSTGRES_PASSWORD: secret123
       TZ: "Asian/Bangkok"
       POSTGRES_SHARED_PRELOAD_LIBRARIES: "timescaledb"
+      # - LOCAL_DATABASE_URL="postgresql://piicharpa:secret123@postgres:5432/cmutransit?schema=public"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -34,7 +34,7 @@ services:
       - DB_USER=piicharpa
       - DB_NAME=cmutransit
       - DB_PASSWORD=secret123
-      - DB_PORT=5432
+      - DB_PORT=5431
     volumes:
       - ./server:/app
       - /app/node_modules
