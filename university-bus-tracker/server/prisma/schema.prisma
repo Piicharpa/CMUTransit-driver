@@ -47,6 +47,7 @@ model Driver {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   History History[]
+  DriverStatus DriverStatus?
 
   @@map("drivers")
 }
@@ -87,13 +88,26 @@ model History {
   driverId  Int      @map("driver_id")
   startTime DateTime @map("start_time")
   endTime   DateTime? @map("end_time")
-  duration  Int?      @map("duration")
+  duration  String?      @map("duration")
 
   Bus    Bus    @relation(fields: [busId], references: [id], onDelete: Cascade)
   Driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
 
   @@map("histories")
 }
+
+model DriverStatus {
+  id        Int      @id @default(autoincrement())
+  driverId  Int      @unique
+  status    String   @default("waiting") // waiting | driving | not_working
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@map("driver_status")
+}
+
 
 
 model Bus {

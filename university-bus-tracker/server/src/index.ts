@@ -8,6 +8,7 @@ import busRouter from "./routes/buses";
 import driverRouter from "./routes/drivers";
 import categoryRouter from "./routes/categories"; // This line is crucial
 import scanRoutes from "./routes/scans";
+import reportRoutes from "./routes/report";
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/buses', busRouter);
 app.use('/drivers', driverRouter);
 app.use('/categories', categoryRouter); // This line is correct
 app.use("/scans", scanRoutes);
+app.use("/reports", reportRoutes);
 
 
 // const server = http.createServer(app);

@@ -1,11 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('Start seeding...');
 
-  // Data for Categories
+  // Categories
   const categories = await prisma.category.createMany({
     data: [
       { name: 'Bus late' },
@@ -16,7 +15,7 @@ async function main() {
   });
   console.log(`Created ${categories.count} categories.`);
 
-  // Data for Admins
+  // Admins
   const admins = await prisma.admin.createMany({
     data: [
       { fname: 'Admin', lname: 'One', username: 'admin1', password: 'password1' },
@@ -26,7 +25,7 @@ async function main() {
   });
   console.log(`Created ${admins.count} admins.`);
 
-  // Data for Students
+  // Students
   const students = await prisma.student.createMany({
     data: [
       { name: 'Alice', studentId: 66012345, email: 'alice@cmu.ac.th' },
@@ -37,7 +36,7 @@ async function main() {
   });
   console.log(`Created ${students.count} students.`);
 
-  // Data for Drivers
+  // Drivers
   const drivers = await prisma.driver.createMany({
     data: [
       { fname: 'David', lname: 'Jones', email: 'david@cmu.ac.th' },
@@ -47,7 +46,7 @@ async function main() {
   });
   console.log(`Created ${drivers.count} drivers.`);
 
-  // Data for Buses
+  // Buses
   const buses = await prisma.bus.createMany({
     data: [
       { routeNumber: 1, busNumber: 101 },
@@ -58,14 +57,14 @@ async function main() {
   });
   console.log(`Created ${buses.count} buses.`);
 
-  // Fetch created data to get IDs for relations
+  // Fetch data for relations
   const seededStudents = await prisma.student.findMany();
   const seededBuses = await prisma.bus.findMany();
   const seededCategories = await prisma.category.findMany();
   const seededDrivers = await prisma.driver.findMany();
 
-  // Data for Reports (requires existing student, bus, and category IDs)
-  if (seededStudents.length > 0 && seededBuses.length > 0 && seededCategories.length > 0) {
+  // Reports
+  if (seededStudents.length && seededBuses.length && seededCategories.length) {
     await prisma.report.createMany({
       data: [
         {
@@ -85,8 +84,8 @@ async function main() {
     console.log('Created reports.');
   }
 
-  // Data for Histories (requires existing driver and bus IDs)
-  if (seededDrivers.length > 0 && seededBuses.length > 0) {
+  // Histories
+  if (seededDrivers.length && seededBuses.length) {
     await prisma.history.createMany({
       data: [
         { driverId: seededDrivers[0].id, busId: seededBuses[0].id, startTime: new Date() },

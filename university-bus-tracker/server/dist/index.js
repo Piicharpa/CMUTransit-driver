@@ -21,6 +21,7 @@ const buses_1 = __importDefault(require("./routes/buses"));
 const drivers_1 = __importDefault(require("./routes/drivers"));
 const categories_1 = __importDefault(require("./routes/categories")); // This line is crucial
 const scans_1 = __importDefault(require("./routes/scans"));
+const report_1 = __importDefault(require("./routes/report"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -36,6 +37,7 @@ app.use('/buses', buses_1.default);
 app.use('/drivers', drivers_1.default);
 app.use('/categories', categories_1.default); // This line is correct
 app.use("/scans", scans_1.default);
+app.use("/reports", report_1.default);
 // const server = http.createServer(app);
 // const io = new Server(server, {
 //   cors: {

@@ -1,17 +1,16 @@
 import express from "express";
-import { PrismaClient } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 function isPrismaKnownRequestError(e: any): e is PrismaClientKnownRequestError {
-  return typeof e === 'object' && e !== null && 'code' in e;
+  return typeof e === "object" && e !== null && "code" in e;
 }
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
-
-//GET /students
-router.get('/', async (req, res) => {
+// GET all students
+router.get("/", async (req, res) => {
   try {
     const students = await prisma.student.findMany();
     res.json(students);
@@ -20,7 +19,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: "Could not fetch students." });
   }
 });
-
 
 //GET /students/:id (use studentId)
 router.get('/:id', async (req, res) => {
@@ -49,8 +47,9 @@ router.get('/:id', async (req, res) => {
 });
 
 
-//POST /students 
-router.post('/', express.json(), async (req, res) => {
+
+// CREATE student
+router.post("/", async (req, res) => {
   const { name, studentId, email, role } = req.body;
 
   if (!name || !studentId || !email) {
@@ -59,16 +58,11 @@ router.post('/', express.json(), async (req, res) => {
 
   try {
     const newStudent = await prisma.student.create({
-      data: {
-        name,
-        studentId,
-        email,
-        role,
-      },
+      data: { name, studentId, email, role },
     });
     res.status(201).json(newStudent);
   } catch (error) {
-    if (isPrismaKnownRequestError(error) && error.code === 'P2002') {
+    if (isPrismaKnownRequestError(error) && error.code === "P2002") {
       res.status(409).json({ error: `A student with studentId ${studentId} already exists.` });
     } else {
       console.error("Error creating student:", error);
@@ -77,54 +71,44 @@ router.post('/', express.json(), async (req, res) => {
   }
 });
 
-
-
-//PUT /students/:id 
-router.put('/:id', express.json(), async (req, res) => {
-  const studentId = parseInt(req.params.id);
+// UPDATE student by ID
+router.put("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
   const { name, email, role } = req.body;
 
-  if (isNaN(studentId)) {
+  if (isNaN(id)) {
     return res.status(400).json({ error: "Invalid student ID." });
   }
 
   try {
     const updatedStudent = await prisma.student.update({
-      where: {
-        studentId: studentId,
-      },
-      data: {
-        name,
-        email,
-        role,
-      },
+      where: { id },
+      data: { name, email, role },
     });
     res.json(updatedStudent);
   } catch (error) {
+    if (isPrismaKnownRequestError(error) && error.code === "P2025") {
+      return res.status(404).json({ error: `Student with ID ${id} not found.` });
+    }
     console.error("Error updating student:", error);
     res.status(500).json({ error: "Could not update student." });
   }
 });
 
+// DELETE student by ID
+router.delete("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
 
-//DELETE /students/:id (use studentId)
-router.delete('/:id', async (req, res) => {
-  const studentId = parseInt(req.params.id);
-
-  if (isNaN(studentId)) {
+  if (isNaN(id)) {
     return res.status(400).json({ error: "Invalid student ID." });
   }
 
   try {
-    const deletedStudent = await prisma.student.delete({
-      where: {
-        studentId: studentId, // Use the correct field: 'studentId'
-      },
-    });
+    const deletedStudent = await prisma.student.delete({ where: { id } });
     res.json(deletedStudent);
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-      return res.status(404).json({ error: `Student with ID ${studentId} not found.` });
+    if (isPrismaKnownRequestError(error) && error.code === "P2025") {
+      return res.status(404).json({ error: `Student with ID ${id} not found.` });
     }
     console.error("Error deleting student:", error);
     res.status(500).json({ error: "Could not delete student." });
