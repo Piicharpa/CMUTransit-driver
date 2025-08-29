@@ -1,11 +1,12 @@
 import {
   Text,
   View,
-  StyleSheet,
   FlatList,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 import { useState } from "react";
+import { styles } from "../../theme/student_theme/reportHistory";
 
 interface ReportHistory {
   id: string;
@@ -16,170 +17,622 @@ interface ReportHistory {
   reportDate: string;
   reportTime: string;
   reason: string;
+  category: 'vehicle' | 'route' | 'passenger' | 'safety' | 'accident' | 'other';
+  title: string;
+  status: 'pending' | 'processing' | 'completed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
 }
+
+interface ReportCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+}
+
+interface ReportStatus {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+}
+
+const reportCategories: ReportCategory[] = [
+  { id: 'vehicle', name: 'ปัญหารถ', icon: '🚌', color: '#3b82f6' },
+  { id: 'route', name: 'เส้นทาง', icon: '🗺️', color: '#10b981' },
+  { id: 'passenger', name: 'ผู้โดยสาร', icon: '👥', color: '#f59e0b' },
+  { id: 'safety', name: 'ความปลอดภัย', icon: '⚠️', color: '#ef4444' },
+  { id: 'accident', name: 'อุบัติเหตุ', icon: '🚨', color: '#dc2626' },
+  { id: 'other', name: 'อื่นๆ', icon: '📝', color: '#8b5cf6' },
+];
+
+const reportStatuses: ReportStatus[] = [
+  { id: 'pending', name: 'รอดำเนินการ', icon: '⏳', color: '#f59e0b' },
+  { id: 'processing', name: 'กำลังดำเนินการ', icon: '🔄', color: '#3b82f6' },
+  { id: 'completed', name: 'ดำเนินการแล้ว', icon: '✅', color: '#10b981' },
+];
 
 const reportHistoryData: ReportHistory[] = [
   {
     id: "1",
     busNumber: "B-101",
-    route: "Downtown - Airport",
+    route: "1 - Purple Line",
     accidentDate: "2025-01-15",
     accidentTime: "14:30",
     reportDate: "2025-01-15",
     reportTime: "14:35",
-    reason: "Engine malfunction caused sudden stop",
+    reason: "เครื่องยนต์เสียทำให้รถหยุดกะทันหัน ผู้โดยสารต้องรอรถคันถัดไป ช่างได้มาตรวจสอบและซ่อมแซมเรียบร้อยแล้ว",
+    category: 'vehicle',
+    title: "เครื่องยนต์เสีย",
+    status: 'processing',
+    priority: 'high',
   },
   {
     id: "2",
     busNumber: "B-205",
-    route: "University - Mall",
+    route: "2 - Red Line",
     accidentDate: "2025-01-14",
     accidentTime: "09:15",
     reportDate: "2025-01-14",
     reportTime: "09:20",
-    reason: "Minor collision with parked vehicle at bus stop",
+    reason: "ชนรถที่จอดอยู่ที่ป้ายรถเมล์เล็กน้อย ไม่มีผู้บาดเจ็บ ความเสียหายเพียงเล็กน้อย ได้แจ้งบริษัทประกันแล้ว",
+    category: 'accident',
+    title: "ชนรถจอด",
+    status: 'completed',
+    priority: 'medium',
   },
   {
     id: "3",
     busNumber: "B-312",
-    route: "Station - Beach",
+    route: "3 - Blue Line",
     accidentDate: "2025-01-14",
     accidentTime: "16:45",
     reportDate: "2025-01-14",
     reportTime: "16:50",
-    reason: "Passenger injury due to sudden braking",
+    reason: "ผู้โดยสารบาดเจ็บเนื่องจากเบรกกะทันหัน ได้นำส่งโรงพยาบาลแล้ว อาการไม่หนัก คาดว่าจะหายดีในไม่กี่วัน",
+    category: 'safety',
+    title: "ผู้โดยสารบาดเจ็บ",
+    status: 'completed',
+    priority: 'urgent',
   },
   {
     id: "4",
     busNumber: "B-458",
-    route: "City Center - Suburbs",
+    route: "4 - Green Line",
     accidentDate: "2025-01-13",
     accidentTime: "11:20",
     reportDate: "2025-01-13",
     reportTime: "11:25",
-    reason: "Tire puncture during regular service",
+    reason: "ยางระเบิดระหว่างการให้บริการ ต้องเปลี่ยนยางใหม่ ใช้เวลาประมาณ 30 นาทีในการซ่อมแซม",
+    category: 'vehicle',
+    title: "ยางระเบิด",
+    status: 'completed',
+    priority: 'medium',
   },
   {
     id: "5",
     busNumber: "B-567",
-    route: "North Side - South Side",
+    route: "1 - Purple Line",
     accidentDate: "2025-01-12",
     accidentTime: "13:50",
     reportDate: "2025-01-12",
     reportTime: "13:55",
-    reason: "Door malfunction trapping passengers",
+    reason: "ประตูรถเสียทำให้ผู้โดยสารติดอยู่ข้างใน ต้องเรียกช่างมาซ่อม ใช้เวลาประมาณ 45 นาทีในการแก้ไข",
+    category: 'vehicle',
+    title: "ประตูรถเสีย",
+    status: 'completed',
+    priority: 'high',
   },
   {
     id: "6",
     busNumber: "B-101",
-    route: "Downtown - Airport",
+    route: "1 - Purple Line",
     accidentDate: "2025-01-12",
     accidentTime: "08:30",
     reportDate: "2025-01-12",
     reportTime: "08:35",
-    reason: "Late arrival due to traffic accident blocking route",
+    reason: "มาสายเนื่องจากอุบัติเหตุจราจรบนเส้นทาง ผู้โดยสารรอนาน ไม่สามารถควบคุมได้เนื่องจากปัจจัยภายนอก",
+    category: 'route',
+    title: "มาสายเนื่องจากจราจร",
+    status: 'completed',
+    priority: 'low',
   },
   {
     id: "7",
     busNumber: "B-789",
-    route: "Industrial Area - Downtown",
+    route: "2 - Red Line",
     accidentDate: "2025-01-11",
     accidentTime: "17:15",
     reportDate: "2025-01-11",
     reportTime: "17:20",
-    reason: "Air conditioning system failure during peak hours",
+    reason: "แอร์เสียในช่วงเวลาเร่งด่วน อากาศร้อนจัด ผู้โดยสารร้องเรียน กำลังดำเนินการซ่อมแซม",
+    category: 'vehicle',
+    title: "เครื่องปรับอากาศเสีย",
+    status: 'pending',
+    priority: 'medium',
   },
   {
     id: "8",
     busNumber: "B-312",
-    route: "Station - Beach",
+    route: "3 - Blue Line",
     accidentDate: "2025-01-10",
     accidentTime: "12:40",
     reportDate: "2025-01-10",
     reportTime: "12:45",
-    reason: "Broken window due to vandalism",
+    reason: "กระจกแตกเนื่องจากการทำลาย ต้องเปลี่ยนกระจกใหม่ กำลังรอชิ้นส่วนจากผู้ผลิต",
+    category: 'other',
+    title: "กระจกแตกจากการทำลาย",
+    status: 'processing',
+    priority: 'medium',
   },
 ];
 
 export default function Report_History() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+  
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+
+  const getCategoryInfo = (categoryId: string) => {
+    return reportCategories.find(cat => cat.id === categoryId) || reportCategories[0];
+  };
+
+  const getStatusInfo = (statusId: string) => {
+    return reportStatuses.find(status => status.id === statusId) || reportStatuses[0];
+  };
 
   const toggleExpanded = (id: string) => {
     setExpandedItem(expandedItem === id ? null : id);
   };
 
+  const filteredData = filterStatus === "all" 
+    ? reportHistoryData 
+    : reportHistoryData.filter(item => item.status === filterStatus);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear() + 543;
+    return `${day}/${month}/${year}`;
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'urgent': return '#dc2626';
+      case 'high': return '#ef4444';
+      case 'medium': return '#f59e0b';
+      case 'low': return '#10b981';
+      default: return '#6b7280';
+    }
+  };
+
+  const getPriorityName = (priority: string) => {
+    switch (priority) {
+      case 'urgent': return 'เร่งด่วน';
+      case 'high': return 'สูง';
+      case 'medium': return 'ปานกลาง';
+      case 'low': return 'ต่ำ';
+      default: return 'ปานกลาง';
+    }
+  };
+
   const renderReportItem = ({ item }: { item: ReportHistory }) => {
     const isExpanded = expandedItem === item.id;
+    const categoryInfo = getCategoryInfo(item.category);
+    const statusInfo = getStatusInfo(item.status);
 
     return (
-      <TouchableOpacity
-        style={styles.reportCard}
-        onPress={() => toggleExpanded(item.id)}
-        activeOpacity={0.7}
+      <View 
+        style={[
+          styles.reportCard,
+          {
+            backgroundColor: isDark ? "#1f2937" : "#ffffff",
+            borderColor: isDark ? "#374151" : "#e5e7eb",
+            shadowColor: isDark ? "#000000" : "#007AFF",
+          },
+        ]}
       >
-        {/* Header Section - Always Visible */}
-        <View style={styles.cardHeader}>
-          <View style={styles.busInfo}>
-            <Text style={styles.busNumber}>{item.busNumber}</Text>
+        {/* Priority Indicator */}
+        <View 
+          style={[
+            styles.priorityIndicator,
+            { backgroundColor: getPriorityColor(item.priority) },
+          ]}
+        />
+
+        {/* Main Content */}
+        <View style={styles.cardContent}>
+          {/* Header Section - Always Visible */}
+          <View style={styles.cardHeader}>
+            {/* Top Row: Category and Status */}
+            <View style={styles.topRow}>
+              <View style={styles.categoryBadge}>
+                <Text style={styles.categoryIcon}>{categoryInfo.icon}</Text>
+                <Text 
+                  style={[
+                    styles.categoryText,
+                    { color: categoryInfo.color },
+                  ]}
+                >
+                  {categoryInfo.name}
+                </Text>
+              </View>
+              
+              <View 
+                style={[
+                  styles.statusBadge,
+                  { backgroundColor: `${statusInfo.color}20` },
+                ]}
+              >
+                <Text style={styles.statusIcon}>{statusInfo.icon}</Text>
+                <Text 
+                  style={[
+                    styles.statusText,
+                    { color: statusInfo.color },
+                  ]}
+                >
+                  {statusInfo.name}
+                </Text>
+              </View>
+            </View>
+
+            {/* Title Row */}
+            <View style={styles.titleRow}>
+              <Text 
+                style={[
+                  styles.reportTitle,
+                  { color: isDark ? "#f3f4f6" : "#111827" },
+                ]}
+              >
+                {item.title}
+              </Text>
+              <View 
+                style={[
+                  styles.priorityBadge,
+                  { backgroundColor: `${getPriorityColor(item.priority)}15` },
+                ]}
+              >
+                <Text 
+                  style={[
+                    styles.priorityText,
+                    { color: getPriorityColor(item.priority) },
+                  ]}
+                >
+                  {getPriorityName(item.priority)}
+                </Text>
+              </View>
+            </View>
+
+            {/* Bus Info Row */}
+            <View style={styles.busInfoRow}>
+              <Text 
+                style={[
+                  styles.busNumberText,
+                  { color: isDark ? "#60a5fa" : "#3b82f6" },
+                ]}
+              >
+                🚌 {item.busNumber}
+              </Text>
+              <Text 
+                style={[
+                  styles.routeText,
+                  { color: isDark ? "#9ca3af" : "#6b7280" },
+                ]}
+              >
+                🗺️ {item.route}
+              </Text>
+            </View>
+
+            {/* Date Time Row */}
+            <View style={styles.dateTimeRow}>
+              <Text 
+                style={[
+                  styles.dateTimeText,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                📅 {formatDate(item.accidentDate)}
+              </Text>
+              <Text 
+                style={[
+                  styles.dateTimeText,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                ⏰ {item.accidentTime}
+              </Text>
+            </View>
           </View>
-          <Text style={styles.route}>{item.route}</Text>
-          <Text style={styles.dateTime}>
-            วัน/เวลาที่เกิดเหตุ: {item.accidentDate}, {item.accidentTime}
-          </Text>
+
+          {/* Expand/Collapse Button */}
+          <TouchableOpacity
+            style={[
+              styles.expandButton,
+              { backgroundColor: isDark ? "#374151" : "#f3f4f6" },
+            ]}
+            onPress={() => toggleExpanded(item.id)}
+            activeOpacity={0.8}
+          >
+            <Text 
+              style={[
+                styles.expandText,
+                { color: isDark ? "#9ca3af" : "#6b7280" },
+              ]}
+            >
+              {isExpanded ? "🔼 ซ่อนรายละเอียด" : "🔽 ดูรายละเอียดเพิ่มเติม"}
+            </Text>
+            <Text 
+              style={[
+                styles.expandArrow,
+                { color: isDark ? "#60a5fa" : "#3b82f6" },
+              ]}
+            >
+              {isExpanded ? "▲" : "▼"}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Expanded Details */}
+          {isExpanded && (
+            <View style={styles.expandedContent}>
+              <View 
+                style={[
+                  styles.separator,
+                  { backgroundColor: isDark ? "#374151" : "#e5e7eb" },
+                ]}
+              />
+              
+              {/* Report Details Grid */}
+              <View style={styles.detailsSection}>
+                <Text 
+                  style={[
+                    styles.sectionTitle,
+                    { color: isDark ? "#f3f4f6" : "#111827" },
+                  ]}
+                >
+                  📋 ข้อมูลการรายงาน
+                </Text>
+                
+                <View style={styles.detailsGrid}>
+                  <View style={styles.detailRow}>
+                    <Text 
+                      style={[
+                        styles.detailLabel,
+                        { color: isDark ? "#9ca3af" : "#6b7280" },
+                      ]}
+                    >
+                      📅 วันที่รายงาน
+                    </Text>
+                    <Text 
+                      style={[
+                        styles.detailValue,
+                        { color: isDark ? "#f3f4f6" : "#111827" },
+                      ]}
+                    >
+                      {formatDate(item.reportDate)}
+                    </Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text 
+                      style={[
+                        styles.detailLabel,
+                        { color: isDark ? "#9ca3af" : "#6b7280" },
+                      ]}
+                    >
+                      ⏰ เวลาที่ส่งรายงาน
+                    </Text>
+                    <Text 
+                      style={[
+                        styles.detailValue,
+                        { color: isDark ? "#f3f4f6" : "#111827" },
+                      ]}
+                    >
+                      {item.reportTime} น.
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Reason Section */}
+              <View style={styles.reasonSection}>
+                <Text 
+                  style={[
+                    styles.sectionTitle,
+                    { color: isDark ? "#f3f4f6" : "#111827" },
+                  ]}
+                >
+                  📄 รายละเอียดเหตุการณ์
+                </Text>
+                
+                <View 
+                  style={[
+                    styles.reasonContainer,
+                    {
+                      backgroundColor: isDark ? "#111827" : "#f9fafb",
+                      borderColor: isDark ? "#374151" : "#e5e7eb",
+                    },
+                  ]}
+                >
+                  <Text 
+                    style={[
+                      styles.reasonText,
+                      { color: isDark ? "#d1d5db" : "#374151" },
+                    ]}
+                  >
+                    {item.reason}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
         </View>
-
-        {/* Expanded Details */}
-        {isExpanded && (
-          <View style={styles.expandedContent}>
-            <View style={styles.separator} />
-
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>วันที่รายงาน:</Text>
-              <Text style={styles.detailValue}>{item.reportDate}</Text>
-            </View>
-
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>เวลาที่ส่งรายงาน:</Text>
-              <Text style={styles.detailValue}>{item.reportTime}</Text>
-            </View>
-
-            <View style={styles.reasonContainer}>
-              <Text style={styles.detailLabel}>เนื้อหา:</Text>
-              <Text style={styles.reasonText}>{item.reason}</Text>
-            </View>
-          </View>
-        )}
-
-        {/* Expand/Collapse Indicator */}
-        <View style={styles.expandIndicator}>
-          <Text style={styles.expandText}>
-            {isExpanded ? "กดเพื่อปิด" : "กดเพื่อดูเนื้อหาทั้งหมด"}
-          </Text>
-          <Text style={styles.expandArrow}>{isExpanded ? "▲" : "▼"}</Text>
-        </View>
-      </TouchableOpacity>
+      </View>
     );
   };
 
+  const renderFilterButtons = () => (
+    <View style={styles.filterContainer}>
+      <Text 
+        style={[
+          styles.filterTitle,
+          { color: isDark ? "#d1d5db" : "#374151" },
+        ]}
+      >
+        🔍 กรองตามสถานะ
+      </Text>
+      <View style={styles.filterButtonsContainer}>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            {
+              backgroundColor: filterStatus === "all" 
+                ? (isDark ? "#3b82f6" : "#007AFF")
+                : (isDark ? "#374151" : "#f3f4f6"),
+              borderColor: filterStatus === "all" 
+                ? (isDark ? "#3b82f6" : "#007AFF")
+                : (isDark ? "#4b5563" : "#d1d5db"),
+            },
+          ]}
+          onPress={() => setFilterStatus("all")}
+          activeOpacity={0.8}
+        >
+          <Text
+            style={[
+              styles.filterButtonText,
+              {
+                color: filterStatus === "all" 
+                  ? "#ffffff" 
+                  : (isDark ? "#d1d5db" : "#374151"),
+              },
+            ]}
+          >
+            📋 ทั้งหมด
+          </Text>
+        </TouchableOpacity>
+
+        {reportStatuses.map((status) => (
+          <TouchableOpacity
+            key={status.id}
+            style={[
+              styles.filterButton,
+              {
+                backgroundColor: filterStatus === status.id 
+                  ? status.color
+                  : (isDark ? "#374151" : "#f3f4f6"),
+                borderColor: filterStatus === status.id 
+                  ? status.color
+                  : (isDark ? "#4b5563" : "#d1d5db"),
+              },
+            ]}
+            onPress={() => setFilterStatus(status.id)}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={[
+                styles.filterButtonText,
+                {
+                  color: filterStatus === status.id 
+                    ? "#ffffff" 
+                    : (isDark ? "#d1d5db" : "#374151"),
+                },
+              ]}
+            >
+              {status.icon} {status.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+
   const renderHeader = () => (
     <View style={styles.headerContainer}>
-      <Text style={styles.title}>ประวัติการรายงาน</Text>
-      <Text style={styles.subtitle}>
-        รายงานทั้งหมด: {reportHistoryData.length}
+      <Text 
+        style={[
+          styles.title,
+          { color: isDark ? "#60a5fa" : "#007AFF" },
+        ]}
+      >
+        📊 ประวัติการรายงาน
       </Text>
+      <Text 
+        style={[
+          styles.subtitle,
+          { color: isDark ? "#9ca3af" : "#6b7280" },
+        ]}
+      >
+        รายงานทั้งหมด: {reportHistoryData.length} รายการ | แสดง: {filteredData.length} รายการ
+      </Text>
+
+      {/* Stats Cards */}
+      <View 
+        style={[
+          styles.statsContainer,
+          {
+            backgroundColor: isDark ? "#1f2937" : "#ffffff",
+            borderColor: isDark ? "#374151" : "#e5e7eb",
+            shadowColor: isDark ? "#000000" : "#007AFF",
+          },
+        ]}
+      >
+        {reportStatuses.map((status) => {
+          const count = reportHistoryData.filter(item => item.status === status.id).length;
+          return (
+            <View key={status.id} style={styles.statItem}>
+              <Text style={styles.statIcon}>{status.icon}</Text>
+              <Text 
+                style={[
+                  styles.statValue,
+                  { color: status.color },
+                ]}
+              >
+                {count}
+              </Text>
+              <Text 
+                style={[
+                  styles.statLabel,
+                  { color: isDark ? "#9ca3af" : "#6b7280" },
+                ]}
+              >
+                {status.name}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+
+      {renderFilterButtons()}
     </View>
   );
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>ยังไม่เคยรายงาน</Text>
+      <Text style={styles.emptyIcon}>📋</Text>
+      <Text 
+        style={[
+          styles.emptyText,
+          { color: isDark ? "#9ca3af" : "#6b7280" },
+        ]}
+      >
+        {filterStatus === "all" 
+          ? "ยังไม่เคยรายงาน"
+          : `ไม่พบรายงานที่มีสถานะ "${getStatusInfo(filterStatus).name}"`
+        }
+      </Text>
     </View>
   );
 
   return (
-    <View style={styles.container}>
+    <View 
+      style={[
+        styles.container,
+        { backgroundColor: isDark ? "#0f172a" : "#f9fafb" },
+      ]}
+    >
       <FlatList
-        data={reportHistoryData}
+        data={filteredData}
         renderItem={renderReportItem}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={renderHeader}
@@ -190,121 +643,3 @@ export default function Report_History() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#25292e",
-    paddingTop: 50,
-  },
-  listContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  headerContainer: {
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  title: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  subtitle: {
-    color: "#B0B0B0",
-    fontSize: 14,
-  },
-  reportCard: {
-    backgroundColor: "#333842",
-    borderRadius: 12,
-    marginBottom: 12,
-    overflow: "hidden",
-  },
-  cardHeader: {
-    padding: 16,
-  },
-  busInfo: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  busNumber: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  route: {
-    color: "#B0B0B0",
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  dateTime: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  separator: {
-    height: 1,
-    backgroundColor: "#404855",
-    marginBottom: 12,
-  },
-  expandedContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 8,
-  },
-  detailRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  detailLabel: {
-    color: "#B0B0B0",
-    fontSize: 12,
-    fontWeight: "500",
-    flex: 1,
-  },
-  detailValue: {
-    color: "#fff",
-    fontSize: 12,
-    flex: 1,
-    textAlign: "right",
-  },
-  reasonContainer: {
-    marginTop: 8,
-  },
-  reasonText: {
-    color: "#fff",
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 4,
-    fontStyle: "italic",
-  },
-  expandIndicator: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: "#404855",
-  },
-  expandText: {
-    color: "#B0B0B0",
-    fontSize: 10,
-  },
-  expandArrow: {
-    color: "#B0B0B0",
-    fontSize: 12,
-  },
-  emptyContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 40,
-  },
-  emptyText: {
-    color: "#B0B0B0",
-    fontSize: 16,
-  },
-});

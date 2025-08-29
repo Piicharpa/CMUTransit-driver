@@ -1,15 +1,28 @@
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
-import { useState } from 'react';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  Alert,
+  useColorScheme,
+  ScrollView,
+} from "react-native";
+import { useState } from "react";
+import { styles } from "../../theme/driver_theme/profile";
 
 export default function Driver_Profile() {
   const [driver, setDriver] = useState({
-    userID: 'DRV001',
-    name: 'John Smith',
-    profilePic: 'https://via.placeholder.com/150/007AFF/FFFFFF?text=JS'
+    userID: "DRV001",
+    name: "John Smith",
+    profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=JS",
   });
 
   const [isEditingName, setIsEditingName] = useState(false);
-  const [editName, setEditName] = useState('');
+  const [editName, setEditName] = useState("");
+
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   const handleEditName = () => {
     setEditName(driver.name);
@@ -20,234 +33,318 @@ export default function Driver_Profile() {
     if (editName.trim()) {
       setDriver({ ...driver, name: editName.trim() });
       setIsEditingName(false);
-      setEditName('');
+      setEditName("");
     } else {
-      Alert.alert('Error', 'Name cannot be empty');
+      Alert.alert(
+        "ข้อผิดพลาด",
+        "ชื่อไม่สามารถเว้นว่างได้"
+      );
     }
   };
 
   const handleCancelEdit = () => {
     setIsEditingName(false);
-    setEditName('');
+    setEditName("");
   };
 
   const handleChangeProfilePic = () => {
-    // For demo purposes, we'll cycle through different placeholder images
-    const currentColor = driver.profilePic.includes('007AFF') ? '34C759' :
-                        driver.profilePic.includes('34C759') ? 'FF3B30' :
-                        driver.profilePic.includes('FF3B30') ? 'FF9500' :
-                        driver.profilePic.includes('FF9500') ? '5856D6' : '007AFF';
-    
-    const initials = driver.name.split(' ').map(n => n[0]).join('').toUpperCase();
+    const currentColor = driver.profilePic.includes("007AFF")
+      ? "34C759"
+      : driver.profilePic.includes("34C759")
+      ? "FF3B30"
+      : driver.profilePic.includes("FF3B30")
+      ? "FF9500"
+      : driver.profilePic.includes("FF9500")
+      ? "5856D6"
+      : "007AFF";
+
+    const initials = driver.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
     const newPic = `https://via.placeholder.com/150/${currentColor}/FFFFFF?text=${initials}`;
-    
+
     setDriver({ ...driver, profilePic: newPic });
-    
-    // In a real app, you would implement image picker here
-    // Example: using expo-image-picker or react-native-image-picker
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>โปรไฟล์คนขับ</Text>
-      
-      <View style={styles.profileCard}>
-        {/* Profile Picture Section */}
-        <View style={styles.profilePicContainer}>
-          <Image source={{ uri: driver.profilePic }} style={styles.profilePic} />
-          <TouchableOpacity 
-            style={styles.changePicButton}
-            onPress={handleChangeProfilePic}
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDark ? "#0f172a" : "#FFFFFF" },
+      ]}
+    >
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header Section */}
+        <View style={styles.header}>
+          <Text
+            style={[styles.title, { color: isDark ? "#60a5fa" : "#007AFF" }]}
           >
-            <Text style={styles.changePicText}>📷</Text>
-          </TouchableOpacity>
+            👤 โปรไฟล์คนขับ
+          </Text>
+          <Text
+            style={[styles.subtitle, { color: isDark ? "#9ca3af" : "#6b7280" }]}
+          >
+            จัดการข้อมูลส่วนตัวของคุณ
+          </Text>
         </View>
 
-        {/* User ID Section */}
-        <View style={styles.infoSection}>
-          <Text style={styles.label}>User ID:</Text>
-          <Text style={styles.userID}>{driver.userID}</Text>
-        </View>
-
-        {/* Name Section */}
-        <View style={styles.infoSection}>
-          <Text style={styles.label}>ชื่อ-นามสกุล:</Text>
-          {isEditingName ? (
-            <View style={styles.editNameContainer}>
-              <TextInput
-                style={styles.nameInput}
-                value={editName}
-                onChangeText={setEditName}
-                placeholder="Enter name"
-                placeholderTextColor="#999"
-                autoFocus
+        <View
+          style={[
+            styles.profileCard,
+            {
+              backgroundColor: isDark ? "#1f2937" : "#F9FAFB",
+              borderColor: isDark ? "#374151" : "#E5E7EB",
+              shadowColor: isDark ? "#000000" : "#007AFF",
+            },
+          ]}
+        >
+          {/* Profile Picture Section */}
+          <View style={styles.profilePicSection}>
+            <View style={styles.profilePicContainer}>
+              <Image
+                source={{ uri: driver.profilePic }}
+                style={[
+                  styles.profilePic,
+                  { borderColor: isDark ? "#60a5fa" : "#007AFF" },
+                ]}
               />
-              <View style={styles.editButtons}>
-                <TouchableOpacity 
-                  style={[styles.button, styles.saveButton]}
-                  onPress={handleSaveName}
-                >
-                  <Text style={styles.buttonText}>บันทึก</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={[styles.button, styles.cancelButton]}
-                  onPress={handleCancelEdit}
-                >
-                  <Text style={styles.buttonText}>ยกเลิก</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ) : (
-            <View style={styles.nameContainer}>
-              <Text style={styles.name}>{driver.name}</Text>
-              <TouchableOpacity 
-                style={[styles.button, styles.editButton]}
-                onPress={handleEditName}
+              <View
+                style={[
+                  styles.profileRing,
+                  {
+                    borderColor: isDark
+                      ? "rgba(96, 165, 250, 0.3)"
+                      : "rgba(0, 122, 255, 0.3)",
+                  },
+                ]}
+              />
+              <TouchableOpacity
+                style={[
+                  styles.changePicButton,
+                  {
+                    backgroundColor: isDark ? "#3b82f6" : "#007AFF",
+                    borderColor: isDark ? "#1f2937" : "#FFFFFF",
+                  },
+                ]}
+                onPress={handleChangeProfilePic}
+                activeOpacity={0.8}
               >
-                <Text style={styles.buttonText}>แก้ไขข้อมูล</Text>
+                <Text style={styles.changePicText}>📷</Text>
               </TouchableOpacity>
             </View>
-          )}
-        </View>
+            <Text
+              style={[
+                styles.changePicHint,
+                { color: isDark ? "#6b7280" : "#9ca3af" },
+              ]}
+            >
+              แตะเพื่อเปลี่ยนรูปโปรไฟล์
+            </Text>
+          </View>
 
-        {/* Additional Info */}
-        <View style={styles.additionalInfo}>
-          <Text style={styles.infoText}>สร้างโปรไฟล์เมื่อ: 25/07/2025</Text>
-          <Text style={styles.infoText}>อัพเดทล่าสุด: {new Date().toLocaleDateString()}</Text>
+          {/* User ID Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>🆔</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                User ID
+              </Text>
+            </View>
+            <View style={styles.userIDContainer}>
+              <Text
+                style={[
+                  styles.userID,
+                  { color: isDark ? "#f3f4f6" : "#111827" },
+                ]}
+              >
+                {driver.userID}
+              </Text>
+              <View style={styles.verifiedBadge}>
+                <Text style={styles.verifiedText}>✓</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Name Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>👤</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                ชื่อ-นามสกุล
+              </Text>
+            </View>
+
+            {isEditingName ? (
+              <View style={styles.editNameContainer}>
+                <TextInput
+                  style={[
+                    styles.nameInput,
+                    {
+                      backgroundColor: isDark ? "#1f2937" : "#F3F4F6",
+                      borderColor: isDark ? "#60a5fa" : "#007AFF",
+                      color: isDark ? "#f3f4f6" : "#111827",
+                    },
+                  ]}
+                  value={editName}
+                  onChangeText={setEditName}
+                  placeholder="กรอกชื่อ-นามสกุล"
+                  placeholderTextColor={isDark ? "#6b7280" : "#999"}
+                  autoFocus
+                  selectionColor={isDark ? "#60a5fa" : "#007AFF"}
+                />
+                <View style={styles.editButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={handleCancelEdit}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.cancelButtonText}>
+                      ยกเลิก
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.button, styles.saveButton]}
+                    onPress={handleSaveName}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.saveButtonText}>
+                      ✓ บันทึก
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.nameDisplayContainer}>
+                <Text
+                  style={[
+                    styles.nameDisplay,
+                    { color: isDark ? "#f3f4f6" : "#111827" },
+                  ]}
+                >
+                  {driver.name}
+                </Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.editButton]}
+                  onPress={handleEditName}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.editButtonText}>
+                    ✏️ แก้ไข
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+
+          {/* Stats Section */}
+          <View
+            style={[
+              styles.statsContainer,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.statItem}>
+              <Text style={styles.statIcon}>📅</Text>
+              <Text
+                style={[
+                  styles.statLabel,
+                  { color: isDark ? "#9ca3af" : "#6B7280" },
+                ]}
+              >
+                สร้างโปรไฟล์
+              </Text>
+              <Text
+                style={[
+                  styles.statValue,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                25/07/2025
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.statDivider,
+                { backgroundColor: isDark ? "#374151" : "#e5e7eb" },
+              ]}
+            />
+            <View style={styles.statItem}>
+              <Text style={styles.statIcon}>🔄</Text>
+              <Text
+                style={[
+                  styles.statLabel,
+                  { color: isDark ? "#9ca3af" : "#6B7280" },
+                ]}
+              >
+                อัพเดทล่าสุด
+              </Text>
+              <Text
+                style={[
+                  styles.statValue,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                {new Date().toLocaleDateString("th-TH")}
+              </Text>
+            </View>
+          </View>
+
+          {/* Status Badge */}
+          <View style={styles.statusContainer}>
+            <View
+              style={[
+                styles.statusBadge,
+                { backgroundColor: isDark ? "#065f46" : "#d1fae5" },
+              ]}
+            >
+              <Text style={styles.statusIcon}>✅</Text>
+              <Text
+                style={[
+                  styles.statusText,
+                  { color: isDark ? "#10b981" : "#059669" },
+                ]}
+              >
+                โปรไฟล์ยืนยันแล้ว
+              </Text>
+            </View>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    paddingTop: 50,
-    paddingHorizontal: 20,
-  },
-  title: {
-    color: '#fff',
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  profileCard: {
-    backgroundColor: '#3a3f47',
-    borderRadius: 16,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: '#4a5058',
-    alignItems: 'center',
-  },
-  profilePicContainer: {
-    position: 'relative',
-    marginBottom: 24,
-  },
-  profilePic: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: '#007AFF',
-  },
-  changePicButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: '#007AFF',
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#3a3f47',
-  },
-  changePicText: {
-    fontSize: 18,
-  },
-  infoSection: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  label: {
-    color: '#ccc',
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  userID: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    backgroundColor: '#25292e',
-    padding: 12,
-    borderRadius: 8,
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: '#5a6068',
-  },
-  nameContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  name: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    flex: 1,
-  },
-  editNameContainer: {
-    width: '100%',
-  },
-  nameInput: {
-    color: '#fff',
-    fontSize: 18,
-    backgroundColor: '#25292e',
-    borderWidth: 1,
-    borderColor: '#5a6068',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
-  },
-  editButtons: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: 8,
-  },
-  button: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 60,
-  },
-  editButton: {
-    backgroundColor: '#007AFF',
-  },
-  saveButton: {
-    backgroundColor: '#34C759',
-  },
-  cancelButton: {
-    backgroundColor: '#8E8E93',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  additionalInfo: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  infoText: {
-    color: '#999',
-    fontSize: 12,
-    marginBottom: 4,
-  },
-});

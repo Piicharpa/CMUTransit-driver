@@ -1,0 +1,202 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 50,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    lineHeight: 24,
+  },
+  headerCard: {
+    marginHorizontal: 16,
+    marginBottom: 20,
+    borderRadius: 16,
+    padding: 20,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+  },
+  statsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  statItem: {
+    alignItems: "center",
+    flex: 1,
+  },
+  statNumber: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  statDivider: {
+    width: 1,
+    height: 40,
+    marginHorizontal: 20,
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+  busCard: {
+    borderRadius: 16,
+    marginBottom: 12,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 1,
+    overflow: "hidden",
+  },
+  busRow: {
+    padding: 20,
+  },
+  busNumberContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 12,
+    alignSelf: "flex-start",
+    marginBottom: 16,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  busNumber: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  infoContainer: {
+    marginBottom: 12,
+  },
+  routeContainer: {
+    marginBottom: 16,
+  },
+  infoLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
+  infoText: {
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 20,
+  },
+  routeText: {
+    fontSize: 14,
+    fontWeight: "600",
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    lineHeight: 20,
+  },
+  routeInput: {
+    fontSize: 14,
+    borderWidth: 2,
+    borderRadius: 8,
+    padding: 12,
+    minHeight: 44,
+    textAlignVertical: "top",
+  },
+  buttonContainer: {
+    alignItems: "center",
+  },
+  actionButtons: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  editButtons: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 10,
+    minWidth: 90,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  editButton: {
+    borderWidth: 1,
+    borderColor: "#2563eb",
+  },
+  deleteButton: {
+    backgroundColor: "#ef4444",
+    borderWidth: 1,
+    borderColor: "#dc2626",
+  },
+  saveButton: {
+    backgroundColor: "#10b981",
+    borderWidth: 1,
+    borderColor: "#059669",
+  },
+  cancelButton: {
+    borderWidth: 1,
+    borderColor: "#4b5563",
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 13,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 60,
+    marginTop: 40,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginHorizontal: 20,
+  },
+  emptyIcon: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  emptyText: {
+    fontSize: 14,
+    textAlign: "center",
+    lineHeight: 20,
+    paddingHorizontal: 20,
+  },
+});

@@ -1,0 +1,113 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#3b82f6",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    shadowColor: "#3b82f6",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  logoIcon: {
+    fontSize: 40,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    lineHeight: 24,
+  },
+  formContainer: {
+    width: "100%",
+    maxWidth: 400,
+    alignSelf: "center",
+    marginTop: 16,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  input: {
+    width: "100%",
+    borderWidth: 2,
+    padding: 16,
+    borderRadius: 12,
+    fontSize: 16,
+  },
+  inputFocused: {
+    borderColor: "#3b82f6",
+  },
+  passwordContainer: {
+    position: "relative",
+  },
+  passwordInput: {
+    paddingRight: 50,
+  },
+  eyeButton: {
+    position: "absolute",
+    right: 16,
+    top: 16,
+  },
+  eyeIcon: {
+    fontSize: 20,
+  },
+  loginButton: {
+    width: "100%",
+    padding: 18,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+  dividerText: {
+    paddingHorizontal: 16,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  studentButton: {
+    width: "100%",
+    padding: 18,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  studentButtonText: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+});

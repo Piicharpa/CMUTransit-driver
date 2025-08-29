@@ -1,13 +1,14 @@
 import {
   Text,
   View,
-  StyleSheet,
   FlatList,
   TouchableOpacity,
   TextInput,
   Alert,
+  useColorScheme,
 } from "react-native";
 import { useState } from "react";
+import { styles } from "../../theme/admin_theme/route";
 
 interface Bus {
   id: string;
@@ -45,6 +46,9 @@ export default function Route_Manage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editRoute, setEditRoute] = useState("");
 
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const handleEdit = (bus: Bus) => {
     setEditingId(bus.id);
     setEditRoute(bus.route);
@@ -65,12 +69,14 @@ export default function Route_Manage() {
 
   const handleDelete = (id: string, busNumber: string) => {
     Alert.alert(
-      "Delete Bus",
-      `Are you sure you want to delete bus ${busNumber}?`,
+      isDark ? "ลบรถ" : "Delete Bus",
+      isDark
+        ? `คุณแน่ใจหรือไม่ที่จะลบรถ ${busNumber}?`
+        : `Are you sure you want to delete bus ${busNumber}?`,
       [
-        { text: "Cancel", style: "cancel" },
+        { text: isDark ? "ยกเลิก" : "Cancel", style: "cancel" },
         {
-          text: "Delete",
+          text: isDark ? "ลบ" : "Delete",
           style: "destructive",
           onPress: () => setBuses(buses.filter((bus) => bus.id !== id)),
         },
@@ -79,23 +85,98 @@ export default function Route_Manage() {
   };
 
   const renderBusItem = ({ item }: { item: Bus }) => (
-    <View style={styles.busCard}>
+    <View
+      style={[
+        styles.busCard,
+        {
+          backgroundColor: isDark ? "#1f2937" : "#ffffff",
+          borderColor: isDark ? "#374151" : "#e2e8f0",
+          shadowColor: isDark ? "#000000" : "#1e3a8a",
+        },
+      ]}
+    >
       <View style={styles.busRow}>
-        <Text style={styles.busNumber}>{item.busNumber}</Text>
-        <Text style={styles.infoText}>{item.mac}</Text>
-        <Text style={styles.infoText}>{item.driverName}</Text>
+        <View
+          style={[
+            styles.busNumberContainer,
+            { backgroundColor: isDark ? "#3b82f6" : "#1e3a8a" },
+          ]}
+        >
+          <Text style={styles.busNumber}>{item.busNumber}</Text>
+        </View>
 
-        {editingId === item.id ? (
-          <TextInput
-            style={styles.routeInput}
-            value={editRoute}
-            onChangeText={setEditRoute}
-            placeholder="Enter route"
-            placeholderTextColor="#999"
-          />
-        ) : (
-          <Text style={styles.routeText}>{item.route}</Text>
-        )}
+        <View style={styles.infoContainer}>
+          <Text
+            style={[
+              styles.infoLabel,
+              { color: isDark ? "#9ca3af" : "#64748b" },
+            ]}
+          >
+            DELL MAC ADDRESS
+          </Text>
+          <Text
+            style={[styles.infoText, { color: isDark ? "#f3f4f6" : "#1e293b" }]}
+          >
+            {item.mac}
+          </Text>
+        </View>
+
+        <View style={styles.infoContainer}>
+          <Text
+            style={[
+              styles.infoLabel,
+              { color: isDark ? "#9ca3af" : "#64748b" },
+            ]}
+          >
+            ชื่อคนขับ
+          </Text>
+          <Text
+            style={[styles.infoText, { color: isDark ? "#f3f4f6" : "#1e293b" }]}
+          >
+            {item.driverName}
+          </Text>
+        </View>
+
+        <View style={styles.routeContainer}>
+          <Text
+            style={[
+              styles.infoLabel,
+              { color: isDark ? "#9ca3af" : "#64748b" },
+            ]}
+          >
+            สายรถ
+          </Text>
+          {editingId === item.id ? (
+            <TextInput
+              style={[
+                styles.routeInput,
+                {
+                  backgroundColor: isDark ? "#111827" : "#ffffff",
+                  borderColor: isDark ? "#60a5fa" : "#3b82f6",
+                  color: isDark ? "#f3f4f6" : "#1e293b",
+                },
+              ]}
+              value={editRoute}
+              onChangeText={setEditRoute}
+              placeholder="ใส่เส้นทาง"
+              placeholderTextColor={isDark ? "#6b7280" : "#999"}
+              multiline
+            />
+          ) : (
+            <Text
+              style={[
+                styles.routeText,
+                {
+                  backgroundColor: isDark ? "#111827" : "#f1f5f9",
+                  borderColor: isDark ? "#374151" : "#e2e8f0",
+                  color: isDark ? "#f3f4f6" : "#1e293b",
+                },
+              ]}
+            >
+              {item.route}
+            </Text>
+          )}
+        </View>
 
         <View style={styles.buttonContainer}>
           {editingId === item.id ? (
@@ -104,28 +185,44 @@ export default function Route_Manage() {
                 style={[styles.button, styles.saveButton]}
                 onPress={() => handleSave(item.id)}
               >
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>
+                  ✓ บันทึก
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
+                style={[
+                  styles.button,
+                  styles.cancelButton,
+                  { backgroundColor: isDark ? "#4b5563" : "#6b7280" },
+                ]}
                 onPress={handleCancel}
               >
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={styles.buttonText}>
+                  ✕ ยกเลิก
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.actionButtons}>
               <TouchableOpacity
-                style={[styles.button, styles.editButton]}
+                style={[
+                  styles.button,
+                  styles.editButton,
+                  { backgroundColor: isDark ? "#3b82f6" : "#3b82f6" },
+                ]}
                 onPress={() => handleEdit(item)}
               >
-                <Text style={styles.buttonText}>Edit</Text>
+                <Text style={styles.buttonText}>
+                  ✏️ แก้ไข
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.deleteButton]}
                 onPress={() => handleDelete(item.id, item.busNumber)}
               >
-                <Text style={styles.buttonText}>Delete</Text>
+                <Text style={styles.buttonText}>
+                  🗑️ ลบ
+                </Text>
               </TouchableOpacity>
             </View>
           )}
@@ -135,16 +232,78 @@ export default function Route_Manage() {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bus Routes</Text>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDark ? "#0f172a" : "#f8f9fa" },
+      ]}
+    >
+      <View style={styles.header}>
+        <Text style={[styles.title, { color: isDark ? "#60a5fa" : "#1e3a8a" }]}>
+          🚌 จัดการเส้นทางรถ
+        </Text>
+        <Text
+          style={[styles.subtitle, { color: isDark ? "#9ca3af" : "#64748b" }]}
+        >
+          จัดการเส้นทางของคุณอย่างมีประสิทธิภาพ
+        </Text>
+      </View>
 
-      {/* Header Row */}
-      <View style={styles.headerRow}>
-        <Text style={styles.headerText}>Bus #</Text>
-        <Text style={styles.headerText}>MAC</Text>
-        <Text style={styles.headerText}>Driver</Text>
-        <Text style={styles.headerText}>Route</Text>
-        <Text style={styles.headerText}>Actions</Text>
+      {/* Header Card */}
+      <View
+        style={[
+          styles.headerCard,
+          {
+            backgroundColor: isDark ? "#1f2937" : "#ffffff",
+            borderColor: isDark ? "#374151" : "#e2e8f0",
+            shadowColor: isDark ? "#000000" : "#1e3a8a",
+          },
+        ]}
+      >
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Text
+              style={[
+                styles.statNumber,
+                { color: isDark ? "#60a5fa" : "#1e3a8a" },
+              ]}
+            >
+              {buses.length}
+            </Text>
+            <Text
+              style={[
+                styles.statLabel,
+                { color: isDark ? "#9ca3af" : "#64748b" },
+              ]}
+            >
+              รถทั้งหมด
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.statDivider,
+              { backgroundColor: isDark ? "#374151" : "#e2e8f0" },
+            ]}
+          />
+          <View style={styles.statItem}>
+            <Text
+              style={[
+                styles.statNumber,
+                { color: isDark ? "#60a5fa" : "#1e3a8a" },
+              ]}
+            >
+              {new Set(buses.map((b) => b.route)).size}
+            </Text>
+            <Text
+              style={[
+                styles.statLabel,
+                { color: isDark ? "#9ca3af" : "#64748b" },
+              ]}
+            >
+              เส้นทางที่ใช้งาน
+            </Text>
+          </View>
+        </View>
       </View>
 
       <FlatList
@@ -153,138 +312,37 @@ export default function Route_Manage() {
         keyExtractor={(item) => item.id}
         style={styles.list}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={() => (
+          <View
+            style={[
+              styles.emptyContainer,
+              {
+                backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e2e8f0",
+              },
+            ]}
+          >
+            <Text style={styles.emptyIcon}>🚌</Text>
+            <Text
+              style={[
+                styles.emptyTitle,
+                { color: isDark ? "#60a5fa" : "#1e3a8a" },
+              ]}
+            >
+              ไม่มีข้อมูลรถ
+            </Text>
+            <Text
+              style={[
+                styles.emptyText,
+                { color: isDark ? "#9ca3af" : "#64748b" },
+              ]}
+            >
+              เพิ่มรถใหม่เพื่อเริ่มจัดการเส้นทาง
+            </Text>
+          </View>
+        )}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#25292e",
-    paddingTop: 50,
-    paddingHorizontal: 16,
-  },
-  title: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  headerRow: {
-    flexDirection: "row",
-    backgroundColor: "#1a1d21",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginBottom: 10,
-    alignItems: "center",
-  },
-  headerText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    flex: 1,
-    textAlign: "center",
-  },
-  list: {
-    flex: 1,
-  },
-  busCard: {
-    backgroundColor: "#3a3f47",
-    borderRadius: 8,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: "#4a5058",
-  },
-  busRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  busNumber: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-    flex: 1,
-    textAlign: "center",
-  },
-  infoText: {
-    color: "#ccc",
-    fontSize: 12,
-    flex: 1,
-    textAlign: "center",
-  },
-  routeText: {
-    color: "#fff",
-    fontSize: 12,
-    flex: 1,
-    textAlign: "center",
-  },
-  routeInput: {
-    color: "#fff",
-    fontSize: 12,
-    backgroundColor: "#25292e",
-    borderWidth: 1,
-    borderColor: "#5a6068",
-    borderRadius: 4,
-    padding: 6,
-    flex: 1,
-    marginHorizontal: 4,
-    textAlign: "center",
-  },
-  buttonContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  actionButtons: {
-    flexDirection: "row",
-    gap: 4,
-  },
-  editButtons: {
-    flexDirection: "row",
-    gap: 4,
-  },
-  button: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    minWidth: 40,
-  },
-  editButton: {
-    backgroundColor: "#007AFF",
-    width: 64,
-    height: 32,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  deleteButton: {
-    backgroundColor: "#FF3B30",
-    width: 64,
-    height: 32,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  saveButton: {
-    backgroundColor: "#34C759",
-    width: 64,
-    height: 32,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  cancelButton: {
-    backgroundColor: "#8E8E93",
-    width: 64,
-    height: 32,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 10,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-});

@@ -1,11 +1,14 @@
 import { Stack, Link } from "expo-router";
-import { View, Text, Pressable, StyleSheet, Platform } from "react-native";
+import { View, Text, Pressable, Platform } from "react-native";
+import { styles } from "../theme/admin_theme/layout";
 
 export default function Layout() {
-  const isWeb = Platform.OS === 'web';
-  
+  const isWeb = Platform.OS === "web";
+
   const NavBar = () => (
-    <View style={[styles.navbar, isWeb ? styles.navbarTop : styles.navbarBottom]}>
+    <View
+      style={[styles.navbar, isWeb ? styles.navbarTop : styles.navbarBottom]}
+    >
       <Link href="/admin" asChild>
         <Pressable style={styles.navItem}>
           <Text style={styles.link}>หน้าหลัก</Text>
@@ -53,34 +56,3 @@ export default function Layout() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  navbar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "#007AFF",
-    paddingVertical: 20,
-  },
-  navbarTop: {
-    // Additional styles for top navbar if needed
-    borderBottomWidth: 1,
-    borderBottomColor: "#0056CC",
-  },
-  navbarBottom: {
-    // Additional styles for bottom navbar
-    borderTopWidth: 1,
-    borderTopColor: "#0056CC",
-    paddingBottom: Platform.OS === 'ios' ? 20 : 12, // Account for iOS safe area
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: 8,
-  },
-  link: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: 'center',
-  },
-});

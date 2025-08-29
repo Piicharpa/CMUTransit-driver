@@ -1,11 +1,13 @@
 import {
   Text,
   View,
-  StyleSheet,
   FlatList,
   TouchableOpacity,
+  TextInput,
+  useColorScheme,
 } from "react-native";
 import { useState } from "react";
+import { styles } from "../../theme/admin_theme/all_report";
 
 interface ReportHistory {
   id: string;
@@ -16,7 +18,8 @@ interface ReportHistory {
   reportDate: string;
   reportTime: string;
   reason: string;
-  driverName: string; // Added driver name
+  driverName: string;
+  category: "mechanical" | "accident" | "passenger" | "delay" | "safety"; // เพิ่ม category
 }
 
 const reportHistoryData: ReportHistory[] = [
@@ -30,6 +33,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "14:35",
     reason: "เครื่องยนต์มีปัญหาทำให้รถหยุดกะทันหัน",
     driverName: "สมชาย วงศ์ใหญ่",
+    category: "mechanical",
   },
   {
     id: "2",
@@ -41,6 +45,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "09:20",
     reason: "ชนรถที่จอดอยู่ที่ป้ายรถเมล์เล็กน้อย",
     driverName: "สุปราณี จันทร์เพ็ญ",
+    category: "accident",
   },
   {
     id: "3",
@@ -52,6 +57,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "16:50",
     reason: "ผู้โดยสารได้รับบาดเจ็บจากการเบรกกะทันหัน",
     driverName: "สมศักดิ์ แสงทอง",
+    category: "passenger",
   },
   {
     id: "4",
@@ -63,6 +69,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "11:25",
     reason: "ยางรถแตกขณะให้บริการปกติ",
     driverName: "สุกัญญา ทองดี",
+    category: "mechanical",
   },
   {
     id: "5",
@@ -74,6 +81,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "13:55",
     reason: "ประตูรถเสียทำให้ผู้โดยสารติดอยู่",
     driverName: "วิชัย ศรีสวัสดิ์",
+    category: "safety",
   },
   {
     id: "6",
@@ -85,6 +93,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "08:35",
     reason: "เดินทางล่าช้าเนื่องจากอุบัติเหตุบนเส้นทาง",
     driverName: "นิรมล เจริญสุข",
+    category: "delay",
   },
   {
     id: "7",
@@ -96,6 +105,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "17:20",
     reason: "เครื่องปรับอากาศเสียในช่วงเวลาเร่งด่วน",
     driverName: "ประวิทย์ มงคลชัย",
+    category: "mechanical",
   },
   {
     id: "8",
@@ -107,6 +117,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "12:45",
     reason: "กระจกหน้าต่างแตกจากการทำลาย",
     driverName: "สมหญิง ใจดี",
+    category: "safety",
   },
   {
     id: "9",
@@ -118,6 +129,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "07:50",
     reason: "ออกเดินทางล่าช้าจากปัญหาระบบเครื่องยนต์",
     driverName: "รุ่งโรจน์ พรหมมี",
+    category: "delay",
   },
   {
     id: "10",
@@ -129,6 +141,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "15:25",
     reason: "ชนกันเล็กน้อยที่แยกไฟแดง",
     driverName: "สุมลลี ดาวเด่น",
+    category: "accident",
   },
   {
     id: "11",
@@ -140,6 +153,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "10:20",
     reason: "ผู้โดยสารล้มขณะรถเบรก",
     driverName: "อนุชิต บุญเรือง",
+    category: "passenger",
   },
   {
     id: "12",
@@ -150,7 +164,8 @@ const reportHistoryData: ReportHistory[] = [
     reportDate: "2025-01-06",
     reportTime: "16:35",
     reason: "เครื่องยนต์ร้อนเกินไปในช่วงรถติด",
-    driverName: "จินดา รัตนพงษ์",
+    driverName: "จินดา รัตนพฤทธิ์",
+    category: "mechanical",
   },
   {
     id: "13",
@@ -162,6 +177,7 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "13:25",
     reason: "ระบบเบรกมีปัญหาขณะจอดรถ",
     driverName: "ธนวัฒน์ สุขใส",
+    category: "safety",
   },
   {
     id: "14",
@@ -171,8 +187,9 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "11:45",
     reportDate: "2025-01-04",
     reportTime: "11:50",
-    reason: "ระบ บไฟฟ้าในรถขัดข้อง",
+    reason: "ระบบไฟฟ้าในรถขัดข้อง",
     driverName: "พิมพ์ใจ มณีรัตน์",
+    category: "mechanical",
   },
   {
     id: "15",
@@ -184,231 +201,947 @@ const reportHistoryData: ReportHistory[] = [
     reportTime: "08:15",
     reason: "ชนรถมอเตอร์ไซค์เล็กน้อยที่สี่แยก",
     driverName: "กฤษณะ ทองคำ",
+    category: "accident",
   },
 ];
 
 export default function All_Report() {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [status, setStatus] = useState<{ [key: string]: string }>({});
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    route: "",
+    accidentDate: "",
+    driverName: "",
+    status: "",
+    busNumber: "",
+    category: "", // เพิ่ม category filter
+  });
+
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
+  // ฟังก์ชันสำหรับหาสีและไอคอนของหมวดหมู่
+  const getCategoryConfig = (category: string) => {
+    switch (category) {
+      case "mechanical":
+        return { color: "#f59e0b", icon: "🔧", label: "เครื่องยนต์/อุปกรณ์" };
+      case "accident":
+        return { color: "#ef4444", icon: "⚠️", label: "อุบัติเหตุ" };
+      case "passenger":
+        return { color: "#8b5cf6", icon: "👥", label: "ผู้โดยสาร" };
+      case "delay":
+        return { color: "#06b6d4", icon: "⏰", label: "ความล่าช้า" };
+      case "safety":
+        return { color: "#10b981", icon: "🛡️", label: "ความปลอดภัย" };
+      default:
+        return {
+          color: isDark ? "#6b7280" : "#9ca3af",
+          icon: "📝",
+          label: "อื่นๆ",
+        };
+    }
+  };
 
   const toggleExpanded = (id: string) => {
     setExpandedItem(expandedItem === id ? null : id);
   };
 
+  // ฟังก์ชันเช็คว่ามี filter ที่ active อยู่หรือไม่
+  const hasActiveFilters = () => {
+    return Object.values(filters).some((value) => value !== "");
+  };
+
+  // ฟังก์ชันล้าง filter ทั้งหมด
+  const clearAllFilters = () => {
+    setFilters({
+      route: "",
+      accidentDate: "",
+      driverName: "",
+      status: "",
+      busNumber: "",
+      category: "", // ล้าง category filter ด้วย
+    });
+  };
+
+  // กรองข้อมูลตาม filter
+  const filteredData = reportHistoryData.filter((item) => {
+    const routeMatch = item.route.includes(filters.route);
+    const dateMatch = item.accidentDate.includes(filters.accidentDate);
+    const driverMatch = item.driverName.includes(filters.driverName);
+    const busMatch = item.busNumber.includes(filters.busNumber);
+    const categoryMatch =
+      !filters.category || item.category === filters.category; // เพิ่ม category filter
+    const statusMatch = !filters.status || status[item.id] === filters.status;
+    return (
+      routeMatch &&
+      dateMatch &&
+      driverMatch &&
+      busMatch &&
+      categoryMatch &&
+      statusMatch
+    );
+  });
+
+  const getStatusColor = (statusValue: string) => {
+    switch (statusValue) {
+      case "pending":
+        return "#f59e0b";
+      case "in_progress":
+        return "#3b82f6";
+      case "done":
+        return "#10b981";
+      default:
+        return isDark ? "#6b7280" : "#9ca3af";
+    }
+  };
+
   const renderReportItem = ({ item }: { item: ReportHistory }) => {
     const isExpanded = expandedItem === item.id;
+    const itemStatus = status[item.id];
+    const categoryConfig = getCategoryConfig(item.category);
 
     return (
-      <TouchableOpacity
-        style={styles.reportCard}
-        onPress={() => toggleExpanded(item.id)}
-        activeOpacity={0.7}
+      <View
+        style={[
+          styles.reportCard,
+          {
+            backgroundColor: isDark ? "#1f2937" : "#ffffff",
+            borderColor: isDark ? "#374151" : "#e2e8f0",
+            shadowColor: isDark ? "#000000" : "#1e3a8a",
+          },
+        ]}
       >
-        {/* Header Section - Always Visible */}
-        <View style={styles.cardHeader}>
-          <View style={styles.busInfo}>
-            <Text style={styles.busNumber}>{item.busNumber}</Text>
-            <View style={styles.driverInfo}>
-              <Text style={styles.driverLabel}>คนขับ:</Text>
-              <Text style={styles.driverName}>{item.driverName}</Text>
+        <TouchableOpacity
+          onPress={() => toggleExpanded(item.id)}
+          activeOpacity={0.8}
+        >
+          {/* Header Section */}
+          <View style={styles.cardHeader}>
+            <View style={styles.headerTop}>
+              <View style={styles.busInfoContainer}>
+                <View
+                  style={[
+                    styles.busNumberTag,
+                    { backgroundColor: isDark ? "#3b82f6" : "#1e3a8a" },
+                  ]}
+                >
+                  <Text style={styles.busNumber}>🚌 {item.busNumber}</Text>
+                </View>
+                <View
+                  style={[
+                    styles.statusDot,
+                    { backgroundColor: getStatusColor(itemStatus) },
+                  ]}
+                />
+              </View>
+
+              {/* Category Badge */}
+              <View
+                style={[
+                  styles.categoryBadge,
+                  {
+                    backgroundColor: categoryConfig.color + "20",
+                    borderColor: categoryConfig.color,
+                  },
+                ]}
+              >
+                <Text style={styles.categoryIcon}>{categoryConfig.icon}</Text>
+                <Text
+                  style={[styles.categoryText, { color: categoryConfig.color }]}
+                >
+                  {categoryConfig.label}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.driverInfoRow}>
+              <Text
+                style={[
+                  styles.driverLabel,
+                  { color: isDark ? "#9ca3af" : "#64748b" },
+                ]}
+              >
+                ผู้ขับรถ
+              </Text>
+              <Text
+                style={[
+                  styles.driverName,
+                  { color: isDark ? "#f3f4f6" : "#1e293b" },
+                ]}
+              >
+                👤 {item.driverName}
+              </Text>
+            </View>
+
+            <View style={styles.routeContainer}>
+              <Text
+                style={[
+                  styles.routeLabel,
+                  { color: isDark ? "#9ca3af" : "#64748b" },
+                ]}
+              >
+                เส้นทาง
+              </Text>
+              <Text
+                style={[
+                  styles.route,
+                  { color: isDark ? "#f3f4f6" : "#1e293b" },
+                ]}
+              >
+                🛣️ {item.route}
+              </Text>
+            </View>
+
+            <View style={styles.dateTimeContainer}>
+              <View
+                style={[
+                  styles.dateTimeBox,
+                  {
+                    backgroundColor: isDark ? "#111827" : "#f1f5f9",
+                    borderColor: isDark ? "#374151" : "#e2e8f0",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.dateTimeLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  📅 วันที่อุบัติเหตุ
+                </Text>
+                <Text
+                  style={[
+                    styles.dateTime,
+                    { color: isDark ? "#f3f4f6" : "#1e293b" },
+                  ]}
+                >
+                  {item.accidentDate}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.dateTimeBox,
+                  {
+                    backgroundColor: isDark ? "#111827" : "#f1f5f9",
+                    borderColor: isDark ? "#374151" : "#e2e8f0",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.dateTimeLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  🕐 เวลา
+                </Text>
+                <Text
+                  style={[
+                    styles.dateTime,
+                    { color: isDark ? "#f3f4f6" : "#1e293b" },
+                  ]}
+                >
+                  {item.accidentTime}
+                </Text>
+              </View>
             </View>
           </View>
-          <Text style={styles.route}>{item.route}</Text>
-          <Text style={styles.dateTime}>
-            Accident: {item.accidentDate} at {item.accidentTime}
-          </Text>
-        </View>
+
+          {/* Expand/Collapse Indicator */}
+          <View
+            style={[
+              styles.expandIndicator,
+              {
+                backgroundColor: isDark ? "#111827" : "#f1f5f9",
+                borderTopColor: isDark ? "#374151" : "#e2e8f0",
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.expandText,
+                { color: isDark ? "#60a5fa" : "#1e3a8a" },
+              ]}
+            >
+              {isExpanded ? "▲ ซ่อนรายละเอียด" : "▼ ดูรายละเอียดเพิ่มเติม"}
+            </Text>
+          </View>
+        </TouchableOpacity>
 
         {/* Expanded Details */}
         {isExpanded && (
-          <View style={styles.expandedContent}>
-            <View style={styles.separator} />
+          <View
+            style={[
+              styles.expandedContent,
+              {
+                backgroundColor: isDark ? "#111827" : "#f8f9fa",
+                borderTopColor: isDark ? "#374151" : "#e2e8f0",
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.separator,
+                { backgroundColor: isDark ? "#374151" : "#e2e8f0" },
+              ]}
+            />
 
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>วันที่ส่งรายงาน:</Text>
-              <Text style={styles.detailValue}>{item.reportDate}</Text>
+            <View style={styles.detailsGrid}>
+              <View
+                style={[
+                  styles.detailItem,
+                  {
+                    backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                    borderColor: isDark ? "#374151" : "#e2e8f0",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.detailLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  📄 วันที่ส่งรายงาน
+                </Text>
+                <Text
+                  style={[
+                    styles.detailValue,
+                    { color: isDark ? "#f3f4f6" : "#1e293b" },
+                  ]}
+                >
+                  {item.reportDate}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.detailItem,
+                  {
+                    backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                    borderColor: isDark ? "#374151" : "#e2e8f0",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.detailLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  ⏰ เวลาส่งรายงาน
+                </Text>
+                <Text
+                  style={[
+                    styles.detailValue,
+                    { color: isDark ? "#f3f4f6" : "#1e293b" },
+                  ]}
+                >
+                  {item.reportTime}
+                </Text>
+              </View>
             </View>
 
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>เวลาที่ส่งรายงาน:</Text>
-              <Text style={styles.detailValue}>{item.reportTime}</Text>
+            <View
+              style={[
+                styles.reasonContainer,
+                {
+                  backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                  borderColor: isDark ? "#374151" : "#e2e8f0",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.reasonTitle,
+                  { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                ]}
+              >
+                📝 รายละเอียดเหตุการณ์
+              </Text>
+              <Text
+                style={[
+                  styles.reasonText,
+                  { color: isDark ? "#d1d5db" : "#475569" },
+                ]}
+              >
+                {item.reason}
+              </Text>
             </View>
 
-            <View style={styles.reasonContainer}>
-              <Text style={styles.detailLabel}>เหตุผล:</Text>
-              <Text style={styles.reasonText}>{item.reason}</Text>
+            {/* Status Selection */}
+            <View style={styles.statusSection}>
+              <Text
+                style={[
+                  styles.statusLabel,
+                  { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                ]}
+              >
+                🔄 สถานะการดำเนินการ
+              </Text>
+              <View style={styles.statusButtons}>
+                {[
+                  {
+                    label: "⏳ รอดำเนินการ",
+                    value: "pending",
+                    color: "#f59e0b",
+                  },
+                  {
+                    label: "⚡ กำลังดำเนินการ",
+                    value: "in_progress",
+                    color: "#3b82f6",
+                  },
+                  { label: "✅ เสร็จสิ้น", value: "done", color: "#10b981" },
+                ].map((option) => (
+                  <TouchableOpacity
+                    key={option.value}
+                    style={[
+                      styles.statusButton,
+                      {
+                        backgroundColor:
+                          status[item.id] === option.value
+                            ? option.color
+                            : isDark
+                            ? "#1f2937"
+                            : "#ffffff",
+                        borderColor:
+                          status[item.id] === option.value
+                            ? option.color
+                            : isDark
+                            ? "#374151"
+                            : "#e2e8f0",
+                      },
+                    ]}
+                    onPress={() =>
+                      setStatus((prev) => ({
+                        ...prev,
+                        [item.id]: option.value,
+                      }))
+                    }
+                  >
+                    <Text
+                      style={[
+                        styles.statusButtonText,
+                        {
+                          color:
+                            status[item.id] === option.value
+                              ? "#ffffff"
+                              : isDark
+                              ? "#9ca3af"
+                              : "#64748b",
+                        },
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           </View>
         )}
-
-        {/* Expand/Collapse Indicator */}
-        <View style={styles.expandIndicator}>
-          <Text style={styles.expandText}>
-            {isExpanded ? "คลิกเพื่อย่อ" : "คลิกเพื่อดูทั้งหมด"}
-          </Text>
-          <Text style={styles.expandArrow}>{isExpanded ? "▲" : "▼"}</Text>
-        </View>
-      </TouchableOpacity>
+      </View>
     );
   };
 
-  const renderHeader = () => (
-    <View style={styles.headerContainer}>
-      <Text style={styles.title}>รายงานทั้งหมด</Text>
-      <Text style={styles.subtitle}>
-        รายงานทั้งหมด: {reportHistoryData.length}
-      </Text>
-    </View>
-  );
-
-  const renderEmptyState = () => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>No reports found</Text>
-    </View>
-  );
-
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDark ? "#0f172a" : "#f8f9fa" },
+      ]}
+    >
       <FlatList
-        data={reportHistoryData}
+        data={filteredData}
         renderItem={renderReportItem}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderHeader}
-        ListEmptyComponent={renderEmptyState}
+        ListHeaderComponent={
+          <View>
+            {/* Header */}
+            <View style={styles.headerContainer}>
+              <Text
+                style={[
+                  styles.title,
+                  { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                ]}
+              >
+                📋 รายงานอุบัติเหตุทั้งหมด
+              </Text>
+              <Text
+                style={[
+                  styles.subtitle,
+                  { color: isDark ? "#9ca3af" : "#64748b" },
+                ]}
+              >
+                จัดการและติดตามสถานะรายงาน {filteredData.length} รายการ
+              </Text>
+            </View>
+
+            {/* Summary Card */}
+            <View
+              style={[
+                styles.summaryCard,
+                {
+                  backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                  borderColor: isDark ? "#374151" : "#e2e8f0",
+                  shadowColor: isDark ? "#000000" : "#1e3a8a",
+                },
+              ]}
+            >
+              <View style={styles.summaryItem}>
+                <Text
+                  style={[
+                    styles.summaryNumber,
+                    { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                  ]}
+                >
+                  {filteredData.length}
+                </Text>
+                <Text
+                  style={[
+                    styles.summaryLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  📊 รายงานทั้งหมด
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.summaryDivider,
+                  { backgroundColor: isDark ? "#374151" : "#e2e8f0" },
+                ]}
+              />
+              <View style={styles.summaryItem}>
+                <Text
+                  style={[
+                    styles.summaryNumber,
+                    { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                  ]}
+                >
+                  {Object.values(status).filter((s) => s === "done").length}
+                </Text>
+                <Text
+                  style={[
+                    styles.summaryLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  ✅ เสร็จสิ้น
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.summaryDivider,
+                  { backgroundColor: isDark ? "#374151" : "#e2e8f0" },
+                ]}
+              />
+              <View style={styles.summaryItem}>
+                <Text
+                  style={[
+                    styles.summaryNumber,
+                    { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                  ]}
+                >
+                  {
+                    Object.values(status).filter(
+                      (s) => s === "pending" || s === "in_progress"
+                    ).length
+                  }
+                </Text>
+                <Text
+                  style={[
+                    styles.summaryLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  ⏳ กำลังดำเนินการ
+                </Text>
+              </View>
+            </View>
+
+            {/* Filter Toggle Button */}
+            <View style={styles.filterToggleContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.filterToggleButton,
+                  {
+                    backgroundColor: showFilters
+                      ? isDark
+                        ? "#3b82f6"
+                        : "#1e3a8a"
+                      : isDark
+                      ? "#374151"
+                      : "#f1f5f9",
+                    borderColor: isDark ? "#4b5563" : "#e2e8f0",
+                  },
+                ]}
+                onPress={() => setShowFilters(!showFilters)}
+                activeOpacity={0.8}
+              >
+                <Text
+                  style={[
+                    styles.filterToggleText,
+                    {
+                      color: showFilters
+                        ? "#ffffff"
+                        : isDark
+                        ? "#d1d5db"
+                        : "#1e293b",
+                    },
+                  ]}
+                >
+                  🔍 {showFilters ? "ซ่อนตัวกรอง" : "แสดงตัวกรอง"}
+                </Text>
+                <Text
+                  style={[
+                    styles.filterToggleIcon,
+                    {
+                      color: showFilters
+                        ? "#ffffff"
+                        : isDark
+                        ? "#9ca3af"
+                        : "#64748b",
+                    },
+                  ]}
+                >
+                  {showFilters ? "▲" : "▼"}
+                </Text>
+              </TouchableOpacity>
+
+              {/* Filter Status Indicator */}
+              {hasActiveFilters() && (
+                <View style={styles.filterIndicatorContainer}>
+                  <View
+                    style={[
+                      styles.filterIndicator,
+                      { backgroundColor: isDark ? "#f59e0b" : "#f59e0b" },
+                    ]}
+                  >
+                    <Text style={styles.filterIndicatorText}>
+                      {Object.values(filters).filter((v) => v !== "").length}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={[
+                      styles.clearFiltersButton,
+                      {
+                        backgroundColor: isDark ? "#ef4444" : "#ef4444",
+                      },
+                    ]}
+                    onPress={clearAllFilters}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.clearFiltersText}>ล้าง</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            {/* Filter Section */}
+            {showFilters && (
+              <View
+                style={[
+                  styles.filterContainer,
+                  {
+                    backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                    borderColor: isDark ? "#374151" : "#e2e8f0",
+                    shadowColor: isDark ? "#000000" : "#1e3a8a",
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.filterTitle,
+                    { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                  ]}
+                >
+                  🔍 ค้นหาและกรองข้อมูล
+                </Text>
+
+                {/* Category Filter */}
+                <View style={styles.categoryFilterContainer}>
+                  <Text
+                    style={[
+                      styles.statusFilterLabel,
+                      { color: isDark ? "#9ca3af" : "#64748b" },
+                    ]}
+                  >
+                    📂 กรองตามหมวดหมู่
+                  </Text>
+                  <View style={styles.categoryFilterButtons}>
+                    <TouchableOpacity
+                      style={[
+                        styles.categoryFilterButton,
+                        {
+                          backgroundColor:
+                            filters.category === ""
+                              ? isDark
+                                ? "#3b82f6"
+                                : "#1e3a8a"
+                              : isDark
+                              ? "#374151"
+                              : "#f1f5f9",
+                          borderColor:
+                            filters.category === ""
+                              ? isDark
+                                ? "#3b82f6"
+                                : "#1e3a8a"
+                              : isDark
+                              ? "#4b5563"
+                              : "#e2e8f0",
+                        },
+                      ]}
+                      onPress={() =>
+                        setFilters((prev) => ({ ...prev, category: "" }))
+                      }
+                    >
+                      <Text
+                        style={[
+                          styles.categoryFilterText,
+                          {
+                            color:
+                              filters.category === ""
+                                ? "#ffffff"
+                                : isDark
+                                ? "#9ca3af"
+                                : "#64748b",
+                          },
+                        ]}
+                      >
+                        ทั้งหมด
+                      </Text>
+                    </TouchableOpacity>
+
+                    {[
+                      { key: "mechanical", ...getCategoryConfig("mechanical") },
+                      { key: "accident", ...getCategoryConfig("accident") },
+                      { key: "passenger", ...getCategoryConfig("passenger") },
+                      { key: "delay", ...getCategoryConfig("delay") },
+                      { key: "safety", ...getCategoryConfig("safety") },
+                    ].map((category) => (
+                      <TouchableOpacity
+                        key={category.key}
+                        style={[
+                          styles.categoryFilterButton,
+                          {
+                            backgroundColor:
+                              filters.category === category.key
+                                ? category.color
+                                : isDark
+                                ? "#374151"
+                                : "#f1f5f9",
+                            borderColor:
+                              filters.category === category.key
+                                ? category.color
+                                : isDark
+                                ? "#4b5563"
+                                : "#e2e8f0",
+                          },
+                        ]}
+                        onPress={() =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            category:
+                              prev.category === category.key
+                                ? ""
+                                : category.key,
+                          }))
+                        }
+                      >
+                        <Text style={styles.categoryFilterIcon}>
+                          {category.icon}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.categoryFilterText,
+                            {
+                              color:
+                                filters.category === category.key
+                                  ? "#ffffff"
+                                  : isDark
+                                  ? "#9ca3af"
+                                  : "#64748b",
+                            },
+                          ]}
+                        >
+                          {category.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+
+                <View style={styles.filterGrid}>
+                  <TextInput
+                    placeholder="🚌 ค้นหาหมายเลขรถ"
+                    placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
+                    style={[
+                      styles.filterInput,
+                      {
+                        backgroundColor: isDark ? "#111827" : "#f8f9fa",
+                        borderColor: isDark ? "#374151" : "#e2e8f0",
+                        color: isDark ? "#f3f4f6" : "#1e293b",
+                      },
+                    ]}
+                    value={filters.busNumber}
+                    onChangeText={(text) =>
+                      setFilters((prev) => ({ ...prev, busNumber: text }))
+                    }
+                  />
+                  <TextInput
+                    placeholder="🛣️ ค้นหาเส้นทาง"
+                    placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
+                    style={[
+                      styles.filterInput,
+                      {
+                        backgroundColor: isDark ? "#111827" : "#f8f9fa",
+                        borderColor: isDark ? "#374151" : "#e2e8f0",
+                        color: isDark ? "#f3f4f6" : "#1e293b",
+                      },
+                    ]}
+                    value={filters.route}
+                    onChangeText={(text) =>
+                      setFilters((prev) => ({ ...prev, route: text }))
+                    }
+                  />
+                  <TextInput
+                    placeholder="👤 ค้นหาชื่อผู้ขับ"
+                    placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
+                    style={[
+                      styles.filterInput,
+                      {
+                        backgroundColor: isDark ? "#111827" : "#f8f9fa",
+                        borderColor: isDark ? "#374151" : "#e2e8f0",
+                        color: isDark ? "#f3f4f6" : "#1e293b",
+                      },
+                    ]}
+                    value={filters.driverName}
+                    onChangeText={(text) =>
+                      setFilters((prev) => ({ ...prev, driverName: text }))
+                    }
+                  />
+                  <TextInput
+                    placeholder="📅 ค้นหาวันที่ (YYYY-MM-DD)"
+                    placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
+                    style={[
+                      styles.filterInput,
+                      {
+                        backgroundColor: isDark ? "#111827" : "#f8f9fa",
+                        borderColor: isDark ? "#374151" : "#e2e8f0",
+                        color: isDark ? "#f3f4f6" : "#1e293b",
+                      },
+                    ]}
+                    value={filters.accidentDate}
+                    onChangeText={(text) =>
+                      setFilters((prev) => ({ ...prev, accidentDate: text }))
+                    }
+                  />
+                </View>
+
+                {/* Status Filter */}
+                <View style={styles.statusFilterContainer}>
+                  <Text
+                    style={[
+                      styles.statusFilterLabel,
+                      { color: isDark ? "#9ca3af" : "#64748b" },
+                    ]}
+                  >
+                    🔄 กรองตามสถานะ
+                  </Text>
+                  <View style={styles.statusFilterButtons}>
+                    {[
+                      { label: "ทั้งหมด", value: "" },
+                      { label: "⏳ รอดำเนินการ", value: "pending" },
+                      { label: "⚡ กำลังดำเนินการ", value: "in_progress" },
+                      { label: "✅ เสร็จสิ้น", value: "done" },
+                    ].map((option) => (
+                      <TouchableOpacity
+                        key={option.value}
+                        style={[
+                          styles.filterStatusButton,
+                          {
+                            backgroundColor:
+                              filters.status === option.value
+                                ? isDark
+                                  ? "#3b82f6"
+                                  : "#1e3a8a"
+                                : isDark
+                                ? "#374151"
+                                : "#f1f5f9",
+                            borderColor:
+                              filters.status === option.value
+                                ? isDark
+                                  ? "#3b82f6"
+                                  : "#1e3a8a"
+                                : isDark
+                                ? "#4b5563"
+                                : "#e2e8f0",
+                          },
+                        ]}
+                        onPress={() =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            status: option.value,
+                          }))
+                        }
+                      >
+                        <Text
+                          style={[
+                            styles.filterStatusText,
+                            {
+                              color:
+                                filters.status === option.value
+                                  ? "#ffffff"
+                                  : isDark
+                                  ? "#9ca3af"
+                                  : "#64748b",
+                            },
+                          ]}
+                        >
+                          {option.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+              </View>
+            )}
+          </View>
+        }
+        ListEmptyComponent={
+          <View
+            style={[
+              styles.emptyContainer,
+              {
+                backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e2e8f0",
+              },
+            ]}
+          >
+            <Text style={styles.emptyIcon}>📭</Text>
+            <Text
+              style={[
+                styles.emptyTitle,
+                { color: isDark ? "#60a5fa" : "#1e3a8a" },
+              ]}
+            >
+              ไม่พบรายงาน
+            </Text>
+            <Text
+              style={[
+                styles.emptyText,
+                { color: isDark ? "#9ca3af" : "#64748b" },
+              ]}
+            >
+              ลองปรับเงื่อนไขการค้นหาใหม่
+            </Text>
+          </View>
+        }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#25292e",
-    paddingTop: 50,
-  },
-  listContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  headerContainer: {
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  title: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  subtitle: {
-    color: "#B0B0B0",
-    fontSize: 14,
-  },
-  reportCard: {
-    backgroundColor: "#333842",
-    borderRadius: 12,
-    marginBottom: 12,
-    overflow: "hidden",
-  },
-  cardHeader: {
-    padding: 16,
-  },
-  busInfo: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  busNumber: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  // New driver info styles
-  driverInfo: {
-    alignItems: "flex-end",
-  },
-  driverLabel: {
-    color: "#B0B0B0",
-    fontSize: 10,
-    marginBottom: 2,
-  },
-  driverName: {
-    color: "#4CAF50",
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  route: {
-    color: "#B0B0B0",
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  dateTime: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  separator: {
-    height: 1,
-    backgroundColor: "#404855",
-    marginBottom: 12,
-  },
-  expandedContent: {
-    paddingHorizontal: 16,
-    paddingBottom: 8,
-  },
-  detailRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  detailLabel: {
-    color: "#B0B0B0",
-    fontSize: 12,
-    fontWeight: "500",
-    flex: 1,
-  },
-  detailValue: {
-    color: "#fff",
-    fontSize: 12,
-    flex: 1,
-    textAlign: "right",
-  },
-  reasonContainer: {
-    marginTop: 8,
-  },
-  reasonText: {
-    color: "#fff",
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 4,
-    fontStyle: "italic",
-  },
-  expandIndicator: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: "#404855",
-  },
-  expandText: {
-    color: "#B0B0B0",
-    fontSize: 10,
-  },
-  expandArrow: {
-    color: "#B0B0B0",
-    fontSize: 12,
-  },
-  emptyContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 40,
-  },
-  emptyText: {
-    color: "#B0B0B0",
-    fontSize: 16,
-  },
-});

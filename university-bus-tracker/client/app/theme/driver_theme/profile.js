@@ -1,0 +1,243 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    paddingBottom: 30, // เพิ่ม padding ล่าง
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  profileCard: {
+    borderRadius: 24,
+    padding: 24,
+    borderWidth: 1,
+    alignItems: 'center',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  profilePicSection: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  profilePicContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  profilePic: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 4,
+  },
+  profileRing: {
+    position: 'absolute',
+    width: 136,
+    height: 136,
+    borderRadius: 68,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+  },
+  changePicButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  changePicText: {
+    fontSize: 16,
+  },
+  changePicHint: {
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
+  infoCard: {
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    width: '100%',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  infoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  infoIcon: {
+    fontSize: 18,
+    marginRight: 10,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  userIDContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  userID: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'monospace',
+  },
+  verifiedBadge: {
+    backgroundColor: '#10b981',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verifiedText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  nameDisplayContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  nameDisplay: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flex: 1,
+    marginRight: 12,
+  },
+  editNameContainer: {
+    gap: 12,
+  },
+  nameInput: {
+    fontSize: 16,
+    borderWidth: 2,
+    borderRadius: 12,
+    padding: 12,
+  },
+  editButtons: {
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'flex-end',
+  },
+  button: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 70,
+  },
+  editButton: {
+    backgroundColor: '#007AFF',
+  },
+  editButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  saveButton: {
+    backgroundColor: '#10b981',
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  cancelButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#6b7280',
+  },
+  cancelButtonText: {
+    color: '#6b7280',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    width: '100%',
+  },
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statIcon: {
+    fontSize: 20,
+    marginBottom: 6,
+  },
+  statLabel: {
+    fontSize: 10,
+    fontWeight: '500',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  statValue: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  statDivider: {
+    width: 1,
+    marginHorizontal: 12,
+  },
+  statusContainer: {
+    alignItems: 'center',
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#10b981',
+  },
+  statusIcon: {
+    fontSize: 14,
+    marginRight: 6,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+});
