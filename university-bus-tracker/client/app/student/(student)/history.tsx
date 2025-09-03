@@ -17,10 +17,9 @@ interface ReportHistory {
   reportDate: string;
   reportTime: string;
   reason: string;
-  category: 'vehicle' | 'route' | 'passenger' | 'safety' | 'accident' | 'other';
+  category: "vehicle" | "route" | "passenger" | "safety" | "accident" | "other";
   title: string;
-  status: 'pending' | 'processing' | 'completed';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: "pending" | "processing" | "completed";
 }
 
 interface ReportCategory {
@@ -38,18 +37,33 @@ interface ReportStatus {
 }
 
 const reportCategories: ReportCategory[] = [
-  { id: 'vehicle', name: 'ปัญหารถ', icon: '🚌', color: '#3b82f6' },
-  { id: 'route', name: 'เส้นทาง', icon: '🗺️', color: '#10b981' },
-  { id: 'passenger', name: 'ผู้โดยสาร', icon: '👥', color: '#f59e0b' },
-  { id: 'safety', name: 'ความปลอดภัย', icon: '⚠️', color: '#ef4444' },
-  { id: 'accident', name: 'อุบัติเหตุ', icon: '🚨', color: '#dc2626' },
-  { id: 'other', name: 'อื่นๆ', icon: '📝', color: '#8b5cf6' },
+  { id: "vehicle", name: "ปัญหารถ", icon: "🚌", color: "#3b82f6" },
+  { id: "route", name: "เส้นทาง", icon: "🗺️", color: "#10b981" },
+  { id: "passenger", name: "ผู้โดยสาร", icon: "👥", color: "#f59e0b" },
+  { id: "safety", name: "ความปลอดภัย", icon: "⚠️", color: "#ef4444" },
+  { id: "accident", name: "อุบัติเหตุ", icon: "🚨", color: "#dc2626" },
+  { id: "other", name: "อื่นๆ", icon: "📝", color: "#8b5cf6" },
 ];
 
 const reportStatuses: ReportStatus[] = [
-  { id: 'pending', name: 'รอดำเนินการ', icon: '⏳', color: '#f59e0b' },
-  { id: 'processing', name: 'กำลังดำเนินการ', icon: '🔄', color: '#3b82f6' },
-  { id: 'completed', name: 'ดำเนินการแล้ว', icon: '✅', color: '#10b981' },
+  {
+    id: "pending",
+    name: "รอดำเนินการแก้ไข/ปรับปรุง",
+    icon: "⏳",
+    color: "#f59e0b",
+  },
+  {
+    id: "processing",
+    name: "กำลังดำเนินการแก้ไข/ปรับปรุง",
+    icon: "🔄",
+    color: "#3b82f6",
+  },
+  {
+    id: "completed",
+    name: "ดำเนินการแก้ไข/ปรับปรุงแล้ว",
+    icon: "✅",
+    color: "#10b981",
+  },
 ];
 
 const reportHistoryData: ReportHistory[] = [
@@ -61,11 +75,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "14:30",
     reportDate: "2025-01-15",
     reportTime: "14:35",
-    reason: "เครื่องยนต์เสียทำให้รถหยุดกะทันหัน ผู้โดยสารต้องรอรถคันถัดไป ช่างได้มาตรวจสอบและซ่อมแซมเรียบร้อยแล้ว",
-    category: 'vehicle',
+    reason:
+      "เครื่องยนต์เสียทำให้รถหยุดกะทันหัน ผู้โดยสารต้องรอรถคันถัดไป ช่างได้มาตรวจสอบและซ่อมแซมเรียบร้อยแล้ว",
+    category: "vehicle",
     title: "เครื่องยนต์เสีย",
-    status: 'processing',
-    priority: 'high',
+    status: "processing",
   },
   {
     id: "2",
@@ -75,11 +89,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "09:15",
     reportDate: "2025-01-14",
     reportTime: "09:20",
-    reason: "ชนรถที่จอดอยู่ที่ป้ายรถเมล์เล็กน้อย ไม่มีผู้บาดเจ็บ ความเสียหายเพียงเล็กน้อย ได้แจ้งบริษัทประกันแล้ว",
-    category: 'accident',
+    reason:
+      "ชนรถที่จอดอยู่ที่ป้ายรถเมล์เล็กน้อย ไม่มีผู้บาดเจ็บ ความเสียหายเพียงเล็กน้อย ได้แจ้งบริษัทประกันแล้ว",
+    category: "accident",
     title: "ชนรถจอด",
-    status: 'completed',
-    priority: 'medium',
+    status: "completed",
   },
   {
     id: "3",
@@ -89,11 +103,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "16:45",
     reportDate: "2025-01-14",
     reportTime: "16:50",
-    reason: "ผู้โดยสารบาดเจ็บเนื่องจากเบรกกะทันหัน ได้นำส่งโรงพยาบาลแล้ว อาการไม่หนัก คาดว่าจะหายดีในไม่กี่วัน",
-    category: 'safety',
+    reason:
+      "ผู้โดยสารบาดเจ็บเนื่องจากเบรกกะทันหัน ได้นำส่งโรงพยาบาลแล้ว อาการไม่หนัก คาดว่าจะหายดีในไม่กี่วัน",
+    category: "safety",
     title: "ผู้โดยสารบาดเจ็บ",
-    status: 'completed',
-    priority: 'urgent',
+    status: "completed",
   },
   {
     id: "4",
@@ -103,11 +117,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "11:20",
     reportDate: "2025-01-13",
     reportTime: "11:25",
-    reason: "ยางระเบิดระหว่างการให้บริการ ต้องเปลี่ยนยางใหม่ ใช้เวลาประมาณ 30 นาทีในการซ่อมแซม",
-    category: 'vehicle',
+    reason:
+      "ยางระเบิดระหว่างการให้บริการ ต้องเปลี่ยนยางใหม่ ใช้เวลาประมาณ 30 นาทีในการซ่อมแซม",
+    category: "vehicle",
     title: "ยางระเบิด",
-    status: 'completed',
-    priority: 'medium',
+    status: "completed",
   },
   {
     id: "5",
@@ -117,11 +131,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "13:50",
     reportDate: "2025-01-12",
     reportTime: "13:55",
-    reason: "ประตูรถเสียทำให้ผู้โดยสารติดอยู่ข้างใน ต้องเรียกช่างมาซ่อม ใช้เวลาประมาณ 45 นาทีในการแก้ไข",
-    category: 'vehicle',
+    reason:
+      "ประตูรถเสียทำให้ผู้โดยสารติดอยู่ข้างใน ต้องเรียกช่างมาซ่อม ใช้เวลาประมาณ 45 นาทีในการแก้ไข",
+    category: "vehicle",
     title: "ประตูรถเสีย",
-    status: 'completed',
-    priority: 'high',
+    status: "completed",
   },
   {
     id: "6",
@@ -131,11 +145,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "08:30",
     reportDate: "2025-01-12",
     reportTime: "08:35",
-    reason: "มาสายเนื่องจากอุบัติเหตุจราจรบนเส้นทาง ผู้โดยสารรอนาน ไม่สามารถควบคุมได้เนื่องจากปัจจัยภายนอก",
-    category: 'route',
+    reason:
+      "มาสายเนื่องจากอุบัติเหตุจราจรบนเส้นทาง ผู้โดยสารรอนาน ไม่สามารถควบคุมได้เนื่องจากปัจจัยภายนอก",
+    category: "route",
     title: "มาสายเนื่องจากจราจร",
-    status: 'completed',
-    priority: 'low',
+    status: "completed",
   },
   {
     id: "7",
@@ -145,11 +159,11 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "17:15",
     reportDate: "2025-01-11",
     reportTime: "17:20",
-    reason: "แอร์เสียในช่วงเวลาเร่งด่วน อากาศร้อนจัด ผู้โดยสารร้องเรียน กำลังดำเนินการซ่อมแซม",
-    category: 'vehicle',
+    reason:
+      "แอร์เสียในช่วงเวลาเร่งด่วน อากาศร้อนจัด ผู้โดยสารร้องเรียน กำลังดำเนินการซ่อมแซม",
+    category: "vehicle",
     title: "เครื่องปรับอากาศเสีย",
-    status: 'pending',
-    priority: 'medium',
+    status: "pending",
   },
   {
     id: "8",
@@ -159,36 +173,43 @@ const reportHistoryData: ReportHistory[] = [
     accidentTime: "12:40",
     reportDate: "2025-01-10",
     reportTime: "12:45",
-    reason: "กระจกแตกเนื่องจากการทำลาย ต้องเปลี่ยนกระจกใหม่ กำลังรอชิ้นส่วนจากผู้ผลิต",
-    category: 'other',
+    reason:
+      "กระจกแตกเนื่องจากการทำลาย ต้องเปลี่ยนกระจกใหม่ กำลังรอชิ้นส่วนจากผู้ผลิต",
+    category: "other",
     title: "กระจกแตกจากการทำลาย",
-    status: 'processing',
-    priority: 'medium',
+    status: "processing",
   },
 ];
 
 export default function Report_History() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-  
+
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const getCategoryInfo = (categoryId: string) => {
-    return reportCategories.find(cat => cat.id === categoryId) || reportCategories[0];
+    return (
+      reportCategories.find((cat) => cat.id === categoryId) ||
+      reportCategories[0]
+    );
   };
 
   const getStatusInfo = (statusId: string) => {
-    return reportStatuses.find(status => status.id === statusId) || reportStatuses[0];
+    return (
+      reportStatuses.find((status) => status.id === statusId) ||
+      reportStatuses[0]
+    );
   };
 
   const toggleExpanded = (id: string) => {
     setExpandedItem(expandedItem === id ? null : id);
   };
 
-  const filteredData = filterStatus === "all" 
-    ? reportHistoryData 
-    : reportHistoryData.filter(item => item.status === filterStatus);
+  const filteredData =
+    filterStatus === "all"
+      ? reportHistoryData
+      : reportHistoryData.filter((item) => item.status === filterStatus);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -198,33 +219,13 @@ export default function Report_History() {
     return `${day}/${month}/${year}`;
   };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'urgent': return '#dc2626';
-      case 'high': return '#ef4444';
-      case 'medium': return '#f59e0b';
-      case 'low': return '#10b981';
-      default: return '#6b7280';
-    }
-  };
-
-  const getPriorityName = (priority: string) => {
-    switch (priority) {
-      case 'urgent': return 'เร่งด่วน';
-      case 'high': return 'สูง';
-      case 'medium': return 'ปานกลาง';
-      case 'low': return 'ต่ำ';
-      default: return 'ปานกลาง';
-    }
-  };
-
   const renderReportItem = ({ item }: { item: ReportHistory }) => {
     const isExpanded = expandedItem === item.id;
     const categoryInfo = getCategoryInfo(item.category);
     const statusInfo = getStatusInfo(item.status);
 
     return (
-      <View 
+      <View
         style={[
           styles.reportCard,
           {
@@ -234,14 +235,6 @@ export default function Report_History() {
           },
         ]}
       >
-        {/* Priority Indicator */}
-        <View 
-          style={[
-            styles.priorityIndicator,
-            { backgroundColor: getPriorityColor(item.priority) },
-          ]}
-        />
-
         {/* Main Content */}
         <View style={styles.cardContent}>
           {/* Header Section - Always Visible */}
@@ -250,64 +243,29 @@ export default function Report_History() {
             <View style={styles.topRow}>
               <View style={styles.categoryBadge}>
                 <Text style={styles.categoryIcon}>{categoryInfo.icon}</Text>
-                <Text 
-                  style={[
-                    styles.categoryText,
-                    { color: categoryInfo.color },
-                  ]}
+                <Text
+                  style={[styles.categoryText, { color: categoryInfo.color }]}
                 >
                   {categoryInfo.name}
                 </Text>
               </View>
-              
-              <View 
+
+              <View
                 style={[
                   styles.statusBadge,
                   { backgroundColor: `${statusInfo.color}20` },
                 ]}
               >
                 <Text style={styles.statusIcon}>{statusInfo.icon}</Text>
-                <Text 
-                  style={[
-                    styles.statusText,
-                    { color: statusInfo.color },
-                  ]}
-                >
+                <Text style={[styles.statusText, { color: statusInfo.color }]}>
                   {statusInfo.name}
-                </Text>
-              </View>
-            </View>
-
-            {/* Title Row */}
-            <View style={styles.titleRow}>
-              <Text 
-                style={[
-                  styles.reportTitle,
-                  { color: isDark ? "#f3f4f6" : "#111827" },
-                ]}
-              >
-                {item.title}
-              </Text>
-              <View 
-                style={[
-                  styles.priorityBadge,
-                  { backgroundColor: `${getPriorityColor(item.priority)}15` },
-                ]}
-              >
-                <Text 
-                  style={[
-                    styles.priorityText,
-                    { color: getPriorityColor(item.priority) },
-                  ]}
-                >
-                  {getPriorityName(item.priority)}
                 </Text>
               </View>
             </View>
 
             {/* Bus Info Row */}
             <View style={styles.busInfoRow}>
-              <Text 
+              <Text
                 style={[
                   styles.busNumberText,
                   { color: isDark ? "#60a5fa" : "#3b82f6" },
@@ -315,7 +273,7 @@ export default function Report_History() {
               >
                 🚌 {item.busNumber}
               </Text>
-              <Text 
+              <Text
                 style={[
                   styles.routeText,
                   { color: isDark ? "#9ca3af" : "#6b7280" },
@@ -327,7 +285,7 @@ export default function Report_History() {
 
             {/* Date Time Row */}
             <View style={styles.dateTimeRow}>
-              <Text 
+              <Text
                 style={[
                   styles.dateTimeText,
                   { color: isDark ? "#d1d5db" : "#374151" },
@@ -335,7 +293,7 @@ export default function Report_History() {
               >
                 📅 {formatDate(item.accidentDate)}
               </Text>
-              <Text 
+              <Text
                 style={[
                   styles.dateTimeText,
                   { color: isDark ? "#d1d5db" : "#374151" },
@@ -355,7 +313,7 @@ export default function Report_History() {
             onPress={() => toggleExpanded(item.id)}
             activeOpacity={0.8}
           >
-            <Text 
+            <Text
               style={[
                 styles.expandText,
                 { color: isDark ? "#9ca3af" : "#6b7280" },
@@ -363,7 +321,7 @@ export default function Report_History() {
             >
               {isExpanded ? "🔼 ซ่อนรายละเอียด" : "🔽 ดูรายละเอียดเพิ่มเติม"}
             </Text>
-            <Text 
+            <Text
               style={[
                 styles.expandArrow,
                 { color: isDark ? "#60a5fa" : "#3b82f6" },
@@ -376,16 +334,16 @@ export default function Report_History() {
           {/* Expanded Details */}
           {isExpanded && (
             <View style={styles.expandedContent}>
-              <View 
+              <View
                 style={[
                   styles.separator,
                   { backgroundColor: isDark ? "#374151" : "#e5e7eb" },
                 ]}
               />
-              
+
               {/* Report Details Grid */}
               <View style={styles.detailsSection}>
-                <Text 
+                <Text
                   style={[
                     styles.sectionTitle,
                     { color: isDark ? "#f3f4f6" : "#111827" },
@@ -393,10 +351,10 @@ export default function Report_History() {
                 >
                   📋 ข้อมูลการรายงาน
                 </Text>
-                
+
                 <View style={styles.detailsGrid}>
                   <View style={styles.detailRow}>
-                    <Text 
+                    <Text
                       style={[
                         styles.detailLabel,
                         { color: isDark ? "#9ca3af" : "#6b7280" },
@@ -404,7 +362,7 @@ export default function Report_History() {
                     >
                       📅 วันที่รายงาน
                     </Text>
-                    <Text 
+                    <Text
                       style={[
                         styles.detailValue,
                         { color: isDark ? "#f3f4f6" : "#111827" },
@@ -413,9 +371,9 @@ export default function Report_History() {
                       {formatDate(item.reportDate)}
                     </Text>
                   </View>
-                  
+
                   <View style={styles.detailRow}>
-                    <Text 
+                    <Text
                       style={[
                         styles.detailLabel,
                         { color: isDark ? "#9ca3af" : "#6b7280" },
@@ -423,7 +381,7 @@ export default function Report_History() {
                     >
                       ⏰ เวลาที่ส่งรายงาน
                     </Text>
-                    <Text 
+                    <Text
                       style={[
                         styles.detailValue,
                         { color: isDark ? "#f3f4f6" : "#111827" },
@@ -437,7 +395,7 @@ export default function Report_History() {
 
               {/* Reason Section */}
               <View style={styles.reasonSection}>
-                <Text 
+                <Text
                   style={[
                     styles.sectionTitle,
                     { color: isDark ? "#f3f4f6" : "#111827" },
@@ -445,8 +403,8 @@ export default function Report_History() {
                 >
                   📄 รายละเอียดเหตุการณ์
                 </Text>
-                
-                <View 
+
+                <View
                   style={[
                     styles.reasonContainer,
                     {
@@ -455,7 +413,7 @@ export default function Report_History() {
                     },
                   ]}
                 >
-                  <Text 
+                  <Text
                     style={[
                       styles.reasonText,
                       { color: isDark ? "#d1d5db" : "#374151" },
@@ -474,11 +432,8 @@ export default function Report_History() {
 
   const renderFilterButtons = () => (
     <View style={styles.filterContainer}>
-      <Text 
-        style={[
-          styles.filterTitle,
-          { color: isDark ? "#d1d5db" : "#374151" },
-        ]}
+      <Text
+        style={[styles.filterTitle, { color: isDark ? "#d1d5db" : "#374151" }]}
       >
         🔍 กรองตามสถานะ
       </Text>
@@ -487,12 +442,22 @@ export default function Report_History() {
           style={[
             styles.filterButton,
             {
-              backgroundColor: filterStatus === "all" 
-                ? (isDark ? "#3b82f6" : "#007AFF")
-                : (isDark ? "#374151" : "#f3f4f6"),
-              borderColor: filterStatus === "all" 
-                ? (isDark ? "#3b82f6" : "#007AFF")
-                : (isDark ? "#4b5563" : "#d1d5db"),
+              backgroundColor:
+                filterStatus === "all"
+                  ? isDark
+                    ? "#3b82f6"
+                    : "#007AFF"
+                  : isDark
+                  ? "#374151"
+                  : "#f3f4f6",
+              borderColor:
+                filterStatus === "all"
+                  ? isDark
+                    ? "#3b82f6"
+                    : "#007AFF"
+                  : isDark
+                  ? "#4b5563"
+                  : "#d1d5db",
             },
           ]}
           onPress={() => setFilterStatus("all")}
@@ -502,9 +467,12 @@ export default function Report_History() {
             style={[
               styles.filterButtonText,
               {
-                color: filterStatus === "all" 
-                  ? "#ffffff" 
-                  : (isDark ? "#d1d5db" : "#374151"),
+                color:
+                  filterStatus === "all"
+                    ? "#ffffff"
+                    : isDark
+                    ? "#d1d5db"
+                    : "#374151",
               },
             ]}
           >
@@ -518,12 +486,18 @@ export default function Report_History() {
             style={[
               styles.filterButton,
               {
-                backgroundColor: filterStatus === status.id 
-                  ? status.color
-                  : (isDark ? "#374151" : "#f3f4f6"),
-                borderColor: filterStatus === status.id 
-                  ? status.color
-                  : (isDark ? "#4b5563" : "#d1d5db"),
+                backgroundColor:
+                  filterStatus === status.id
+                    ? status.color
+                    : isDark
+                    ? "#374151"
+                    : "#f3f4f6",
+                borderColor:
+                  filterStatus === status.id
+                    ? status.color
+                    : isDark
+                    ? "#4b5563"
+                    : "#d1d5db",
               },
             ]}
             onPress={() => setFilterStatus(status.id)}
@@ -533,9 +507,12 @@ export default function Report_History() {
               style={[
                 styles.filterButtonText,
                 {
-                  color: filterStatus === status.id 
-                    ? "#ffffff" 
-                    : (isDark ? "#d1d5db" : "#374151"),
+                  color:
+                    filterStatus === status.id
+                      ? "#ffffff"
+                      : isDark
+                      ? "#d1d5db"
+                      : "#374151",
                 },
               ]}
             >
@@ -549,25 +526,18 @@ export default function Report_History() {
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
-      <Text 
-        style={[
-          styles.title,
-          { color: isDark ? "#60a5fa" : "#007AFF" },
-        ]}
-      >
+      <Text style={[styles.title, { color: isDark ? "#60a5fa" : "#007AFF" }]}>
         📊 ประวัติการรายงาน
       </Text>
-      <Text 
-        style={[
-          styles.subtitle,
-          { color: isDark ? "#9ca3af" : "#6b7280" },
-        ]}
+      <Text
+        style={[styles.subtitle, { color: isDark ? "#9ca3af" : "#6b7280" }]}
       >
-        รายงานทั้งหมด: {reportHistoryData.length} รายการ | แสดง: {filteredData.length} รายการ
+        รายงานทั้งหมด: {reportHistoryData.length} รายการ | แสดง:{" "}
+        {filteredData.length} รายการ
       </Text>
 
       {/* Stats Cards */}
-      <View 
+      <View
         style={[
           styles.statsContainer,
           {
@@ -578,19 +548,16 @@ export default function Report_History() {
         ]}
       >
         {reportStatuses.map((status) => {
-          const count = reportHistoryData.filter(item => item.status === status.id).length;
+          const count = reportHistoryData.filter(
+            (item) => item.status === status.id
+          ).length;
           return (
             <View key={status.id} style={styles.statItem}>
               <Text style={styles.statIcon}>{status.icon}</Text>
-              <Text 
-                style={[
-                  styles.statValue,
-                  { color: status.color },
-                ]}
-              >
+              <Text style={[styles.statValue, { color: status.color }]}>
                 {count}
               </Text>
-              <Text 
+              <Text
                 style={[
                   styles.statLabel,
                   { color: isDark ? "#9ca3af" : "#6b7280" },
@@ -610,22 +577,18 @@ export default function Report_History() {
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyIcon}>📋</Text>
-      <Text 
-        style={[
-          styles.emptyText,
-          { color: isDark ? "#9ca3af" : "#6b7280" },
-        ]}
+      <Text
+        style={[styles.emptyText, { color: isDark ? "#9ca3af" : "#6b7280" }]}
       >
-        {filterStatus === "all" 
+        {filterStatus === "all"
           ? "ยังไม่เคยรายงาน"
-          : `ไม่พบรายงานที่มีสถานะ "${getStatusInfo(filterStatus).name}"`
-        }
+          : `ไม่พบรายงานที่มีสถานะ "${getStatusInfo(filterStatus).name}"`}
       </Text>
     </View>
   );
 
   return (
-    <View 
+    <View
       style={[
         styles.container,
         { backgroundColor: isDark ? "#0f172a" : "#f9fafb" },

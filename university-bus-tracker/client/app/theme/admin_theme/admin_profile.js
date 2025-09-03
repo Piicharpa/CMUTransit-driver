@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   scrollContent: {
     paddingTop: 50,
     paddingHorizontal: 20,
-    paddingBottom: 30, // เพิ่ม padding ล่าง
+    paddingBottom: 30,
   },
   header: {
     alignItems: "center",
@@ -187,6 +187,25 @@ export const styles = StyleSheet.create({
   cancelButtonText: {
     color: "#6b7280",
     fontSize: 12,
+    fontWeight: "600",
+  },
+  // เพิ่ม styles สำหรับ Role Badge
+  roleBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
+  roleIcon: {
+    fontSize: 16,
+    marginRight: 6,
+  },
+  roleText: {
+    fontSize: 14,
     fontWeight: "600",
   },
   statsContainer: {

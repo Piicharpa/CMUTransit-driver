@@ -3,10 +3,11 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    // ลบ paddingTop: 50 เพื่อไม่ให้ header ติดอยู่ด้านบน
   },
   header: {
     paddingHorizontal: 20,
+    paddingTop: 20, // เพิ่ม paddingTop ที่นี่แทน
     paddingBottom: 20,
     alignItems: "center",
   },
@@ -62,6 +63,7 @@ export const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 20,
+    // ลบ padding ที่ไม่จำเป็น เพราะจะใช้ ListHeaderComponent แทน
   },
   busCard: {
     borderRadius: 16,
@@ -151,6 +153,7 @@ export const styles = StyleSheet.create({
     elevation: 3,
   },
   editButton: {
+    backgroundColor: "#3b82f6",
     borderWidth: 1,
     borderColor: "#2563eb",
   },

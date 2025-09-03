@@ -231,13 +231,9 @@ export default function Route_Manage() {
     </View>
   );
 
-  return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: isDark ? "#0f172a" : "#f8f9fa" },
-      ]}
-    >
+  // Header component to be included in FlatList
+  const ListHeader = () => (
+    <>
       <View style={styles.header}>
         <Text style={[styles.title, { color: isDark ? "#60a5fa" : "#1e3a8a" }]}>
           🚌 จัดการเส้นทางรถ
@@ -305,7 +301,16 @@ export default function Route_Manage() {
           </View>
         </View>
       </View>
+    </>
+  );
 
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDark ? "#0f172a" : "#f8f9fa" },
+      ]}
+    >
       <FlatList
         data={buses}
         renderItem={renderBusItem}
@@ -313,6 +318,7 @@ export default function Route_Manage() {
         style={styles.list}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        ListHeaderComponent={ListHeader}
         ListEmptyComponent={() => (
           <View
             style={[

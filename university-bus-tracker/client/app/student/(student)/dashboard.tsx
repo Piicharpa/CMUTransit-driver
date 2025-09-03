@@ -40,7 +40,7 @@ const reportCategories: ReportCategory[] = [
 ];
 
 const busData: BusData[] = [
-  // วันนี้ - รถที่กำลังวิ่ง
+  // วันนี้ (2025-09-02) - รถที่กำลังวิ่ง
   {
     id: "1",
     busNumber: "1",
@@ -48,7 +48,7 @@ const busData: BusData[] = [
     startTime: "07:20",
     endTime: null,
     status: "online",
-    operatingDate: "2025-01-25",
+    operatingDate: "2025-09-02",
     lastUpdate: "14:30",
   },
   {
@@ -58,7 +58,7 @@ const busData: BusData[] = [
     startTime: "07:30",
     endTime: null,
     status: "online",
-    operatingDate: "2025-01-25",
+    operatingDate: "2025-09-02",
     lastUpdate: "14:25",
   },
   {
@@ -68,11 +68,10 @@ const busData: BusData[] = [
     startTime: "06:00",
     endTime: null,
     status: "online",
-    operatingDate: "2025-01-25",
+    operatingDate: "2025-09-02",
     lastUpdate: "14:15",
   },
-
-  // วันนี้ - รถที่วิ่งเสร็จแล้ว
+  // วันนี้ (2025-09-02) - รถที่วิ่งเสร็จแล้ว
   {
     id: "4",
     busNumber: "5",
@@ -80,7 +79,7 @@ const busData: BusData[] = [
     startTime: "05:00",
     endTime: "12:30",
     status: "completed",
-    operatingDate: "2025-01-25",
+    operatingDate: "2025-09-02",
     lastUpdate: "12:30",
   },
   {
@@ -90,11 +89,10 @@ const busData: BusData[] = [
     startTime: "06:45",
     endTime: "13:15",
     status: "completed",
-    operatingDate: "2025-01-25",
+    operatingDate: "2025-09-02",
     lastUpdate: "13:15",
   },
-
-  // เมื่อวาน
+  // เมื่อวาน (2025-09-01)
   {
     id: "6",
     busNumber: "4",
@@ -102,7 +100,7 @@ const busData: BusData[] = [
     startTime: "07:15",
     endTime: "16:30",
     status: "completed",
-    operatingDate: "2025-01-24",
+    operatingDate: "2025-09-01",
     lastUpdate: "16:30",
   },
   {
@@ -112,7 +110,7 @@ const busData: BusData[] = [
     startTime: "08:00",
     endTime: "17:45",
     status: "completed",
-    operatingDate: "2025-01-24",
+    operatingDate: "2025-09-01",
     lastUpdate: "17:45",
   },
   {
@@ -122,7 +120,7 @@ const busData: BusData[] = [
     startTime: "06:30",
     endTime: "15:20",
     status: "completed",
-    operatingDate: "2025-01-24",
+    operatingDate: "2025-09-01",
     lastUpdate: "15:20",
   },
   {
@@ -132,11 +130,10 @@ const busData: BusData[] = [
     startTime: "14:00",
     endTime: "22:30",
     status: "completed",
-    operatingDate: "2025-01-24",
+    operatingDate: "2025-09-01",
     lastUpdate: "22:30",
   },
-
-  // 2 วันก่อน
+  // 2 วันก่อน (2025-08-31)
   {
     id: "10",
     busNumber: "25",
@@ -144,7 +141,7 @@ const busData: BusData[] = [
     startTime: "09:15",
     endTime: "18:45",
     status: "completed",
-    operatingDate: "2025-01-23",
+    operatingDate: "2025-08-31",
     lastUpdate: "18:45",
   },
   {
@@ -154,7 +151,7 @@ const busData: BusData[] = [
     startTime: "13:30",
     endTime: "21:15",
     status: "completed",
-    operatingDate: "2025-01-23",
+    operatingDate: "2025-08-31",
     lastUpdate: "21:15",
   },
 ];
@@ -162,7 +159,6 @@ const busData: BusData[] = [
 export default function Bus_Dashboard() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedBus, setSelectedBus] = useState<BusData | null>(null);
   const [reportData, setReportData] = useState({
@@ -186,7 +182,6 @@ export default function Bus_Dashboard() {
   ): boolean => {
     const incident = timeToMinutes(incidentTime);
     const start = timeToMinutes(bus.startTime);
-
     if (bus.endTime) {
       // Bus has finished - check if incident time was within operating hours
       const end = timeToMinutes(bus.endTime);
@@ -202,15 +197,6 @@ export default function Bus_Dashboard() {
     const [hours, minutes] = timeStr.split(":").map(Number);
     return hours * 60 + minutes;
   };
-
-  // Format minutes back to time string
-  // const minutesToTime = (minutes: number): string => {
-  //   const hours = Math.floor(minutes / 60);
-  //   const mins = minutes % 60;
-  //   return `${hours.toString().padStart(2, "0")}:${mins
-  //     .toString()
-  //     .padStart(2, "0")}`;
-  // };
 
   // Get current running buses (today's buses that are still active)
   const getCurrentBuses = () => {
@@ -230,16 +216,13 @@ export default function Bus_Dashboard() {
       let filtered = busData.filter((bus) => {
         // ตรวจสอบวันที่ก่อน
         if (bus.operatingDate !== filterDate) return false;
-
         // ตรวจสอบว่าเวลาที่เกิดเหตุอยู่ในช่วงที่รถวิ่งหรือไม่
         return isTimeWithinBusOperation(incidentTime, bus);
       });
-
       // เรียงตามเวลาเริ่มต้น
       filtered.sort(
         (a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime)
       );
-
       setFilteredBuses(filtered);
     } else if (filterDate.trim()) {
       // แสดงรถทั้งหมดในวันที่เลือก (ยกเว้นรถที่กำลังวิ่งวันนี้)
@@ -273,7 +256,10 @@ export default function Bus_Dashboard() {
         accidentTime: incidentTime,
       });
     }
-    setModalVisible(true);
+    // รออีกเล็กน้อยก่อนเปิด modal เพื่อให้ state update สมบูรณ์
+    setTimeout(() => {
+      setModalVisible(true);
+    }, 100);
   };
 
   const handleOpenHistoricalReport = () => {
@@ -286,7 +272,10 @@ export default function Bus_Dashboard() {
   const handleSelectHistoricalBus = (bus: BusData) => {
     setSelectedBus(bus);
     setShowHistoricalModal(false);
-    setModalVisible(true);
+    // รออีกเล็กน้อยให้ modal แรกปิดก่อน
+    setTimeout(() => {
+      setModalVisible(true);
+    }, 300);
     clearFilters();
   };
 
@@ -313,7 +302,6 @@ export default function Bus_Dashboard() {
     }
 
     const categoryInfo = getCategoryInfo(reportData.category);
-
     Alert.alert(
       isDark ? "ส่งรายงานสำเร็จ" : "Report Sent",
       isDark
@@ -328,15 +316,30 @@ export default function Bus_Dashboard() {
     );
   };
 
+  // ปรับปรุงการจัดการ modal close
   const handleCloseModal = () => {
     setModalVisible(false);
-    setReportData({
-      accidentTime: "",
-      reason: "",
-      category: "vehicle",
-      title: "",
-    });
-    setSelectedBus(null);
+    // รอให้ modal ปิดก่อนล้าง state
+    setTimeout(() => {
+      setReportData({
+        accidentTime: "",
+        reason: "",
+        category: "vehicle",
+        title: "",
+      });
+      setSelectedBus(null);
+    }, 300);
+  };
+
+  // ปรับปรุงการจัดการปิด category modal
+  const handleCloseCategoryModal = () => {
+    setShowCategoryModal(false);
+  };
+
+  // ปรับปรุงการเลือก category
+  const handleSelectCategory = (categoryId: string) => {
+    setReportData({ ...reportData, category: categoryId });
+    setShowCategoryModal(false);
   };
 
   const renderBusRow = ({ item }: { item: BusData }) => (
@@ -411,61 +414,229 @@ export default function Bus_Dashboard() {
     </View>
   );
 
+  // ย้าย CategoryModal ออกมาเป็น component แยก และปรับปรุง
   const CategoryModal = () => (
     <Modal
-      visible={showCategoryModal}
+      visible={showCategoryModal && modalVisible} // เพิ่มเงื่อนไขให้แสดงเฉพาะเมื่อ report modal เปิดอยู่
       transparent={true}
       animationType="fade"
-      onRequestClose={() => setShowCategoryModal(false)}
+      onRequestClose={handleCloseCategoryModal}
+      presentationStyle="overFullScreen" // เพิ่มสำหรับ iOS
     >
       <TouchableOpacity
-        style={styles.modalOverlay}
+        style={[styles.modalOverlay, { zIndex: 1000 }]} // เพิ่ม zIndex
         activeOpacity={1}
-        onPress={() => setShowCategoryModal(false)}
+        onPress={handleCloseCategoryModal}
       >
-        <View
-          style={[
-            styles.categoryModalContent,
-            {
-              backgroundColor: isDark ? "#1f2937" : "#ffffff",
-              borderColor: isDark ? "#374151" : "#e5e7eb",
-            },
-          ]}
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={(e) => e.stopPropagation()} // ป้องกันการปิด modal เมื่อกดบนเนื้อหา
         >
-          <Text
+          <View
             style={[
-              styles.categoryModalTitle,
-              { color: isDark ? "#f3f4f6" : "#111827" },
+              styles.categoryModalContent,
+              {
+                backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
             ]}
           >
-            เลือกหมวดหมู่การรายงาน
-          </Text>
-
-          {reportCategories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={styles.categoryOption}
-              onPress={() => {
-                setReportData({ ...reportData, category: category.id });
-                setShowCategoryModal(false);
-              }}
-              activeOpacity={0.7}
+            <Text
+              style={[
+                styles.categoryModalTitle,
+                { color: isDark ? "#f3f4f6" : "#111827" },
+              ]}
             >
-              <Text style={styles.categoryIcon}>{category.icon}</Text>
-              <Text
-                style={[
-                  styles.categoryOptionText,
-                  { color: isDark ? "#d1d5db" : "#374151" },
-                ]}
+              เลือกหมวดหมู่การรายงาน
+            </Text>
+            {reportCategories.map((category) => (
+              <TouchableOpacity
+                key={category.id}
+                style={styles.categoryOption}
+                onPress={() => handleSelectCategory(category.id)}
+                activeOpacity={0.7}
               >
-                {category.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+                <Text style={styles.categoryIcon}>{category.icon}</Text>
+                <Text
+                  style={[
+                    styles.categoryOptionText,
+                    { color: isDark ? "#d1d5db" : "#374151" },
+                  ]}
+                >
+                  {category.name}
+                </Text>
+                {reportData.category === category.id && (
+                  <Text
+                    style={[
+                      styles.categorySelectedIcon,
+                      { color: isDark ? "#10b981" : "#059669" },
+                    ]}
+                  >
+                    ✓
+                  </Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
       </TouchableOpacity>
     </Modal>
   );
+
+  // Create data structure for main FlatList
+  const mainScreenData = [
+    { type: "header", data: null },
+    { type: "actionButtons", data: null },
+    { type: "currentBusesSection", data: currentBuses },
+  ];
+
+  const renderMainItem = ({ item }: { item: any }) => {
+    switch (item.type) {
+      case "header":
+        return (
+          <View style={styles.header}>
+            <Text
+              style={[styles.title, { color: isDark ? "#60a5fa" : "#007AFF" }]}
+            >
+              🚌 {isDark ? "แดชบอร์ดรถประจำทาง" : "Bus Dashboard"}
+            </Text>
+            <Text
+              style={[
+                styles.subtitle,
+                { color: isDark ? "#9ca3af" : "#6b7280" },
+              ]}
+            >
+              {isDark
+                ? "ติดตามและรายงานสถานะรถประจำทาง"
+                : "Track and report bus status"}
+            </Text>
+          </View>
+        );
+
+      case "actionButtons":
+        return (
+          <View style={styles.actionButtons}>
+            <TouchableOpacity
+              style={[
+                styles.actionButton,
+                { backgroundColor: isDark ? "#3b82f6" : "#007AFF" },
+              ]}
+              onPress={handleOpenHistoricalReport}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.actionButtonText}>
+                🔍 ค้นหารถตามเวลาเหตุการณ์
+              </Text>
+            </TouchableOpacity>
+          </View>
+        );
+
+      case "currentBusesSection":
+        return (
+          <View
+            style={[
+              styles.section,
+              {
+                backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+                shadowColor: isDark ? "#000000" : "#007AFF",
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.sectionTitle,
+                { color: isDark ? "#f3f4f6" : "#111827" },
+              ]}
+            >
+              🚦 รถที่กำลังวิ่งอยู่ในขณะนี้
+            </Text>
+            <View
+              style={[
+                styles.tableContainer,
+                {
+                  backgroundColor: isDark ? "#111827" : "#f9fafb",
+                  borderColor: isDark ? "#374151" : "#e5e7eb",
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.tableHeader,
+                  { backgroundColor: isDark ? "#374151" : "#f3f4f6" },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.headerText,
+                    styles.busNumberColumn,
+                    { color: isDark ? "#f3f4f6" : "#374151" },
+                  ]}
+                >
+                  หมายเลขรถ
+                </Text>
+                <Text
+                  style={[
+                    styles.headerText,
+                    styles.routeColumn,
+                    { color: isDark ? "#f3f4f6" : "#374151" },
+                  ]}
+                >
+                  เส้นทาง
+                </Text>
+                <Text
+                  style={[
+                    styles.headerText,
+                    styles.dateColumn,
+                    { color: isDark ? "#f3f4f6" : "#374151" },
+                  ]}
+                >
+                  วันที่
+                </Text>
+                <Text
+                  style={[
+                    styles.headerText,
+                    styles.timeColumn,
+                    { color: isDark ? "#f3f4f6" : "#374151" },
+                  ]}
+                >
+                  เวลา
+                </Text>
+                <Text
+                  style={[
+                    styles.headerText,
+                    styles.actionColumn,
+                    { color: isDark ? "#f3f4f6" : "#374151" },
+                  ]}
+                >
+                  การดำเนินการ
+                </Text>
+              </View>
+              {item.data.length > 0 ? (
+                item.data.map((bus: BusData) => (
+                  <View key={bus.id}>{renderBusRow({ item: bus })}</View>
+                ))
+              ) : (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyIcon}>🚌</Text>
+                  <Text
+                    style={[
+                      styles.emptyText,
+                      { color: isDark ? "#9ca3af" : "#6b7280" },
+                    ]}
+                  >
+                    ไม่มีรถที่กำลังวิ่งอยู่ในขณะนี้
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <View
@@ -474,141 +645,12 @@ export default function Bus_Dashboard() {
         { backgroundColor: isDark ? "#0f172a" : "#f9fafb" },
       ]}
     >
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: isDark ? "#60a5fa" : "#007AFF" }]}>
-          🚌 {isDark ? "แดชบอร์ดรถประจำทาง" : "Bus Dashboard"}
-        </Text>
-        <Text
-          style={[styles.subtitle, { color: isDark ? "#9ca3af" : "#6b7280" }]}
-        >
-          {isDark
-            ? "ติดตามและรายงานสถานะรถประจำทาง"
-            : "Track and report bus status"}
-        </Text>
-      </View>
-
-      {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity
-          style={[
-            styles.actionButton,
-            { backgroundColor: isDark ? "#3b82f6" : "#007AFF" },
-          ]}
-          onPress={handleOpenHistoricalReport}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.actionButtonText}>
-            🔍 ค้นหารถตามเวลาเหตุการณ์
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Current Running Buses */}
-      <View
-        style={[
-          styles.section,
-          {
-            backgroundColor: isDark ? "#1f2937" : "#ffffff",
-            borderColor: isDark ? "#374151" : "#e5e7eb",
-            shadowColor: isDark ? "#000000" : "#007AFF",
-          },
-        ]}
-      >
-        <Text
-          style={[
-            styles.sectionTitle,
-            { color: isDark ? "#f3f4f6" : "#111827" },
-          ]}
-        >
-          🚦 รถที่กำลังวิ่งอยู่ในขณะนี้
-        </Text>
-
-        <View
-          style={[
-            styles.tableContainer,
-            {
-              backgroundColor: isDark ? "#111827" : "#f9fafb",
-              borderColor: isDark ? "#374151" : "#e5e7eb",
-            },
-          ]}
-        >
-          <View
-            style={[
-              styles.tableHeader,
-              { backgroundColor: isDark ? "#374151" : "#f3f4f6" },
-            ]}
-          >
-            <Text
-              style={[
-                styles.headerText,
-                styles.busNumberColumn,
-                { color: isDark ? "#f3f4f6" : "#374151" },
-              ]}
-            >
-              หมายเลขรถ
-            </Text>
-            <Text
-              style={[
-                styles.headerText,
-                styles.routeColumn,
-                { color: isDark ? "#f3f4f6" : "#374151" },
-              ]}
-            >
-              เส้นทาง
-            </Text>
-            <Text
-              style={[
-                styles.headerText,
-                styles.dateColumn,
-                { color: isDark ? "#f3f4f6" : "#374151" },
-              ]}
-            >
-              วันที่
-            </Text>
-            <Text
-              style={[
-                styles.headerText,
-                styles.timeColumn,
-                { color: isDark ? "#f3f4f6" : "#374151" },
-              ]}
-            >
-              เวลา
-            </Text>
-            <Text
-              style={[
-                styles.headerText,
-                styles.actionColumn,
-                { color: isDark ? "#f3f4f6" : "#374151" },
-              ]}
-            >
-              การดำเนินการ
-            </Text>
-          </View>
-
-          {currentBuses.length > 0 ? (
-            <FlatList
-              data={currentBuses}
-              renderItem={renderBusRow}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              style={styles.list}
-            />
-          ) : (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyIcon}>🚌</Text>
-              <Text
-                style={[
-                  styles.emptyText,
-                  { color: isDark ? "#9ca3af" : "#6b7280" },
-                ]}
-              >
-                ไม่มีรถที่กำลังวิ่งอยู่ในขณะนี้
-              </Text>
-            </View>
-          )}
-        </View>
-      </View>
+      <FlatList
+        data={mainScreenData}
+        renderItem={renderMainItem}
+        keyExtractor={(item, index) => `${item.type}_${index}`}
+        showsVerticalScrollIndicator={false}
+      />
 
       {/* Historical Bus Search Modal */}
       <Modal
@@ -616,6 +658,7 @@ export default function Bus_Dashboard() {
         transparent={true}
         visible={showHistoricalModal}
         onRequestClose={() => setShowHistoricalModal(false)}
+        presentationStyle="pageSheet" // เพิ่มสำหรับ iOS
       >
         <View style={styles.modalOverlay}>
           <View
@@ -644,273 +687,278 @@ export default function Bus_Dashboard() {
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.historicalModalBody}>
-              <View style={styles.filterContainer}>
-                <Text
-                  style={[
-                    styles.filterDescription,
-                    { color: isDark ? "#9ca3af" : "#6b7280" },
-                  ]}
-                >
-                  💡 ระบุวันที่และเวลาที่เกิดเหตุการณ์
-                  เพื่อค้นหารถที่วิ่งอยู่ในช่วงเวลานั้น
-                </Text>
-
-                <View style={styles.filterRow}>
-                  <View style={styles.filterInput}>
+            {/* Use FlatList instead of ScrollView for the modal content */}
+            <FlatList
+              data={[{ type: "content" }]}
+              renderItem={() => (
+                <View style={styles.historicalModalBody}>
+                  <View style={styles.filterContainer}>
                     <Text
                       style={[
-                        styles.filterLabel,
-                        { color: isDark ? "#d1d5db" : "#374151" },
+                        styles.filterDescription,
+                        { color: isDark ? "#9ca3af" : "#6b7280" },
                       ]}
                     >
-                      📅 วันที่เกิดเหตุการณ์
+                      💡 ระบุวันที่และเวลาที่เกิดเหตุการณ์
+                      เพื่อค้นหารถที่วิ่งอยู่ในช่วงเวลานั้น
                     </Text>
-                    <TextInput
-                      style={[
-                        styles.filterTextInput,
-                        {
-                          backgroundColor: isDark ? "#111827" : "#f9fafb",
-                          borderColor: isDark ? "#374151" : "#d1d5db",
-                          color: isDark ? "#f3f4f6" : "#111827",
-                        },
-                      ]}
-                      value={filterDate}
-                      onChangeText={setFilterDate}
-                      placeholder="YYYY-MM-DD"
-                      placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.filterRow}>
-                  <View style={styles.filterInput}>
-                    <Text
-                      style={[
-                        styles.filterLabel,
-                        { color: isDark ? "#d1d5db" : "#374151" },
-                      ]}
-                    >
-                      ⏰ เวลาที่เกิดเหตุการณ์
-                    </Text>
-                    <TextInput
-                      style={[
-                        styles.filterTextInput,
-                        {
-                          backgroundColor: isDark ? "#111827" : "#f9fafb",
-                          borderColor: isDark ? "#374151" : "#d1d5db",
-                          color: isDark ? "#f3f4f6" : "#111827",
-                        },
-                      ]}
-                      value={incidentTime}
-                      onChangeText={setIncidentTime}
-                      placeholder="HH:MM (เช่น 14:30)"
-                      placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.filterButtons}>
-                  <TouchableOpacity
-                    style={styles.clearButton}
-                    onPress={clearFilters}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.clearButtonText}>🗑 ล้างตัวกรอง</Text>
-                  </TouchableOpacity>
-                  <Text
-                    style={[
-                      styles.resultsText,
-                      { color: isDark ? "#9ca3af" : "#6b7280" },
-                    ]}
-                  >
-                    {incidentTime
-                      ? `พบรถที่วิ่งในเวลา ${incidentTime}:`
-                      : `รถทั้งหมดในวันที่:`}{" "}
-                    {filteredBuses.length} คัน
-                  </Text>
-                </View>
-              </View>
-
-              {filteredBuses.length > 0 && (
-                <View
-                  style={[
-                    styles.tableContainer,
-                    {
-                      backgroundColor: isDark ? "#111827" : "#f9fafb",
-                      borderColor: isDark ? "#374151" : "#e5e7eb",
-                    },
-                  ]}
-                >
-                  <View
-                    style={[
-                      styles.tableHeader,
-                      { backgroundColor: isDark ? "#374151" : "#f3f4f6" },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.headerText,
-                        styles.busNumberColumn,
-                        { color: isDark ? "#f3f4f6" : "#374151" },
-                      ]}
-                    >
-                      หมายเลขรถ
-                    </Text>
-                    <Text
-                      style={[
-                        styles.headerText,
-                        styles.routeColumn,
-                        { color: isDark ? "#f3f4f6" : "#374151" },
-                      ]}
-                    >
-                      เส้นทาง
-                    </Text>
-                    <Text
-                      style={[
-                        styles.headerText,
-                        styles.timeColumn,
-                        { color: isDark ? "#f3f4f6" : "#374151" },
-                      ]}
-                    >
-                      เวลาวิ่ง
-                    </Text>
-                    <Text
-                      style={[
-                        styles.headerText,
-                        styles.actionColumn,
-                        { color: isDark ? "#f3f4f6" : "#374151" },
-                      ]}
-                    >
-                      เลือก
-                    </Text>
-                  </View>
-
-                  <FlatList
-                    data={filteredBuses}
-                    renderItem={({ item }) => (
-                      <View
+                    <View style={styles.filterRow}>
+                      <View style={styles.filterInput}>
+                        <Text
+                          style={[
+                            styles.filterLabel,
+                            { color: isDark ? "#d1d5db" : "#374151" },
+                          ]}
+                        >
+                          📅 วันที่เกิดเหตุการณ์
+                        </Text>
+                        <TextInput
+                          style={[
+                            styles.filterTextInput,
+                            {
+                              backgroundColor: isDark ? "#111827" : "#f9fafb",
+                              borderColor: isDark ? "#374151" : "#d1d5db",
+                              color: isDark ? "#f3f4f6" : "#111827",
+                            },
+                          ]}
+                          value={filterDate}
+                          onChangeText={setFilterDate}
+                          placeholder="YYYY-MM-DD"
+                          placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
+                        />
+                      </View>
+                    </View>
+                    <View style={styles.filterRow}>
+                      <View style={styles.filterInput}>
+                        <Text
+                          style={[
+                            styles.filterLabel,
+                            { color: isDark ? "#d1d5db" : "#374151" },
+                          ]}
+                        >
+                          ⏰ เวลาที่เกิดเหตุการณ์
+                        </Text>
+                        <TextInput
+                          style={[
+                            styles.filterTextInput,
+                            {
+                              backgroundColor: isDark ? "#111827" : "#f9fafb",
+                              borderColor: isDark ? "#374151" : "#d1d5db",
+                              color: isDark ? "#f3f4f6" : "#111827",
+                            },
+                          ]}
+                          value={incidentTime}
+                          onChangeText={setIncidentTime}
+                          placeholder="HH:MM (เช่น 14:30)"
+                          placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
+                        />
+                      </View>
+                    </View>
+                    <View style={styles.filterButtons}>
+                      <TouchableOpacity
+                        style={styles.clearButton}
+                        onPress={clearFilters}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={styles.clearButtonText}>
+                          🗑 ล้างตัวกรอง
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
                         style={[
-                          styles.tableRow,
-                          {
-                            backgroundColor: isDark ? "#1f2937" : "#ffffff",
-                            borderBottomColor: isDark ? "#374151" : "#e5e7eb",
-                          },
+                          styles.resultsText,
+                          { color: isDark ? "#9ca3af" : "#6b7280" },
                         ]}
                       >
-                        <View style={styles.busNumberColumn}>
-                          <Text
-                            style={[
-                              styles.busNumber,
-                              { color: isDark ? "#f3f4f6" : "#111827" },
-                            ]}
-                          >
-                            {item.busNumber}
-                          </Text>
-                          <View style={styles.statusContainer}>
-                            <View
+                        {incidentTime
+                          ? `พบรถที่วิ่งในเวลา ${incidentTime}:`
+                          : `รถทั้งหมดในวันที่:`}{" "}
+                        {filteredBuses.length} คัน
+                      </Text>
+                    </View>
+                  </View>
+                  {filteredBuses.length > 0 && (
+                    <View
+                      style={[
+                        styles.tableContainer,
+                        {
+                          backgroundColor: isDark ? "#111827" : "#f9fafb",
+                          borderColor: isDark ? "#374151" : "#e5e7eb",
+                        },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.tableHeader,
+                          { backgroundColor: isDark ? "#374151" : "#f3f4f6" },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.headerText,
+                            styles.busNumberColumn,
+                            { color: isDark ? "#f3f4f6" : "#374151" },
+                          ]}
+                        >
+                          หมายเลขรถ
+                        </Text>
+                        <Text
+                          style={[
+                            styles.headerText,
+                            styles.routeColumn,
+                            { color: isDark ? "#f3f4f6" : "#374151" },
+                          ]}
+                        >
+                          เส้นทาง
+                        </Text>
+                        <Text
+                          style={[
+                            styles.headerText,
+                            styles.timeColumn,
+                            { color: isDark ? "#f3f4f6" : "#374151" },
+                          ]}
+                        >
+                          เวลาวิ่ง
+                        </Text>
+                        <Text
+                          style={[
+                            styles.headerText,
+                            styles.actionColumn,
+                            { color: isDark ? "#f3f4f6" : "#374151" },
+                          ]}
+                        >
+                          เ ลือก
+                        </Text>
+                      </View>
+                      {filteredBuses.map((item) => (
+                        <View
+                          key={item.id}
+                          style={[
+                            styles.tableRow,
+                            {
+                              backgroundColor: isDark ? "#1f2937" : "#ffffff",
+                              borderBottomColor: isDark ? "#374151" : "#e5e7eb",
+                            },
+                          ]}
+                        >
+                          <View style={styles.busNumberColumn}>
+                            <Text
                               style={[
-                                styles.onlineStatus,
+                                styles.busNumber,
+                                { color: isDark ? "#f3f4f6" : "#111827" },
+                              ]}
+                            >
+                              {item.busNumber}
+                            </Text>
+                            <View style={styles.statusContainer}>
+                              <View
+                                style={[
+                                  styles.onlineStatus,
+                                  {
+                                    backgroundColor:
+                                      incidentTime &&
+                                      isTimeWithinBusOperation(
+                                        incidentTime,
+                                        item
+                                      )
+                                        ? "#10b981"
+                                        : "#6b7280",
+                                  },
+                                ]}
+                              />
+                              <Text
+                                style={[
+                                  styles.statusText,
+                                  {
+                                    color:
+                                      incidentTime &&
+                                      isTimeWithinBusOperation(
+                                        incidentTime,
+                                        item
+                                      )
+                                        ? "#10b981"
+                                        : "#6b7280",
+                                  },
+                                ]}
+                              >
+                                {incidentTime &&
+                                isTimeWithinBusOperation(incidentTime, item)
+                                  ? "วิ่งในเวลานั้น"
+                                  : "ไม่ได้วิ่ง"}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={styles.routeColumn}>
+                            <Text
+                              style={[
+                                styles.routeText,
+                                { color: isDark ? "#d1d5db" : "#6b7280" },
+                              ]}
+                            >
+                              {item.route}
+                            </Text>
+                          </View>
+                          <View style={styles.timeColumn}>
+                            <Text
+                              style={[
+                                styles.timeText,
+                                { color: isDark ? "#f3f4f6" : "#111827" },
+                              ]}
+                            >
+                              {item.startTime} - {item.endTime || "ปัจจุบัน"}
+                            </Text>
+                          </View>
+                          <View style={styles.actionColumn}>
+                            <TouchableOpacity
+                              style={[
+                                styles.selectButton,
                                 {
                                   backgroundColor:
                                     incidentTime &&
                                     isTimeWithinBusOperation(incidentTime, item)
-                                      ? "#10b981"
-                                      : "#6b7280",
+                                      ? isDark
+                                        ? "#10b981"
+                                        : "#059669"
+                                      : isDark
+                                      ? "#6b7280"
+                                      : "#9ca3af",
                                 },
                               ]}
-                            />
-                            <Text
-                              style={[
-                                styles.statusText,
-                                {
-                                  color:
-                                    incidentTime &&
-                                    isTimeWithinBusOperation(incidentTime, item)
-                                      ? "#10b981"
-                                      : "#6b7280",
-                                },
-                              ]}
+                              onPress={() => handleSelectHistoricalBus(item)}
+                              activeOpacity={0.8}
                             >
-                              {incidentTime &&
-                              isTimeWithinBusOperation(incidentTime, item)
-                                ? "วิ่งในเวลานั้น"
-                                : "ไม่ได้วิ่ง"}
-                            </Text>
+                              <Text style={styles.selectButtonText}>
+                                {incidentTime &&
+                                isTimeWithinBusOperation(incidentTime, item)
+                                  ? "รายงาน"
+                                  : "เลือก"}
+                              </Text>
+                            </TouchableOpacity>
                           </View>
                         </View>
-                        <View style={styles.routeColumn}>
-                          <Text
-                            style={[
-                              styles.routeText,
-                              { color: isDark ? "#d1d5db" : "#6b7280" },
-                            ]}
-                          >
-                            {item.route}
-                          </Text>
-                        </View>
-                        <View style={styles.timeColumn}>
-                          <Text
-                            style={[
-                              styles.timeText,
-                              { color: isDark ? "#f3f4f6" : "#111827" },
-                            ]}
-                          >
-                            {item.startTime} - {item.endTime || "ปัจจุบัน"}
-                          </Text>
-                        </View>
-                        <View style={styles.actionColumn}>
-                          <TouchableOpacity
-                            style={[
-                              styles.selectButton,
-                              {
-                                backgroundColor:
-                                  incidentTime &&
-                                  isTimeWithinBusOperation(incidentTime, item)
-                                    ? isDark
-                                      ? "#10b981"
-                                      : "#059669"
-                                    : isDark
-                                    ? "#6b7280"
-                                    : "#9ca3af",
-                              },
-                            ]}
-                            onPress={() => handleSelectHistoricalBus(item)}
-                            activeOpacity={0.8}
-                          >
-                            <Text style={styles.selectButtonText}>
-                              {incidentTime &&
-                              isTimeWithinBusOperation(incidentTime, item)
-                                ? "รายงาน"
-                                : "เลือก"}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    )}
-                    keyExtractor={(item) => item.id}
-                    showsVerticalScrollIndicator={false}
-                    style={{ maxHeight: 300 }}
-                  />
+                      ))}
+                    </View>
+                  )}
+                  {filterDate && filteredBuses.length === 0 && (
+                    <View style={styles.emptyState}>
+                      <Text style={styles.emptyIcon}>🔍</Text>
+                      <Text
+                        style={[
+                          styles.emptyText,
+                          { color: isDark ? "#9ca3af" : "#6b7280" },
+                        ]}
+                      >
+                        {incidentTime
+                          ? `ไม่พบรถที่วิ่งในเวลา ${incidentTime} วันที่ ${filterDate}`
+                          : `ไม่พบรถในวันที่ ${filterDate}`}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
-
-              {filterDate && filteredBuses.length === 0 && (
-                <View style={styles.emptyState}>
-                  <Text style={styles.emptyIcon}>🔍</Text>
-                  <Text
-                    style={[
-                      styles.emptyText,
-                      { color: isDark ? "#9ca3af" : "#6b7280" },
-                    ]}
-                  >
-                    {incidentTime
-                      ? `ไม่พบรถที่วิ่งในเวลา ${incidentTime} วันที่ ${filterDate}`
-                      : `ไม่พบรถในวันที่ ${filterDate}`}
-                  </Text>
-                </View>
-              )}
-            </ScrollView>
+              keyExtractor={(item, index) => `modal_content_${index}`}
+              showsVerticalScrollIndicator={false}
+            />
           </View>
         </View>
       </Modal>
@@ -921,6 +969,7 @@ export default function Bus_Dashboard() {
         transparent={true}
         visible={modalVisible}
         onRequestClose={handleCloseModal}
+        presentationStyle="pageSheet" // เพิ่มสำหรับ iOS
       >
         <View style={styles.modalOverlay}>
           <View
@@ -940,7 +989,6 @@ export default function Bus_Dashboard() {
             >
               📋 รายงานรถหมายเลข {selectedBus?.busNumber}
             </Text>
-
             <ScrollView style={styles.modalBody}>
               {/* Category Selection */}
               <View style={styles.inputContainer}>
@@ -986,7 +1034,6 @@ export default function Bus_Dashboard() {
                   </Text>
                 </TouchableOpacity>
               </View>
-
               {/* Title Input */}
               <View style={styles.inputContainer}>
                 <Text
@@ -1014,7 +1061,6 @@ export default function Bus_Dashboard() {
                   placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
                 />
               </View>
-
               {/* Time Input */}
               <View style={styles.inputContainer}>
                 <Text
@@ -1042,7 +1088,6 @@ export default function Bus_Dashboard() {
                   placeholderTextColor={isDark ? "#6b7280" : "#9ca3af"}
                 />
               </View>
-
               {/* Details Input */}
               <View style={styles.inputContainer}>
                 <Text
@@ -1075,7 +1120,6 @@ export default function Bus_Dashboard() {
                 />
               </View>
             </ScrollView>
-
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.cancelButton}

@@ -1,53 +1,35 @@
 import { Stack, Link, usePathname } from "expo-router";
 import {
   View,
-  Text,
   Pressable,
   Platform,
   useColorScheme,
   Animated,
-  StyleSheet,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
+import { styles } from "../theme/driver_theme/layout";
+// Import icons from @expo/vector-icons
+import {
+  Ionicons,
+  MaterialIcons,
+  FontAwesome,
+  Fontisto,
+} from "@expo/vector-icons";
 
 // --- Types ---
 type NavHref =
   | "/driver"
   | "/driver/scanner"
-  | "/driver/profile"
-  | "/driver/history";
+  | "/driver/history"
+  | "/driver/profile";
 
 interface NavItem {
   href: NavHref;
   label: string;
-  icon: string;
+  iconName: string;
+  iconFamily: "Ionicons" | "MaterialIcons" | "FontAwesome" | "Fontisto";
 }
-
-// --- NavBar Styles ---
-const styles = StyleSheet.create({
-  navbar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingHorizontal: 8,
-  },
-  navbarTop: {
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    paddingVertical: 12,
-  },
-  navbarBottom: {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    paddingVertical: 8,
-    paddingBottom: Platform.OS === "ios" ? 20 : 12,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: "center",
-    paddingHorizontal: 4,
-  },
-});
 
 // --- Layout Component ---
 export default function Layout() {
@@ -57,10 +39,30 @@ export default function Layout() {
   const isDark = colorScheme === "dark";
 
   const navItems: NavItem[] = [
-    { href: "/driver", label: "หน้าหลัก" },
-    { href: "/driver/scanner", label: "แสกนเพื่อขับ/ออกจากรถ" },
-    { href: "/driver/profile", label: "โปรไฟล์" },
-    { href: "/driver/history", label: "ประวัติการขับรถ" },
+    {
+      href: "/driver",
+      label: "หน้าหลัก",
+      iconName: "home",
+      iconFamily: "Ionicons",
+    },
+    {
+      href: "/driver/scanner",
+      label: "สแกน QR",
+      iconName: "qr-code",
+      iconFamily: "MaterialIcons",
+    },
+    {
+      href: "/driver/history",
+      label: "ประวัติการขับขี่",
+      iconName: "history",
+      iconFamily: "Fontisto",
+    },
+    {
+      href: "/driver/profile",
+      label: "โปรไฟล์",
+      iconName: "user-o",
+      iconFamily: "FontAwesome",
+    },
   ];
 
   // Animated values สำหรับทุก tab
@@ -79,6 +81,49 @@ export default function Layout() {
       }).start();
     });
   }, [pathname]);
+
+  // Function to render icon based on family
+  const renderIcon = (item: NavItem, isSelected: boolean) => {
+    const iconColor = isSelected ? "black" : "white";
+    const iconSize = 24;
+
+    switch (item.iconFamily) {
+      case "Ionicons":
+        return (
+          <Ionicons
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      case "MaterialIcons":
+        return (
+          <MaterialIcons
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      case "FontAwesome":
+        return (
+          <FontAwesome
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      case "Fontisto":
+        return (
+          <Fontisto
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      default:
+        return <Ionicons name="help" size={iconSize} color={iconColor} />;
+    }
+  };
 
   // --- NavBar ---
   const NavBar = () => {
@@ -128,21 +173,28 @@ export default function Layout() {
                   borderRadius: 10,
                   paddingVertical: 6,
                   alignItems: "center",
+                  justifyContent: isSelected ? "flex-start" : "center",
                 }}
               >
-                <Animated.View style={scaleStyle}>
-                  <Text
-                    style={{
-                      color: isSelected ? "#C954D3" : "white",
-                      fontSize: 20,
-                    }}
-                  >
-                    🔹
-                  </Text>
+                <Animated.View style={[scaleStyle, { alignItems: "center" }]}>
+                  {renderIcon(item, isSelected)}
                 </Animated.View>
-                <Animated.Text style={[{ fontWeight: "bold" }, labelStyle]}>
-                  {item.label}
-                </Animated.Text>
+                {isSelected && (
+                  <Animated.Text
+                    style={[
+                      {
+                        fontWeight: "bold",
+                        color: "black",
+                        textAlign: "center",
+                        marginTop: 2,
+                        fontSize: 12,
+                      },
+                      labelStyle,
+                    ]}
+                  >
+                    {item.label}
+                  </Animated.Text>
+                )}
               </Pressable>
             </Link>
           );

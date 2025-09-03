@@ -1,58 +1,228 @@
-import { Stack, Link } from "expo-router";
-import { View, Text, Pressable, Platform } from "react-native";
+import { Stack, Link, usePathname } from "expo-router";
+import {
+  View,
+  Pressable,
+  Platform,
+  useColorScheme,
+  Animated,
+} from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import React, { useRef, useEffect } from "react";
 import { styles } from "../theme/admin_theme/layout";
+// Import icons from @expo/vector-icons
+import { Ionicons, MaterialIcons, FontAwesome5, FontAwesome } from "@expo/vector-icons";
 
+// --- Types ---
+type NavHref =
+  | "/admin"
+  | "/admin/all_report"
+  | "/admin/driver_dashboard"
+  | "/admin/route"
+  | "/admin/admin_profile";
+
+interface NavItem {
+  href: NavHref;
+  label: string;
+  iconName: string;
+  iconFamily: "Ionicons" | "MaterialIcons" | "FontAwesome5" | "FontAwesome";
+}
+
+// --- Layout Component ---
 export default function Layout() {
   const isWeb = Platform.OS === "web";
+  const colorScheme = useColorScheme();
+  const pathname = usePathname();
+  const isDark = colorScheme === "dark";
 
-  const NavBar = () => (
-    <View
-      style={[styles.navbar, isWeb ? styles.navbarTop : styles.navbarBottom]}
-    >
-      <Link href="/admin" asChild>
-        <Pressable style={styles.navItem}>
-          <Text style={styles.link}>หน้าหลัก</Text>
-        </Pressable>
-      </Link>
-      <Link href="/admin/all_report" asChild>
-        <Pressable style={styles.navItem}>
-          <Text style={styles.link}>รายงานทั้งหมด</Text>
-        </Pressable>
-      </Link>
-      <Link href="/admin/driver_dashboard" asChild>
-        <Pressable style={styles.navItem}>
-          <Text style={styles.link}>จัดการคนขับ</Text>
-        </Pressable>
-      </Link>
-      <Link href="/admin/route" asChild>
-        <Pressable style={styles.navItem}>
-          <Text style={styles.link}>จัดการสายรถ</Text>
-        </Pressable>
-      </Link>
-    </View>
-  );
+  const navItems: NavItem[] = [
+    {
+      href: "/admin",
+      label: "หน้าหลัก",
+      iconName: "home",
+      iconFamily: "Ionicons",
+    },
+    {
+      href: "/admin/all_report",
+      label: "รายงานทั้งหมด",
+      iconName: "report",
+      iconFamily: "MaterialIcons",
+    },
+    {
+      href: "/admin/driver_dashboard",
+      label: "แดชบอร์ดผู้ขับ",
+      iconName: "drivers-license",
+      iconFamily: "FontAwesome",
+    },
+    {
+      href: "/admin/route",
+      label: "แก้ไขสายรถ",
+      iconName: "bus",
+      iconFamily: "FontAwesome",
+    },
+    {
+      href: "/admin/admin_profile",
+      label: "โปรไฟล์",
+      iconName: "user-o",
+      iconFamily: "FontAwesome",
+    },
+  ];
 
-  if (isWeb) {
+  // Animated values สำหรับทุก tab
+  const animatedValues = useRef(
+    navItems.map((item) => new Animated.Value(pathname === item.href ? 1 : 0))
+  ).current;
+
+  useEffect(() => {
+    navItems.forEach((item, index) => {
+      const isSelected = pathname === item.href;
+      Animated.spring(animatedValues[index], {
+        toValue: isSelected ? 1 : 0,
+        useNativeDriver: true,
+        stiffness: 150,
+        damping: 20,
+      }).start();
+    });
+  }, [pathname]);
+
+  // Function to render icon based on family
+  const renderIcon = (item: NavItem, isSelected: boolean) => {
+    const iconColor = isSelected ? "black" : "white";
+    const iconSize = 24;
+
+    switch (item.iconFamily) {
+      case "Ionicons":
+        return (
+          <Ionicons
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      case "MaterialIcons":
+        return (
+          <MaterialIcons
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      case "FontAwesome5":
+        return (
+          <FontAwesome5
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      case "FontAwesome":
+        return (
+          <FontAwesome
+            name={item.iconName as any}
+            size={iconSize}
+            color={iconColor}
+          />
+        );
+      default:
+        return <Ionicons name="help" size={iconSize} color={iconColor} />;
+    }
+  };
+
+  // --- NavBar ---
+  const NavBar = () => {
+    const navbarStyle = {
+      ...styles.navbar,
+      ...(isWeb ? styles.navbarTop : styles.navbarBottom),
+      backgroundColor: isDark ? "#8B008B" : "#C954D3",
+    };
+
     return (
-      <View style={{ flex: 1 }}>
-        {/* ✅ Navbar at top for web */}
-        <NavBar />
-        {/* ✅ Page Content */}
-        <View style={{ flex: 1 }}>
-          <Stack screenOptions={{ headerShown: false }} />
-        </View>
+      <View style={navbarStyle}>
+        {navItems.map((item, index) => {
+          const animatedValue = animatedValues[index];
+          const isSelected = pathname === item.href;
+
+          // label slide + fade
+          const labelStyle = {
+            opacity: animatedValue,
+            transform: [
+              {
+                translateY: animatedValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [10, 0],
+                }),
+              },
+            ],
+          };
+
+          // icon scale
+          const scaleStyle = {
+            transform: [
+              {
+                scale: animatedValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 1.2],
+                }),
+              },
+            ],
+          };
+
+          return (
+            <Link key={item.href} href={item.href} asChild>
+              <Pressable
+                style={{
+                  ...styles.navItem,
+                  backgroundColor: isSelected ? "white" : "transparent",
+                  borderRadius: 10,
+                  paddingVertical: 6,
+                  alignItems: "center",
+                  justifyContent: isSelected ? "flex-start" : "center",
+                }}
+              >
+                <Animated.View style={[scaleStyle, { alignItems: "center" }]}>
+                  {renderIcon(item, isSelected)}
+                </Animated.View>
+                {isSelected && (
+                  <Animated.Text
+                    style={[
+                      {
+                        fontWeight: "bold",
+                        color: "black",
+                        textAlign: "center",
+                        marginTop: 2,
+                        fontSize: 12,
+                      },
+                      labelStyle,
+                    ]}
+                  >
+                    {item.label}
+                  </Animated.Text>
+                )}
+              </Pressable>
+            </Link>
+          );
+        })}
       </View>
     );
-  }
+  };
 
+  // --- Layout Render ---
   return (
-    <View style={{ flex: 1 }}>
-      {/* ✅ Page Content */}
-      <View style={{ flex: 1 }}>
-        <Stack screenOptions={{ headerShown: false }} />
-      </View>
-      {/* ✅ Navbar at bottom for mobile */}
-      <NavBar />
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView
+        edges={["top", "bottom"]}
+        style={{ flex: 1, backgroundColor: "transparent" }}
+      >
+        {isWeb && <NavBar />}
+        <View style={{ flex: 1, backgroundColor: "transparent" }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: "transparent" },
+            }}
+          />
+        </View>
+        {!isWeb && <NavBar />}
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

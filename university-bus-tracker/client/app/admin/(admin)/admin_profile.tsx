@@ -9,13 +9,16 @@ import {
   ScrollView,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/driver_theme/profile";
+import { styles } from "../../theme/admin_theme/admin_profile";
 
-export default function Driver_Profile() {
-  const [driver, setDriver] = useState({
-    userID: "DRV001",
-    name: "John Smith",
-    profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=JS",
+export default function Admin_Profile() {
+  const [admin, setAdmin] = useState({
+    userID: "ADM001",
+    name: "นายสมชาย ใจดี",
+    email: "somchai.jaidee@company.co.th",
+    department: "ฝ่ายเทคโนโลยีสารสนเทศ",
+    role: "System Administrator",
+    profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=SC",
   });
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -25,13 +28,13 @@ export default function Driver_Profile() {
   const isDark = colorScheme === "dark";
 
   const handleEditName = () => {
-    setEditName(driver.name);
+    setEditName(admin.name);
     setIsEditingName(true);
   };
 
   const handleSaveName = () => {
     if (editName.trim()) {
-      setDriver({ ...driver, name: editName.trim() });
+      setAdmin({ ...admin, name: editName.trim() });
       setIsEditingName(false);
       setEditName("");
     } else {
@@ -45,25 +48,72 @@ export default function Driver_Profile() {
   };
 
   const handleChangeProfilePic = () => {
-    const currentColor = driver.profilePic.includes("007AFF")
+    const currentColor = admin.profilePic.includes("007AFF")
       ? "34C759"
-      : driver.profilePic.includes("34C759")
+      : admin.profilePic.includes("34C759")
       ? "FF3B30"
-      : driver.profilePic.includes("FF3B30")
+      : admin.profilePic.includes("FF3B30")
       ? "FF9500"
-      : driver.profilePic.includes("FF9500")
+      : admin.profilePic.includes("FF9500")
       ? "5856D6"
       : "007AFF";
 
-    const initials = driver.name
+    const initials = admin.name
       .split(" ")
       .map((n) => n[0])
       .join("")
       .toUpperCase();
     const newPic = `https://via.placeholder.com/150/${currentColor}/FFFFFF?text=${initials}`;
 
-    setDriver({ ...driver, profilePic: newPic });
+    setAdmin({ ...admin, profilePic: newPic });
   };
+
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case "System Administrator":
+        return "👑";
+      case "Database Administrator":
+        return "🗄️";
+      case "Network Administrator":
+        return "🌐";
+      case "Security Administrator":
+        return "🔒";
+      default:
+        return "👤";
+    }
+  };
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role) {
+      case "System Administrator":
+        return {
+          bg: isDark ? "#7c2d12" : "#fef3c7",
+          text: isDark ? "#fbbf24" : "#d97706",
+        };
+      case "Database Administrator":
+        return {
+          bg: isDark ? "#1e40af" : "#dbeafe",
+          text: isDark ? "#60a5fa" : "#2563eb",
+        };
+      case "Network Administrator":
+        return {
+          bg: isDark ? "#166534" : "#dcfce7",
+          text: isDark ? "#34d399" : "#16a34a",
+        };
+      case "Security Administrator":
+        return {
+          bg: isDark ? "#7c2d12" : "#fee2e2",
+          text: isDark ? "#f87171" : "#dc2626",
+        };
+      default:
+        return {
+          bg: isDark ? "#374151" : "#f3f4f6",
+          text: isDark ? "#9ca3af" : "#6b7280",
+        };
+    }
+  };
+
+  const roleBadgeColor = getRoleBadgeColor(admin.role);
 
   return (
     <View
@@ -82,12 +132,12 @@ export default function Driver_Profile() {
           <Text
             style={[styles.title, { color: isDark ? "#60a5fa" : "#007AFF" }]}
           >
-            👤 โปรไฟล์คนขับ
+            👨‍💼 โปรไฟล์ผู้ดูแลระบบ
           </Text>
           <Text
             style={[styles.subtitle, { color: isDark ? "#9ca3af" : "#6b7280" }]}
           >
-            จัดการข้อมูลส่วนตัวของคุณ
+            จัดการข้อมูลส่วนตัวของผู้ดูแลระบบ
           </Text>
         </View>
 
@@ -105,7 +155,7 @@ export default function Driver_Profile() {
           <View style={styles.profilePicSection}>
             <View style={styles.profilePicContainer}>
               <Image
-                source={{ uri: driver.profilePic }}
+                source={{ uri: admin.profilePic }}
                 style={[
                   styles.profilePic,
                   { borderColor: isDark ? "#60a5fa" : "#007AFF" },
@@ -145,7 +195,7 @@ export default function Driver_Profile() {
             </Text>
           </View>
 
-          {/* User ID Section */}
+          {/* Admin ID Section */}
           <View
             style={[
               styles.infoCard,
@@ -163,7 +213,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#d1d5db" : "#374151" },
                 ]}
               >
-                User ID
+                Admin ID
               </Text>
             </View>
             <View style={styles.userIDContainer}>
@@ -173,7 +223,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#f3f4f6" : "#111827" },
                 ]}
               >
-                {driver.userID}
+                {admin.userID}
               </Text>
               <View style={styles.verifiedBadge}>
                 <Text style={styles.verifiedText}>✓</Text>
@@ -246,7 +296,7 @@ export default function Driver_Profile() {
                     { color: isDark ? "#f3f4f6" : "#111827" },
                   ]}
                 >
-                  {driver.name}
+                  {admin.name}
                 </Text>
                 <TouchableOpacity
                   style={[styles.button, styles.editButton]}
@@ -257,6 +307,106 @@ export default function Driver_Profile() {
                 </TouchableOpacity>
               </View>
             )}
+          </View>
+
+          {/* Email Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>📧</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                อีเมล
+              </Text>
+            </View>
+            <Text
+              style={[
+                styles.nameDisplay,
+                { color: isDark ? "#f3f4f6" : "#111827" },
+              ]}
+            >
+              {admin.email}
+            </Text>
+          </View>
+
+          {/* Department Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>🏢</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                หน่วยงาน
+              </Text>
+            </View>
+            <Text
+              style={[
+                styles.nameDisplay,
+                { color: isDark ? "#f3f4f6" : "#111827" },
+              ]}
+            >
+              {admin.department}
+            </Text>
+          </View>
+
+          {/* Role Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>👑</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                บทบาท
+              </Text>
+            </View>
+            <View style={styles.nameDisplayContainer}>
+              <View
+                style={[
+                  styles.roleBadge,
+                  {
+                    backgroundColor: roleBadgeColor.bg,
+                  },
+                ]}
+              >
+                <Text style={styles.roleIcon}>{getRoleIcon(admin.role)}</Text>
+                <Text style={[styles.roleText, { color: roleBadgeColor.text }]}>
+                  {admin.role}
+                </Text>
+              </View>
+            </View>
           </View>
 
           {/* Stats Section */}
@@ -277,7 +427,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#9ca3af" : "#6B7280" },
                 ]}
               >
-                สร้างโปรไฟล์
+                สร้างบัญชี
               </Text>
               <Text
                 style={[
@@ -285,7 +435,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#d1d5db" : "#374151" },
                 ]}
               >
-                25/07/2025
+                15/01/2024
               </Text>
             </View>
             <View
@@ -302,7 +452,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#9ca3af" : "#6B7280" },
                 ]}
               >
-                อัพเดทล่าสุด
+                เข้าใช้ล่าสุด
               </Text>
               <Text
                 style={[
@@ -330,7 +480,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#10b981" : "#059669" },
                 ]}
               >
-                โปรไฟล์ยืนยันแล้ว
+                บัญชีผู้ดูแลระบบ - ยืนยันแล้ว
               </Text>
             </View>
           </View>

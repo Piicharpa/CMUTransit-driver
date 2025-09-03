@@ -9,13 +9,12 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import {
   SafeAreaProvider,
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 
 export default function App() {
@@ -82,12 +81,17 @@ function LoginScreen() {
           <Text
             style={[styles.title, { color: isDark ? "#f1f5f9" : "#1e293b" }]}
           >
-            ระบบขนส่งนักเรียน
+            ระบบขนส่งสาธารณะ มหาวิทยาลัยเชียงใหม่
           </Text>
           <Text
             style={[styles.subtitle, { color: isDark ? "#94a3b8" : "#64748b" }]}
           >
             เข้าสู่ระบบเพื่อใช้งาน
+          </Text>
+          <Text
+            style={[styles.subtitle, { color: isDark ? "#94a3b8" : "#64748b" }]}
+          >
+            Driver {'->'} driver:driver ,Admin {'->'} admin:admin
           </Text>
 
           {/* Form */}
@@ -228,7 +232,7 @@ function LoginScreen() {
               onPress={handleStudentLogin}
             >
               <Text style={styles.studentButtonText}>
-                🎓 เข้าใช้งานสำหรับนักเรียน
+                🎓 สำหรับนักศึกษา
               </Text>
             </Pressable>
           </View>

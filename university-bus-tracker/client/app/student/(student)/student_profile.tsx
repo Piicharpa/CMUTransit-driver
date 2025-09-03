@@ -9,13 +9,15 @@ import {
   ScrollView,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/driver_theme/profile";
+import { styles } from "../../theme/student_theme/student_profile";
 
-export default function Driver_Profile() {
-  const [driver, setDriver] = useState({
-    userID: "DRV001",
-    name: "John Smith",
-    profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=JS",
+export default function Student_Profile() {
+  const [student, setStudent] = useState({
+    studentID: "STD640123456",
+    name: "นางสาวสมหญิง ใจดี",
+    email: "somying.jaidee@student.university.ac.th",
+    faculty: "คณะวิทยาการคอมพิวเตอร์",
+    profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=SY",
   });
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -25,17 +27,20 @@ export default function Driver_Profile() {
   const isDark = colorScheme === "dark";
 
   const handleEditName = () => {
-    setEditName(driver.name);
+    setEditName(student.name);
     setIsEditingName(true);
   };
 
   const handleSaveName = () => {
     if (editName.trim()) {
-      setDriver({ ...driver, name: editName.trim() });
+      setStudent({ ...student, name: editName.trim() });
       setIsEditingName(false);
       setEditName("");
     } else {
-      Alert.alert("ข้อผิดพลาด", "ชื่อไม่สามารถเว้นว่างได้");
+      Alert.alert(
+        "ข้อผิดพลาด",
+        "ชื่อไม่สามารถเว้นว่างได้"
+      );
     }
   };
 
@@ -45,25 +50,104 @@ export default function Driver_Profile() {
   };
 
   const handleChangeProfilePic = () => {
-    const currentColor = driver.profilePic.includes("007AFF")
-      ? "34C759"
-      : driver.profilePic.includes("34C759")
-      ? "FF3B30"
-      : driver.profilePic.includes("FF3B30")
-      ? "FF9500"
-      : driver.profilePic.includes("FF9500")
-      ? "5856D6"
-      : "007AFF";
+    const colors = ["007AFF", "34C759", "FF3B30", "FF9500", "5856D6", "AF52DE"];
+    const currentColorIndex = colors.findIndex(color => 
+      student.profilePic.includes(color)
+    );
+    const nextColorIndex = (currentColorIndex + 1) % colors.length;
+    const newColor = colors[nextColorIndex];
 
-    const initials = driver.name
+    const initials = student.name
       .split(" ")
       .map((n) => n[0])
       .join("")
-      .toUpperCase();
-    const newPic = `https://via.placeholder.com/150/${currentColor}/FFFFFF?text=${initials}`;
-
-    setDriver({ ...driver, profilePic: newPic });
+      .toUpperCase()
+      .substring(0, 2);
+    
+    const newPic = `https://via.placeholder.com/150/${newColor}/FFFFFF?text=${initials}`;
+    setStudent({ ...student, profilePic: newPic });
   };
+
+  const getFacultyIcon = (faculty: string) => {
+    switch (faculty) {
+      case "คณะวิทยาการคอมพิวเตอร์":
+        return "💻";
+      case "คณะวิศวกรรมศาสตร์":
+        return "⚙️";
+      case "คณะบริหารธุรกิจ":
+        return "💼";
+      case "คณะศึกษาศาสตร์":
+        return "📚";
+      case "คณะแพทยศาสตร์":
+        return "🏥";
+      case "คณะพยาบาลศาสตร์":
+        return "👩‍⚕️";
+      case "คณะเภสัชศาสตร์":
+        return "💊";
+      case "คณะนิติศาสตร์":
+        return "⚖️";
+      default:
+        return "🎓";
+    }
+  };
+
+  const getFacultyBadgeColor = (faculty: string) => {
+    switch (faculty) {
+      case "คณะวิทยาการคอมพิวเตอร์":
+        return { 
+          bg: isDark ? "#1e3a8a" : "#dbeafe", 
+          text: isDark ? "#60a5fa" : "#2563eb",
+          border: isDark ? "#3b82f6" : "#3b82f6"
+        };
+      case "คณะวิศวกรรมศาสตร์":
+        return { 
+          bg: isDark ? "#7c2d12" : "#fef3c7", 
+          text: isDark ? "#fbbf24" : "#d97706",
+          border: isDark ? "#92400e" : "#f59e0b"
+        };
+      case "คณะบริหารธุรกิจ":
+        return { 
+          bg: isDark ? "#166534" : "#dcfce7", 
+          text: isDark ? "#22c55e" : "#16a34a",
+          border: isDark ? "#16a34a" : "#22c55e"
+        };
+      case "คณะศึกษาศาสตร์":
+        return { 
+          bg: isDark ? "#7e22ce" : "#f3e8ff", 
+          text: isDark ? "#c084fc" : "#7c3aed",
+          border: isDark ? "#a855f7" : "#8b5cf6"
+        };
+      default:
+        return { 
+          bg: isDark ? "#374151" : "#f3f4f6", 
+          text: isDark ? "#9ca3af" : "#6b7280",
+          border: isDark ? "#6b7280" : "#9ca3af"
+        };
+    }
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      "ออกจากระบบ",
+      "คุณต้องการออกจากระบบหรือไม่?",
+      [
+        {
+          text: "ยกเลิก",
+          style: "cancel"
+        },
+        {
+          text: "ออกจากระบบ",
+          style: "destructive",
+          onPress: () => {
+            // Add your logout logic here
+            Alert.alert("สำเร็จ", "ออกจากระบบเรียบร้อยแล้ว");
+          }
+        }
+      ]
+    );
+  };
+
+  const facultyBadgeColor = getFacultyBadgeColor(student.faculty);
 
   return (
     <View
@@ -82,12 +166,12 @@ export default function Driver_Profile() {
           <Text
             style={[styles.title, { color: isDark ? "#60a5fa" : "#007AFF" }]}
           >
-            👤 โปรไฟล์คนขับ
+            👨‍🎓 โปรไฟล์นักศึกษา
           </Text>
           <Text
             style={[styles.subtitle, { color: isDark ? "#9ca3af" : "#6b7280" }]}
           >
-            จัดการข้อมูลส่วนตัวของคุณ
+            จัดการข้อมูลส่วนตัวของนักศึกษา
           </Text>
         </View>
 
@@ -105,7 +189,7 @@ export default function Driver_Profile() {
           <View style={styles.profilePicSection}>
             <View style={styles.profilePicContainer}>
               <Image
-                source={{ uri: driver.profilePic }}
+                source={{ uri: student.profilePic }}
                 style={[
                   styles.profilePic,
                   { borderColor: isDark ? "#60a5fa" : "#007AFF" },
@@ -145,7 +229,7 @@ export default function Driver_Profile() {
             </Text>
           </View>
 
-          {/* User ID Section */}
+          {/* Student ID Section */}
           <View
             style={[
               styles.infoCard,
@@ -156,14 +240,14 @@ export default function Driver_Profile() {
             ]}
           >
             <View style={styles.infoHeader}>
-              <Text style={styles.infoIcon}>🆔</Text>
+              <Text style={styles.infoIcon}>🎓</Text>
               <Text
                 style={[
                   styles.label,
                   { color: isDark ? "#d1d5db" : "#374151" },
                 ]}
               >
-                User ID
+                รหัสนักศึกษา
               </Text>
             </View>
             <View style={styles.userIDContainer}>
@@ -172,8 +256,9 @@ export default function Driver_Profile() {
                   styles.userID,
                   { color: isDark ? "#f3f4f6" : "#111827" },
                 ]}
+                selectable={true}
               >
-                {driver.userID}
+                {student.studentID}
               </Text>
               <View style={styles.verifiedBadge}>
                 <Text style={styles.verifiedText}>✓</Text>
@@ -227,14 +312,18 @@ export default function Driver_Profile() {
                     onPress={handleCancelEdit}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.cancelButtonText}>ยกเลิก</Text>
+                    <Text style={styles.cancelButtonText}>
+                      ยกเลิก
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.button, styles.saveButton]}
                     onPress={handleSaveName}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.saveButtonText}>✓ บันทึก</Text>
+                    <Text style={styles.saveButtonText}>
+                      ✓ บันทึก
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -246,17 +335,101 @@ export default function Driver_Profile() {
                     { color: isDark ? "#f3f4f6" : "#111827" },
                   ]}
                 >
-                  {driver.name}
+                  {student.name}
                 </Text>
                 <TouchableOpacity
                   style={[styles.button, styles.editButton]}
                   onPress={handleEditName}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.editButtonText}>✏️ แก้ไข</Text>
+                  <Text style={styles.editButtonText}>
+                    ✏️ แก้ไข
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}
+          </View>
+
+          {/* Email Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>📧</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                อีเมล
+              </Text>
+            </View>
+            <View style={styles.nameDisplayContainer}>
+              <Text
+                style={[
+                  styles.nameDisplay,
+                  { 
+                    color: isDark ? "#f3f4f6" : "#111827",
+                    fontSize: 16,
+                    fontFamily: 'monospace',
+                  },
+                ]}
+                selectable={true}
+              >
+                {student.email}
+              </Text>
+            </View>
+          </View>
+
+          {/* Faculty Section */}
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? "#111827" : "#ffffff",
+                borderColor: isDark ? "#374151" : "#e5e7eb",
+              },
+            ]}
+          >
+            <View style={styles.infoHeader}>
+              <Text style={styles.infoIcon}>🏛️</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: isDark ? "#d1d5db" : "#374151" },
+                ]}
+              >
+                คณะ
+              </Text>
+            </View>
+            <View style={styles.nameDisplayContainer}>
+              <View
+                style={[
+                  styles.roleBadge,
+                  {
+                    backgroundColor: facultyBadgeColor.bg,
+                    borderColor: facultyBadgeColor.border,
+                  },
+                ]}
+              >
+                <Text style={styles.roleIcon}>{getFacultyIcon(student.faculty)}</Text>
+                <Text
+                  style={[
+                    styles.roleText,
+                    { color: facultyBadgeColor.text },
+                  ]}
+                >
+                  {student.faculty}
+                </Text>
+              </View>
+            </View>
           </View>
 
           {/* Stats Section */}
@@ -277,7 +450,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#9ca3af" : "#6B7280" },
                 ]}
               >
-                สร้างโปรไฟล์
+                เข้าศึกษา
               </Text>
               <Text
                 style={[
@@ -285,7 +458,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#d1d5db" : "#374151" },
                 ]}
               >
-                25/07/2025
+                2564
               </Text>
             </View>
             <View
@@ -302,7 +475,7 @@ export default function Driver_Profile() {
                   { color: isDark ? "#9ca3af" : "#6B7280" },
                 ]}
               >
-                อัพเดทล่าสุด
+                เข้าใช้ล่าสุด
               </Text>
               <Text
                 style={[
@@ -330,10 +503,12 @@ export default function Driver_Profile() {
                   { color: isDark ? "#10b981" : "#059669" },
                 ]}
               >
-                โปรไฟล์ยืนยันแล้ว
+                นักศึกษาปัจจุบัน - ยืนยันแล้ว
               </Text>
             </View>
           </View>
+
+          {/* Logout Button */}
           <View style={styles.logoutContainer}>
             <TouchableOpacity
               style={[
@@ -343,7 +518,7 @@ export default function Driver_Profile() {
                   borderColor: isDark ? "#dc2626" : "#f87171",
                 },
               ]}
-              // onPress={handleLogout}
+              onPress={handleLogout}
               activeOpacity={0.8}
             >
               <Text style={styles.logoutIcon}>🚪</Text>
