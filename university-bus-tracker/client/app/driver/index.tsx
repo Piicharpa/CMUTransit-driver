@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { styles } from "../theme/driver_theme/index";
+import styles from "../theme/driver_theme/index";
 export default function Index() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";

@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
   Text,
   Pressable,
   useColorScheme,
-  StyleSheet,
   Platform,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import * as SecureStore from "expo-secure-store";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
 import {
   SafeAreaProvider,
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
+import { MicrosoftAuthService } from "../auth/microsoftAuth";
+import { MICROSOFT_CONFIG } from "../auth/microsoft.config";
+import styles from "./theme/index";
+
+// Constants
+const AUTH_STORAGE_KEY = "auth_data";
+
+// Complete auth session setup
+WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   return (
@@ -32,20 +47,240 @@ function LoginScreen() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   const colorScheme = useColorScheme();
   const router = useRouter();
   const isDark = colorScheme === "dark";
   const insets = useSafeAreaInsets();
 
-  const handleLogin = () => {
-    if (username === "admin" && password === "admin") router.push("/admin");
-    else if (username === "driver" && password === "driver")
-      router.push("/driver");
-    else alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+  // Microsoft OAuth Discovery - auto-discover endpoints
+  const discovery = AuthSession.useAutoDiscovery(
+    `https://login.microsoftonline.com/${MICROSOFT_CONFIG.tenantId}/v2.0`
+  );
+
+  // Auth request configuration
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: MICROSOFT_CONFIG.clientId,
+      scopes: MICROSOFT_CONFIG.scopes,
+      redirectUri: MICROSOFT_CONFIG.redirectUri,
+      responseType: AuthSession.ResponseType.Code, // Use authorization code flow for security
+      extraParams: {
+        // Force user to select account (optional)
+        prompt: "select_account",
+      },
+    },
+    discovery
+  );
+
+  // Handle OAuth response
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { code } = response.params;
+      if (code) {
+        handleMicrosoftAuth(code);
+      } else {
+        Alert.alert("ข้อผิดพลาด", "ไม่ได้รับรหัสยืนยันจาก Microsoft");
+      }
+    } else if (response?.type === "error") {
+      console.error("OAuth Error:", response.error);
+      Alert.alert(
+        "เข้าสู่ระบบล้มเหลว",
+        response.error?.message || "เกิดข้อผิดพลาดในการเข้าสู่ระบบ"
+      );
+    } else if (response?.type === "cancel") {
+      // User cancelled the login
+      console.log("User cancelled Microsoft login");
+    }
+  }, [response]);
+
+  // Load stored authentication on app start
+  useEffect(() => {
+    loadStoredAuth();
+
+    // Warm up browser for better UX
+    if (Platform.OS !== "web") {
+      WebBrowser.warmUpAsync();
+      return () => {
+        WebBrowser.coolDownAsync();
+      };
+    }
+  }, []);
+
+  const handleMicrosoftAuth = async (authCode: string) => {
+    setIsLoading(true);
+    try {
+      // Exchange authorization code for tokens using MicrosoftAuthService
+      const authData = await MicrosoftAuthService.exchangeCodeForTokens(authCode);
+
+      if (authData.accessToken) {
+        // Get user information from CMU API
+        const userInfo = await MicrosoftAuthService.validateAndGetUserInfo(authData.accessToken);
+
+        // Store auth data securely
+        await MicrosoftAuthService.storeAuthData(authData);
+
+        setUserInfo(userInfo);
+
+        // Extract display name from CMU API response
+        const displayName = userInfo.displayName || 
+                           userInfo.name || 
+                           userInfo.firstName + " " + userInfo.lastName || 
+                           userInfo.email || 
+                           "นักศึกษา";
+
+        Alert.alert(
+          "เข้าสู่ระบบสำเร็จ! 🎉",
+          `ยินดีต้อนรับ ${displayName}`,
+          [
+            {
+              text: "ไปหน้านักศึกษา",
+              onPress: () => router.push("/student/dashboard"),
+            },
+          ]
+        );
+      }
+    } catch (error) {
+      console.error("Token exchange error:", error);
+      Alert.alert("เข้าสู่ระบบล้มเหลว", "ไม่สามารถตรวจสอบข้อมูลได้");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleStudentLogin = () => router.push("/student");
+
+
+  // Load stored authentication
+  const loadStoredAuth = async () => {
+    try {
+      const authData = await MicrosoftAuthService.loadStoredAuth();
+
+      if (authData) {
+        setUserInfo(authData.userInfo);
+      }
+    } catch (error) {
+      console.error("Error loading stored auth:", error);
+    }
+  };
+
+
+  // Sign out function
+  const signOut = async () => {
+    try {
+      await MicrosoftAuthService.clearAuthData();
+      setUserInfo(null);
+
+      // Optional: Revoke tokens on Microsoft side
+      // This requires additional API calls
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
+
+  const handleLogin = () => {
+    if (username === "admin" && password === "admin")
+      router.push("/admin/all_report");
+    else if (username === "driver" && password === "driver")
+      router.push("/driver/scanner");
+    else Alert.alert("ข้อผิดพลาด", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+  };
+
+  const handleMicrosoftLogin = async () => {
+    if (!request) {
+      Alert.alert("ข้อผิดพลาด", "กำลังตั้งค่า OAuth กรุณารอสักครู่");
+      return;
+    }
+
+    if (!discovery) {
+      Alert.alert("ข้อผิดพลาด", "ไม่สามารถเชื่อมต่อกับ Microsoft ได้");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await promptAsync();
+    } catch (error) {
+      console.error("Login prompt error:", error);
+      Alert.alert("ข้อผิดพลาด", "ไม่สามารถเปิดหน้าเข้าสู่ระบบได้");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // If user is already logged in with Microsoft
+  if (userInfo) {
+    return (
+      <SafeAreaView
+        style={[
+          styles.container,
+          { backgroundColor: isDark ? "#0f172a" : "#f8fafc" },
+        ]}
+        edges={["top", "bottom", "left", "right"]}
+      >
+        <View style={[styles.messageContainer, { padding: 40 }]}>
+          <Text
+            style={[
+              styles.title,
+              { color: isDark ? "#f1f5f9" : "#1e293b", marginBottom: 16 },
+            ]}
+          >
+            ยินดีต้อนรับ! 👋
+          </Text>
+          <Text
+            style={[
+              styles.subtitle,
+              { color: isDark ? "#94a3b8" : "#64748b", marginBottom: 8 },
+            ]}
+          >
+            {userInfo.displayName}
+          </Text>
+          <Text
+            style={[
+              styles.subtitle,
+              { color: isDark ? "#94a3b8" : "#64748b", marginBottom: 32 },
+            ]}
+          >
+            {userInfo.mail || userInfo.userPrincipalName}
+          </Text>
+
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed
+                  ? isDark
+                    ? "#7c3aed"
+                    : "#8b5cf6"
+                  : isDark
+                  ? "#8b5cf6"
+                  : "#a855f7",
+                transform: [{ scale: pressed ? 0.98 : 1 }],
+                ...styles.studentButton,
+                marginBottom: 16,
+              },
+            ]}
+            onPress={() => router.push("/student/dashboard")}
+          >
+            <Text style={styles.studentButtonText}>🎓 ไปหน้านักศึกษา</Text>
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? "#ef4444" : "#f87171",
+                transform: [{ scale: pressed ? 0.98 : 1 }],
+                ...styles.studentButton,
+              },
+            ]}
+            onPress={signOut}
+          >
+            <Text style={styles.studentButtonText}>🚪 ออกจากระบบ</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -91,7 +326,15 @@ function LoginScreen() {
           <Text
             style={[styles.subtitle, { color: isDark ? "#94a3b8" : "#64748b" }]}
           >
-            Driver {'->'} driver:driver ,Admin {'->'} admin:admin
+            Driver {"->"} driver:driver , Admin {"->"} admin:admin
+          </Text>
+          <Text
+            style={[
+              styles.subtitle,
+              { color: isDark ? "#64748b" : "#9ca3af", fontSize: 14 },
+            ]}
+          >
+            หรือเข้าสู่ระบบด้วยบัญชี Microsoft ของมหาวิทยาลัย
           </Text>
 
           {/* Form */}
@@ -214,7 +457,30 @@ function LoginScreen() {
               />
             </View>
 
-            {/* Student Login Button */}
+            {/* Microsoft Login Button */}
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? "#0078d4" : "#0082d4",
+                  transform: [{ scale: pressed ? 0.98 : 1 }],
+                  opacity: isLoading || !request || !discovery ? 0.7 : 1,
+                  ...styles.studentButton,
+                  marginBottom: 12,
+                },
+              ]}
+              onPress={handleMicrosoftLogin}
+              disabled={isLoading || !request || !discovery}
+            >
+              <Text style={styles.studentButtonText}>
+                {isLoading
+                  ? "🔄 กำลังเข้าสู่ระบบ..."
+                  : !discovery
+                  ? "⏳ กำลังโหลด..."
+                  : "🏢 เข้าสู่ระบบด้วย Microsoft (CMU)"}
+              </Text>
+            </Pressable>
+
+            {/* Student Login Button (Legacy) */}
             <Pressable
               style={({ pressed }) => [
                 {
@@ -229,10 +495,10 @@ function LoginScreen() {
                   ...styles.studentButton,
                 },
               ]}
-              onPress={handleStudentLogin}
+              onPress={() => router.push("/student/dashboard")}
             >
               <Text style={styles.studentButtonText}>
-                🎓 สำหรับนักศึกษา
+                🎓 สำหรับนักศึกษา (ทดลอง)
               </Text>
             </Pressable>
           </View>
@@ -241,67 +507,3 @@ function LoginScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#3b82f6",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-    shadowColor: "#3b82f6",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  logoIcon: { fontSize: 40 },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginTop: 8,
-    textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: "center",
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  formContainer: { width: "100%", maxWidth: 400, alignSelf: "center" },
-  inputGroup: { marginBottom: 20 },
-  inputLabel: { fontSize: 16, fontWeight: "600", marginBottom: 8 },
-  input: {
-    width: "100%",
-    borderWidth: 2,
-    padding: 16,
-    borderRadius: 12,
-    fontSize: 16,
-  },
-  inputFocused: { borderColor: "#3b82f6" },
-  passwordContainer: { position: "relative" },
-  passwordInput: { paddingRight: 50 },
-  eyeButton: { position: "absolute", right: 16, top: 16 },
-  eyeIcon: { fontSize: 20 },
-  loginButton: {
-    width: "100%",
-    padding: 18,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  loginButtonText: { color: "#ffffff", fontWeight: "bold", fontSize: 18 },
-  divider: { flexDirection: "row", alignItems: "center", marginVertical: 24 },
-  dividerLine: { flex: 1, height: 1 },
-  dividerText: { paddingHorizontal: 16, fontSize: 14, fontWeight: "500" },
-  studentButton: {
-    width: "100%",
-    padding: 18,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  studentButtonText: { color: "#ffffff", fontWeight: "bold", fontSize: 18 },
-});

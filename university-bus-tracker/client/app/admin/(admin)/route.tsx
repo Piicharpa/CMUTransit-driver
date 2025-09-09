@@ -8,7 +8,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/admin_theme/route";
+import styles from "../../theme/admin_theme/route";
 
 interface Bus {
   id: string;
@@ -92,6 +92,9 @@ export default function Route_Manage() {
           backgroundColor: isDark ? "#1f2937" : "#ffffff",
           borderColor: isDark ? "#374151" : "#e2e8f0",
           shadowColor: isDark ? "#000000" : "#1e3a8a",
+          boxShadow: isDark
+            ? "0px 2px 4px rgba(0,0,0,0.25)"
+            : "0px 2px 4px rgba(30,58,138,0.25)",
         },
       ]}
     >
@@ -185,9 +188,7 @@ export default function Route_Manage() {
                 style={[styles.button, styles.saveButton]}
                 onPress={() => handleSave(item.id)}
               >
-                <Text style={styles.buttonText}>
-                  ✓ บันทึก
-                </Text>
+                <Text style={styles.buttonText}>✓ บันทึก</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
@@ -197,9 +198,7 @@ export default function Route_Manage() {
                 ]}
                 onPress={handleCancel}
               >
-                <Text style={styles.buttonText}>
-                  ✕ ยกเลิก
-                </Text>
+                <Text style={styles.buttonText}>✕ ยกเลิก</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -212,17 +211,13 @@ export default function Route_Manage() {
                 ]}
                 onPress={() => handleEdit(item)}
               >
-                <Text style={styles.buttonText}>
-                  ✏️ แก้ไข
-                </Text>
+                <Text style={styles.buttonText}>✏️ แก้ไข</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.deleteButton]}
                 onPress={() => handleDelete(item.id, item.busNumber)}
               >
-                <Text style={styles.buttonText}>
-                  🗑️ ลบ
-                </Text>
+                <Text style={styles.buttonText}>🗑️ ลบ</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -253,6 +248,9 @@ export default function Route_Manage() {
             backgroundColor: isDark ? "#1f2937" : "#ffffff",
             borderColor: isDark ? "#374151" : "#e2e8f0",
             shadowColor: isDark ? "#000000" : "#1e3a8a",
+            boxShadow: isDark
+              ? "0px 2px 4px rgba(0,0,0,0.25)"
+              : "0px 2px 4px rgba(30,58,138,0.25)",
           },
         ]}
       >

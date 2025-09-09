@@ -1,9 +1,7 @@
 // theme/howToUse.ts
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const { width } = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -33,6 +31,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 6,
     borderWidth: 1,
   },
@@ -70,6 +69,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
     borderWidth: 1,
     overflow: 'hidden',
@@ -179,3 +179,5 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default styles;

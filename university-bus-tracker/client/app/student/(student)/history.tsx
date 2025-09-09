@@ -6,7 +6,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/student_theme/reportHistory";
+import styles from "../../theme/student_theme/reportHistory";
 
 interface ReportHistory {
   id: string;
@@ -19,7 +19,7 @@ interface ReportHistory {
   reason: string;
   category: "vehicle" | "route" | "passenger" | "safety" | "accident" | "other";
   title: string;
-  status: "pending" | "processing" | "completed";
+  status: "pending" | "processing" | "completed" | "canceled";
 }
 
 interface ReportCategory {
@@ -47,10 +47,10 @@ const reportCategories: ReportCategory[] = [
 
 const reportStatuses: ReportStatus[] = [
   {
-    id: "pending",
-    name: "รอดำเนินการแก้ไข/ปรับปรุง",
-    icon: "⏳",
-    color: "#f59e0b",
+    id: "completed",
+    name: "ดำเนินการแก้ไข/ปรับปรุงแล้ว",
+    icon: "✅",
+    color: "#10b981",
   },
   {
     id: "processing",
@@ -59,10 +59,16 @@ const reportStatuses: ReportStatus[] = [
     color: "#3b82f6",
   },
   {
-    id: "completed",
-    name: "ดำเนินการแก้ไข/ปรับปรุงแล้ว",
-    icon: "✅",
-    color: "#10b981",
+    id: "pending",
+    name: "รอดำเนินการแก้ไข/ปรับปรุง",
+    icon: "⏳",
+    color: "#f59e0b",
+  },
+  {
+    id: "canceled",
+    name: "ปฏิเสธการร้องเรียน",
+    icon: "❌",
+    color: "#ef4444",
   },
 ];
 
@@ -179,6 +185,20 @@ const reportHistoryData: ReportHistory[] = [
     title: "กระจกแตกจากการทำลาย",
     status: "processing",
   },
+  {
+    id: "9",
+    busNumber: "B-312",
+    route: "3 - Blue Line",
+    accidentDate: "2025-01-10",
+    accidentTime: "12:40",
+    reportDate: "2025-01-10",
+    reportTime: "12:45",
+    reason:
+      "กระจกแตกเนื่องจากการทำลาย ต้องเปลี่ยนกระจกใหม่ กำลังรอชิ้นส่วนจากผู้ผลิต",
+    category: "other",
+    title: "กระจกแตกจากการทำลาย",
+    status: "canceled",
+  },
 ];
 
 export default function Report_History() {
@@ -232,6 +252,9 @@ export default function Report_History() {
             backgroundColor: isDark ? "#1f2937" : "#ffffff",
             borderColor: isDark ? "#374151" : "#e5e7eb",
             shadowColor: isDark ? "#000000" : "#007AFF",
+            boxShadow: isDark
+              ? "0px 2px 4px rgba(0,0,0,0.25)"
+              : "0px 2px 4px rgba(30,58,138,0.25)",
           },
         ]}
       >
@@ -544,6 +567,9 @@ export default function Report_History() {
             backgroundColor: isDark ? "#1f2937" : "#ffffff",
             borderColor: isDark ? "#374151" : "#e5e7eb",
             shadowColor: isDark ? "#000000" : "#007AFF",
+            boxShadow: isDark
+              ? "0px 2px 4px rgba(0,0,0,0.25)"
+              : "0px 2px 4px rgba(30,58,138,0.25)",
           },
         ]}
       >

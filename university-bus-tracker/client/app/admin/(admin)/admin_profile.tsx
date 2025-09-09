@@ -2,71 +2,23 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
-  Image,
-  Alert,
   useColorScheme,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
-import { styles } from "../../theme/admin_theme/admin_profile";
+import styles from "../../theme/admin_theme/admin_profile";
 
 export default function Admin_Profile() {
-  const [admin, setAdmin] = useState({
+  const admin = {
     userID: "ADM001",
-    name: "นายสมชาย ใจดี",
+    name: "สมชาย ใจดี",
     email: "somchai.jaidee@company.co.th",
     department: "ฝ่ายเทคโนโลยีสารสนเทศ",
     role: "System Administrator",
     profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=SC",
-  });
-
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [editName, setEditName] = useState("");
+  };
 
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-
-  const handleEditName = () => {
-    setEditName(admin.name);
-    setIsEditingName(true);
-  };
-
-  const handleSaveName = () => {
-    if (editName.trim()) {
-      setAdmin({ ...admin, name: editName.trim() });
-      setIsEditingName(false);
-      setEditName("");
-    } else {
-      Alert.alert("ข้อผิดพลาด", "ชื่อไม่สามารถเว้นว่างได้");
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditingName(false);
-    setEditName("");
-  };
-
-  const handleChangeProfilePic = () => {
-    const currentColor = admin.profilePic.includes("007AFF")
-      ? "34C759"
-      : admin.profilePic.includes("34C759")
-      ? "FF3B30"
-      : admin.profilePic.includes("FF3B30")
-      ? "FF9500"
-      : admin.profilePic.includes("FF9500")
-      ? "5856D6"
-      : "007AFF";
-
-    const initials = admin.name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-    const newPic = `https://via.placeholder.com/150/${currentColor}/FFFFFF?text=${initials}`;
-
-    setAdmin({ ...admin, profilePic: newPic });
-  };
 
   const getRoleIcon = (role: string) => {
     switch (role) {
@@ -148,51 +100,33 @@ export default function Admin_Profile() {
               backgroundColor: isDark ? "#1f2937" : "#F9FAFB",
               borderColor: isDark ? "#374151" : "#E5E7EB",
               shadowColor: isDark ? "#000000" : "#007AFF",
+              boxShadow: isDark
+                ? "0px 2px 4px rgba(0,0,0,0.25)"
+                : "0px 2px 4px rgba(30,58,138,0.25)",
             },
           ]}
         >
           {/* Profile Picture Section */}
           <View style={styles.profilePicSection}>
-            <View style={styles.profilePicContainer}>
-              <Image
-                source={{ uri: admin.profilePic }}
-                style={[
-                  styles.profilePic,
-                  { borderColor: isDark ? "#60a5fa" : "#007AFF" },
-                ]}
-              />
-              <View
-                style={[
-                  styles.profileRing,
-                  {
-                    borderColor: isDark
-                      ? "rgba(96, 165, 250, 0.3)"
-                      : "rgba(0, 122, 255, 0.3)",
-                  },
-                ]}
-              />
-              <TouchableOpacity
-                style={[
-                  styles.changePicButton,
-                  {
-                    backgroundColor: isDark ? "#3b82f6" : "#007AFF",
-                    borderColor: isDark ? "#1f2937" : "#FFFFFF",
-                  },
-                ]}
-                onPress={handleChangeProfilePic}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.changePicText}>📷</Text>
-              </TouchableOpacity>
-            </View>
-            <Text
+            <View
               style={[
-                styles.changePicHint,
-                { color: isDark ? "#6b7280" : "#9ca3af" },
+                styles.profilePic,
+                styles.profileInitial,
+                {
+                  borderColor: isDark ? "#60a5fa" : "#007AFF",
+                  backgroundColor: isDark ? "#374151" : "#f3f4f6",
+                },
               ]}
             >
-              แตะเพื่อเปลี่ยนรูปโปรไฟล์
-            </Text>
+              <Text
+                style={[
+                  styles.initialText,
+                  { color: isDark ? "#ffffff" : "#374151" },
+                ]}
+              >
+                {admin.name?.charAt(0).toUpperCase() || "?"}
+              </Text>
+            </View>
           </View>
 
           {/* Admin ID Section */}
@@ -225,9 +159,6 @@ export default function Admin_Profile() {
               >
                 {admin.userID}
               </Text>
-              <View style={styles.verifiedBadge}>
-                <Text style={styles.verifiedText}>✓</Text>
-              </View>
             </View>
           </View>
 
@@ -253,60 +184,16 @@ export default function Admin_Profile() {
               </Text>
             </View>
 
-            {isEditingName ? (
-              <View style={styles.editNameContainer}>
-                <TextInput
-                  style={[
-                    styles.nameInput,
-                    {
-                      backgroundColor: isDark ? "#1f2937" : "#F3F4F6",
-                      borderColor: isDark ? "#60a5fa" : "#007AFF",
-                      color: isDark ? "#f3f4f6" : "#111827",
-                    },
-                  ]}
-                  value={editName}
-                  onChangeText={setEditName}
-                  placeholder="กรอกชื่อ-นามสกุล"
-                  placeholderTextColor={isDark ? "#6b7280" : "#999"}
-                  autoFocus
-                  selectionColor={isDark ? "#60a5fa" : "#007AFF"}
-                />
-                <View style={styles.editButtons}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.cancelButton]}
-                    onPress={handleCancelEdit}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.cancelButtonText}>ยกเลิก</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.button, styles.saveButton]}
-                    onPress={handleSaveName}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.saveButtonText}>✓ บันทึก</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              <View style={styles.nameDisplayContainer}>
-                <Text
-                  style={[
-                    styles.nameDisplay,
-                    { color: isDark ? "#f3f4f6" : "#111827" },
-                  ]}
-                >
-                  {admin.name}
-                </Text>
-                <TouchableOpacity
-                  style={[styles.button, styles.editButton]}
-                  onPress={handleEditName}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.editButtonText}>✏️ แก้ไข</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            <View style={styles.nameDisplayContainer}>
+              <Text
+                style={[
+                  styles.nameDisplay,
+                  { color: isDark ? "#f3f4f6" : "#111827" },
+                ]}
+              >
+                {admin.name}
+              </Text>
+            </View>
           </View>
 
           {/* Email Section */}
@@ -500,7 +387,7 @@ export default function Admin_Profile() {
               <Text
                 style={[
                   styles.logoutText,
-                  { color: isDark ? "#f87171" : "#dc2626" },
+                  { color: isDark ? "#fff" : "#dc2626" },
                 ]}
               >
                 ออกจากระบบ

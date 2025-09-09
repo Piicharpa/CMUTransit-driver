@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
@@ -28,6 +28,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
     borderWidth: 1,
   },
@@ -55,6 +56,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
   },
   filterToggleText: {
@@ -72,6 +74,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 2,
   },
   filterLabel: {
@@ -148,6 +151,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
   },
   driverHeader: {
@@ -176,6 +180,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 2,
   },
   busNumberLabel: {
@@ -198,6 +203,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 1,
   },
   saveButton: {
@@ -208,6 +214,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
   },
   cancelButton: {
@@ -217,6 +224,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
   },
   noBusContainer: {
@@ -264,6 +272,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
   },
   pickerContainer: {
@@ -271,6 +280,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 2,
     overflow: 'hidden',
   },
@@ -279,3 +289,5 @@ export const styles = StyleSheet.create({
     width: 160,
   },
 });
+
+export default styles;

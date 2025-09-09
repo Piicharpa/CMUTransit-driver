@@ -9,14 +9,14 @@ import {
   ScrollView,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/student_theme/student_profile";
+import styles from "../../theme/student_theme/student_profile";
 
 export default function Student_Profile() {
   const [student, setStudent] = useState({
-    studentID: "STD640123456",
-    name: "นางสาวสมหญิง ใจดี",
-    email: "somying.jaidee@student.university.ac.th",
-    faculty: "คณะวิทยาการคอมพิวเตอร์",
+    studentID: "650610787",
+    name: "ปุณณวิชญ์ เดชอินทร์",
+    email: "punnawich_dachin@cmu.ac.th",
+    faculty: "คณะวิศวกรรมคอมพิวเตอร์",
     profilePic: "https://via.placeholder.com/150/007AFF/FFFFFF?text=SY",
   });
 
@@ -37,10 +37,7 @@ export default function Student_Profile() {
       setIsEditingName(false);
       setEditName("");
     } else {
-      Alert.alert(
-        "ข้อผิดพลาด",
-        "ชื่อไม่สามารถเว้นว่างได้"
-      );
+      Alert.alert("ข้อผิดพลาด", "ชื่อไม่สามารถเว้นว่างได้");
     }
   };
 
@@ -51,7 +48,7 @@ export default function Student_Profile() {
 
   const handleChangeProfilePic = () => {
     const colors = ["007AFF", "34C759", "FF3B30", "FF9500", "5856D6", "AF52DE"];
-    const currentColorIndex = colors.findIndex(color => 
+    const currentColorIndex = colors.findIndex((color) =>
       student.profilePic.includes(color)
     );
     const nextColorIndex = (currentColorIndex + 1) % colors.length;
@@ -63,7 +60,7 @@ export default function Student_Profile() {
       .join("")
       .toUpperCase()
       .substring(0, 2);
-    
+
     const newPic = `https://via.placeholder.com/150/${newColor}/FFFFFF?text=${initials}`;
     setStudent({ ...student, profilePic: newPic });
   };
@@ -94,57 +91,53 @@ export default function Student_Profile() {
   const getFacultyBadgeColor = (faculty: string) => {
     switch (faculty) {
       case "คณะวิทยาการคอมพิวเตอร์":
-        return { 
-          bg: isDark ? "#1e3a8a" : "#dbeafe", 
+        return {
+          bg: isDark ? "#1e3a8a" : "#dbeafe",
           text: isDark ? "#60a5fa" : "#2563eb",
-          border: isDark ? "#3b82f6" : "#3b82f6"
+          border: isDark ? "#3b82f6" : "#3b82f6",
         };
       case "คณะวิศวกรรมศาสตร์":
-        return { 
-          bg: isDark ? "#7c2d12" : "#fef3c7", 
+        return {
+          bg: isDark ? "#7c2d12" : "#fef3c7",
           text: isDark ? "#fbbf24" : "#d97706",
-          border: isDark ? "#92400e" : "#f59e0b"
+          border: isDark ? "#92400e" : "#f59e0b",
         };
       case "คณะบริหารธุรกิจ":
-        return { 
-          bg: isDark ? "#166534" : "#dcfce7", 
+        return {
+          bg: isDark ? "#166534" : "#dcfce7",
           text: isDark ? "#22c55e" : "#16a34a",
-          border: isDark ? "#16a34a" : "#22c55e"
+          border: isDark ? "#16a34a" : "#22c55e",
         };
       case "คณะศึกษาศาสตร์":
-        return { 
-          bg: isDark ? "#7e22ce" : "#f3e8ff", 
+        return {
+          bg: isDark ? "#7e22ce" : "#f3e8ff",
           text: isDark ? "#c084fc" : "#7c3aed",
-          border: isDark ? "#a855f7" : "#8b5cf6"
+          border: isDark ? "#a855f7" : "#8b5cf6",
         };
       default:
-        return { 
-          bg: isDark ? "#374151" : "#f3f4f6", 
+        return {
+          bg: isDark ? "#374151" : "#f3f4f6",
           text: isDark ? "#9ca3af" : "#6b7280",
-          border: isDark ? "#6b7280" : "#9ca3af"
+          border: isDark ? "#6b7280" : "#9ca3af",
         };
     }
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      "ออกจากระบบ",
-      "คุณต้องการออกจากระบบหรือไม่?",
-      [
-        {
-          text: "ยกเลิก",
-          style: "cancel"
+    Alert.alert("ออกจากระบบ", "คุณต้องการออกจากระบบหรือไม่?", [
+      {
+        text: "ยกเลิก",
+        style: "cancel",
+      },
+      {
+        text: "ออกจากระบบ",
+        style: "destructive",
+        onPress: () => {
+          // Add your logout logic here
+          Alert.alert("สำเร็จ", "ออกจากระบบเรียบร้อยแล้ว");
         },
-        {
-          text: "ออกจากระบบ",
-          style: "destructive",
-          onPress: () => {
-            // Add your logout logic here
-            Alert.alert("สำเร็จ", "ออกจากระบบเรียบร้อยแล้ว");
-          }
-        }
-      ]
-    );
+      },
+    ]);
   };
 
   const facultyBadgeColor = getFacultyBadgeColor(student.faculty);
@@ -182,50 +175,30 @@ export default function Student_Profile() {
               backgroundColor: isDark ? "#1f2937" : "#F9FAFB",
               borderColor: isDark ? "#374151" : "#E5E7EB",
               shadowColor: isDark ? "#000000" : "#007AFF",
+              boxShadow: isDark
+                ? "0px 2px 4px rgba(0,0,0,0.25)"
+                : "0px 2px 4px rgba(30,58,138,0.25)",
             },
           ]}
         >
           {/* Profile Picture Section */}
-          <View style={styles.profilePicSection}>
-            <View style={styles.profilePicContainer}>
-              <Image
-                source={{ uri: student.profilePic }}
-                style={[
-                  styles.profilePic,
-                  { borderColor: isDark ? "#60a5fa" : "#007AFF" },
-                ]}
-              />
-              <View
-                style={[
-                  styles.profileRing,
-                  {
-                    borderColor: isDark
-                      ? "rgba(96, 165, 250, 0.3)"
-                      : "rgba(0, 122, 255, 0.3)",
-                  },
-                ]}
-              />
-              <TouchableOpacity
-                style={[
-                  styles.changePicButton,
-                  {
-                    backgroundColor: isDark ? "#3b82f6" : "#007AFF",
-                    borderColor: isDark ? "#1f2937" : "#FFFFFF",
-                  },
-                ]}
-                onPress={handleChangeProfilePic}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.changePicText}>📷</Text>
-              </TouchableOpacity>
-            </View>
+          <View
+            style={[
+              styles.profilePic,
+              styles.profileInitial,
+              {
+                borderColor: isDark ? "#60a5fa" : "#007AFF",
+                backgroundColor: isDark ? "#374151" : "#f3f4f6",
+              },
+            ]}
+          >
             <Text
               style={[
-                styles.changePicHint,
-                { color: isDark ? "#6b7280" : "#9ca3af" },
+                styles.initialText,
+                { color: isDark ? "#ffffff" : "#374151" },
               ]}
             >
-              แตะเพื่อเปลี่ยนรูปโปรไฟล์
+              {student.name?.charAt(0).toUpperCase() || "?"}
             </Text>
           </View>
 
@@ -260,9 +233,6 @@ export default function Student_Profile() {
               >
                 {student.studentID}
               </Text>
-              <View style={styles.verifiedBadge}>
-                <Text style={styles.verifiedText}>✓</Text>
-              </View>
             </View>
           </View>
 
@@ -288,66 +258,16 @@ export default function Student_Profile() {
               </Text>
             </View>
 
-            {isEditingName ? (
-              <View style={styles.editNameContainer}>
-                <TextInput
-                  style={[
-                    styles.nameInput,
-                    {
-                      backgroundColor: isDark ? "#1f2937" : "#F3F4F6",
-                      borderColor: isDark ? "#60a5fa" : "#007AFF",
-                      color: isDark ? "#f3f4f6" : "#111827",
-                    },
-                  ]}
-                  value={editName}
-                  onChangeText={setEditName}
-                  placeholder="กรอกชื่อ-นามสกุล"
-                  placeholderTextColor={isDark ? "#6b7280" : "#999"}
-                  autoFocus
-                  selectionColor={isDark ? "#60a5fa" : "#007AFF"}
-                />
-                <View style={styles.editButtons}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.cancelButton]}
-                    onPress={handleCancelEdit}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.cancelButtonText}>
-                      ยกเลิก
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.button, styles.saveButton]}
-                    onPress={handleSaveName}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.saveButtonText}>
-                      ✓ บันทึก
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              <View style={styles.nameDisplayContainer}>
-                <Text
-                  style={[
-                    styles.nameDisplay,
-                    { color: isDark ? "#f3f4f6" : "#111827" },
-                  ]}
-                >
-                  {student.name}
-                </Text>
-                <TouchableOpacity
-                  style={[styles.button, styles.editButton]}
-                  onPress={handleEditName}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.editButtonText}>
-                    ✏️ แก้ไข
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            <View style={styles.nameDisplayContainer}>
+              <Text
+                style={[
+                  styles.nameDisplay,
+                  { color: isDark ? "#f3f4f6" : "#111827" },
+                ]}
+              >
+                {student.name}
+              </Text>
+            </View>
           </View>
 
           {/* Email Section */}
@@ -375,10 +295,10 @@ export default function Student_Profile() {
               <Text
                 style={[
                   styles.nameDisplay,
-                  { 
+                  {
                     color: isDark ? "#f3f4f6" : "#111827",
                     fontSize: 16,
-                    fontFamily: 'monospace',
+                    fontFamily: "monospace",
                   },
                 ]}
                 selectable={true}
@@ -419,12 +339,11 @@ export default function Student_Profile() {
                   },
                 ]}
               >
-                <Text style={styles.roleIcon}>{getFacultyIcon(student.faculty)}</Text>
+                <Text style={styles.roleIcon}>
+                  {getFacultyIcon(student.faculty)}
+                </Text>
                 <Text
-                  style={[
-                    styles.roleText,
-                    { color: facultyBadgeColor.text },
-                  ]}
+                  style={[styles.roleText, { color: facultyBadgeColor.text }]}
                 >
                   {student.faculty}
                 </Text>
@@ -458,7 +377,7 @@ export default function Student_Profile() {
                   { color: isDark ? "#d1d5db" : "#374151" },
                 ]}
               >
-                2564
+                2565
               </Text>
             </View>
             <View
@@ -525,7 +444,7 @@ export default function Student_Profile() {
               <Text
                 style={[
                   styles.logoutText,
-                  { color: isDark ? "#f87171" : "#dc2626" },
+                  { color: isDark ? "#fff" : "#dc2626" },
                 ]}
               >
                 ออกจากระบบ

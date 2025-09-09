@@ -8,9 +8,14 @@ import {
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import React, { useRef, useEffect } from "react";
-import { styles } from "../theme/admin_theme/layout";
+import styles from "../theme/admin_theme/layout";
 // Import icons from @expo/vector-icons
-import { Ionicons, MaterialIcons, FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialIcons,
+  FontAwesome5,
+  FontAwesome,
+} from "@expo/vector-icons";
 
 // --- Types ---
 type NavHref =
@@ -36,12 +41,6 @@ export default function Layout() {
 
   const navItems: NavItem[] = [
     {
-      href: "/admin",
-      label: "หน้าหลัก",
-      iconName: "home",
-      iconFamily: "Ionicons",
-    },
-    {
       href: "/admin/all_report",
       label: "รายงานทั้งหมด",
       iconName: "report",
@@ -64,6 +63,12 @@ export default function Layout() {
       label: "โปรไฟล์",
       iconName: "user-o",
       iconFamily: "FontAwesome",
+    },
+    {
+      href: "/admin",
+      label: "วิธีการใช้งาน",
+      iconName: "question",
+      iconFamily: "FontAwesome5",
     },
   ];
 

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import React, { useRef, useEffect } from "react";
-import { styles } from "../theme/student_theme/layout";
+import styles from "../theme/student_theme/layout";
 // Import icons from @expo/vector-icons
 import { Ionicons, MaterialIcons, FontAwesome5, FontAwesome } from "@expo/vector-icons";
 
@@ -35,16 +35,10 @@ export default function Layout() {
 
   const navItems: NavItem[] = [
     {
-      href: "/student",
-      label: "หน้าหลัก",
-      iconName: "home",
-      iconFamily: "Ionicons",
-    },
-    {
       href: "/student/dashboard",
-      label: "รายงานทั้งหมด",
-      iconName: "report",
-      iconFamily: "MaterialIcons",
+      label: "สายรถทั้งหมด",
+      iconName: "bus",
+      iconFamily: "FontAwesome5",
     },
     {
       href: "/student/history",
@@ -57,6 +51,12 @@ export default function Layout() {
       label: "โปรไฟล์",
       iconName: "user-o",
       iconFamily: "FontAwesome",
+    },
+    {
+      href: "/student",
+      label: "วิธีการใช้งาน",
+      iconName: "question",
+      iconFamily: "FontAwesome5",
     },
   ];
 

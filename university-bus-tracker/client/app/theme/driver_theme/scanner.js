@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
   },
   mobileIcon: {
@@ -64,6 +65,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
   },
   loadingIcon: {
@@ -78,6 +80,32 @@ export const styles = StyleSheet.create({
   },
   loadingSubtext: {
     fontSize: 14,
+    textAlign: 'center',
+  },
+  // เพิ่ม styles สำหรับปุ่มขออนุญาต
+  permissionButton: {
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
+    elevation: 6,
+    minWidth: 200,
+  },
+  permissionButtonIcon: {
+    fontSize: 20,
+    marginRight: 12,
+  },
+  permissionButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
     textAlign: 'center',
   },
   instructionCard: {
@@ -106,6 +134,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
   },
   headerTitle: {
@@ -145,6 +174,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
   },
   camera: {
     flex: 1,
@@ -226,6 +256,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 6,
   },
   scanButtonIcon: {
@@ -262,3 +293,5 @@ export const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
+
+export default styles;

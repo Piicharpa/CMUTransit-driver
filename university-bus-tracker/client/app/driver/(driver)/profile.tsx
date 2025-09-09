@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/driver_theme/profile";
+import styles from "../../theme/driver_theme/profile";
 
 export default function Driver_Profile() {
   const [driver, setDriver] = useState({
@@ -98,51 +98,33 @@ export default function Driver_Profile() {
               backgroundColor: isDark ? "#1f2937" : "#F9FAFB",
               borderColor: isDark ? "#374151" : "#E5E7EB",
               shadowColor: isDark ? "#000000" : "#007AFF",
+              boxShadow: isDark
+                ? "0px 2px 4px rgba(0,0,0,0.25)"
+                : "0px 2px 4px rgba(30,58,138,0.25)",
             },
           ]}
         >
           {/* Profile Picture Section */}
           <View style={styles.profilePicSection}>
-            <View style={styles.profilePicContainer}>
-              <Image
-                source={{ uri: driver.profilePic }}
-                style={[
-                  styles.profilePic,
-                  { borderColor: isDark ? "#60a5fa" : "#007AFF" },
-                ]}
-              />
-              <View
-                style={[
-                  styles.profileRing,
-                  {
-                    borderColor: isDark
-                      ? "rgba(96, 165, 250, 0.3)"
-                      : "rgba(0, 122, 255, 0.3)",
-                  },
-                ]}
-              />
-              <TouchableOpacity
-                style={[
-                  styles.changePicButton,
-                  {
-                    backgroundColor: isDark ? "#3b82f6" : "#007AFF",
-                    borderColor: isDark ? "#1f2937" : "#FFFFFF",
-                  },
-                ]}
-                onPress={handleChangeProfilePic}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.changePicText}>📷</Text>
-              </TouchableOpacity>
-            </View>
-            <Text
+            <View
               style={[
-                styles.changePicHint,
-                { color: isDark ? "#6b7280" : "#9ca3af" },
+                styles.profilePic,
+                styles.profileInitial,
+                {
+                  borderColor: isDark ? "#60a5fa" : "#007AFF",
+                  backgroundColor: isDark ? "#374151" : "#f3f4f6",
+                },
               ]}
             >
-              แตะเพื่อเปลี่ยนรูปโปรไฟล์
-            </Text>
+              <Text
+                style={[
+                  styles.initialText,
+                  { color: isDark ? "#ffffff" : "#374151" },
+                ]}
+              >
+                {driver.name?.charAt(0).toUpperCase() || "?"}
+              </Text>
+            </View>
           </View>
 
           {/* User ID Section */}
@@ -350,7 +332,7 @@ export default function Driver_Profile() {
               <Text
                 style={[
                   styles.logoutText,
-                  { color: isDark ? "#f87171" : "#dc2626" },
+                  { color: isDark ? "#fff" : "#dc2626" },
                 ]}
               >
                 ออกจากระบบ

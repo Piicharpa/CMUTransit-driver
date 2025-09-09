@@ -12,7 +12,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { styles } from "../../theme/driver_theme/history";
+import styles from "../../theme/driver_theme/history";
 
 interface BusHistory {
   id: string;
@@ -133,6 +133,9 @@ export default function Drive_History() {
           backgroundColor: isDark ? "#1f2937" : "#ffffff",
           borderColor: isDark ? "#374151" : "#e5e7eb",
           shadowColor: isDark ? "#000" : "#007AFF",
+          boxShadow: isDark
+            ? "0px 2px 4px rgba(0,0,0,0.25)"
+            : "0px 2px 4px rgba(30,58,138,0.25)",
         },
       ]}
     >
@@ -260,6 +263,9 @@ export default function Drive_History() {
                 backgroundColor: isDark ? "#1f2937" : "#F9FAFB",
                 borderColor: isDark ? "#374151" : "#E5E7EB",
                 shadowColor: isDark ? "#000" : "#007AFF",
+                boxShadow: isDark
+                  ? "0px 2px 4px rgba(0,0,0,0.25)"
+                  : "0px 2px 4px rgba(30,58,138,0.25)",
               },
             ]}
           >

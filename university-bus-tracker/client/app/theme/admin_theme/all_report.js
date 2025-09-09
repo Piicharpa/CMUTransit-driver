@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
   },
   categoryStatsTitle: {
@@ -58,6 +59,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 1,
   },
   categoryStatIcon: {
@@ -126,6 +128,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
     borderWidth: 1,
     flexDirection: "row",
@@ -170,6 +173,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 2,
   },
   filterToggleText: {
@@ -216,6 +220,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
     borderWidth: 1,
   },
@@ -264,6 +269,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
     borderWidth: 1,
     overflow: "hidden",
@@ -436,3 +442,5 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+export default styles;

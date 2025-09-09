@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import React, { useRef, useEffect } from "react";
-import { styles } from "../theme/driver_theme/layout";
+import styles from "../theme/driver_theme/layout";
 // Import icons from @expo/vector-icons
 import {
-  Ionicons,
+  FontAwesome5,
   MaterialIcons,
   FontAwesome,
   Fontisto,
@@ -28,7 +28,7 @@ interface NavItem {
   href: NavHref;
   label: string;
   iconName: string;
-  iconFamily: "Ionicons" | "MaterialIcons" | "FontAwesome" | "Fontisto";
+  iconFamily: "FontAwesome5" | "MaterialIcons" | "FontAwesome" | "Fontisto";
 }
 
 // --- Layout Component ---
@@ -39,12 +39,6 @@ export default function Layout() {
   const isDark = colorScheme === "dark";
 
   const navItems: NavItem[] = [
-    {
-      href: "/driver",
-      label: "หน้าหลัก",
-      iconName: "home",
-      iconFamily: "Ionicons",
-    },
     {
       href: "/driver/scanner",
       label: "สแกน QR",
@@ -62,6 +56,12 @@ export default function Layout() {
       label: "โปรไฟล์",
       iconName: "user-o",
       iconFamily: "FontAwesome",
+    },
+    {
+      href: "/driver",
+      label: "วิธีการใช้งาน",
+      iconName: "question",
+      iconFamily: "FontAwesome5",
     },
   ];
 
@@ -88,9 +88,9 @@ export default function Layout() {
     const iconSize = 24;
 
     switch (item.iconFamily) {
-      case "Ionicons":
+      case "FontAwesome5":
         return (
-          <Ionicons
+          <FontAwesome5
             name={item.iconName as any}
             size={iconSize}
             color={iconColor}
@@ -121,7 +121,7 @@ export default function Layout() {
           />
         );
       default:
-        return <Ionicons name="help" size={iconSize} color={iconColor} />;
+        return <FontAwesome5 name="help" size={iconSize} color={iconColor} />;
     }
   };
 

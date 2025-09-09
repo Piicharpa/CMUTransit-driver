@@ -7,7 +7,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { useState } from "react";
-import { styles } from "../../theme/admin_theme/all_report";
+import styles from "../../theme/admin_theme/all_report";
 
 interface ReportHistory {
   id: string;
@@ -285,6 +285,8 @@ export default function All_Report() {
 
   const getStatusColor = (statusValue: string) => {
     switch (statusValue) {
+      case "canceled":
+        return "#ef4444";
       case "pending":
         return "#f59e0b";
       case "in_progress":
@@ -309,6 +311,9 @@ export default function All_Report() {
             backgroundColor: isDark ? "#1f2937" : "#ffffff",
             borderColor: isDark ? "#374151" : "#e2e8f0",
             shadowColor: isDark ? "#000000" : "#1e3a8a",
+            boxShadow: isDark
+              ? "0px 2px 4px rgba(0,0,0,0.25)"
+              : "0px 2px 4px rgba(30,58,138,0.25)",
           },
         ]}
       >
@@ -583,6 +588,11 @@ export default function All_Report() {
               <View style={styles.statusButtons}>
                 {[
                   {
+                    label: "❌ ปฏิเสธการร้องเรียน",
+                    value: "canceled",
+                    color: "#f59e0b",
+                  },
+                  {
                     label: "⏳ รอดำเนินการ",
                     value: "pending",
                     color: "#f59e0b",
@@ -592,7 +602,11 @@ export default function All_Report() {
                     value: "in_progress",
                     color: "#3b82f6",
                   },
-                  { label: "✅ เสร็จสิ้น", value: "done", color: "#10b981" },
+                  {
+                    label: "✅ เสร็จสิ้น",
+                    value: "done",
+                    color: "#10b981",
+                  },
                 ].map((option) => (
                   <TouchableOpacity
                     key={option.value}
@@ -686,6 +700,9 @@ export default function All_Report() {
                   backgroundColor: isDark ? "#1f2937" : "#ffffff",
                   borderColor: isDark ? "#374151" : "#e2e8f0",
                   shadowColor: isDark ? "#000000" : "#1e3a8a",
+                  boxShadow: isDark
+                    ? "0px 2px 4px rgba(0,0,0,0.25)"
+                    : "0px 2px 4px rgba(30,58,138,0.25)",
                 },
               ]}
             >
@@ -746,7 +763,7 @@ export default function All_Report() {
                 >
                   {
                     Object.values(status).filter(
-                      (s) => s === "pending" || s === "in_progress"
+                      (s) =>s === "in_progress"
                     ).length
                   }
                 </Text>
@@ -756,7 +773,63 @@ export default function All_Report() {
                     { color: isDark ? "#9ca3af" : "#64748b" },
                   ]}
                 >
-                  ⏳ กำลังดำเนินการ
+                  ⚡ กำลังดำเนินการ
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.summaryDivider,
+                  { backgroundColor: isDark ? "#374151" : "#e2e8f0" },
+                ]}
+              />
+              <View style={styles.summaryItem}>
+                <Text
+                  style={[
+                    styles.summaryNumber,
+                    { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                  ]}
+                >
+                  {
+                    Object.values(status).filter(
+                      (s) => s === "pending"
+                    ).length
+                  }
+                </Text>
+                <Text
+                  style={[
+                    styles.summaryLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  ⏳ รอดำเนินการ
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.summaryDivider,
+                  { backgroundColor: isDark ? "#374151" : "#e2e8f0" },
+                ]}
+              />
+              <View style={styles.summaryItem}>
+                <Text
+                  style={[
+                    styles.summaryNumber,
+                    { color: isDark ? "#60a5fa" : "#1e3a8a" },
+                  ]}
+                >
+                  {
+                    Object.values(status).filter(
+                      (s) => s === "canceled"
+                    ).length
+                  }
+                </Text>
+                <Text
+                  style={[
+                    styles.summaryLabel,
+                    { color: isDark ? "#9ca3af" : "#64748b" },
+                  ]}
+                >
+                  ❌ ปฏิเสธการร้องเรียน
                 </Text>
               </View>
             </View>
@@ -848,6 +921,9 @@ export default function All_Report() {
                     backgroundColor: isDark ? "#1f2937" : "#ffffff",
                     borderColor: isDark ? "#374151" : "#e2e8f0",
                     shadowColor: isDark ? "#000000" : "#1e3a8a",
+                    boxShadow: isDark
+                      ? "0px 2px 4px rgba(0,0,0,0.25)"
+                      : "0px 2px 4px rgba(30,58,138,0.25)",
                   },
                 ]}
               >

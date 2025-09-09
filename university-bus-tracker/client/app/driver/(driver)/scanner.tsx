@@ -6,30 +6,16 @@ import {
   useColorScheme,
   TouchableOpacity,
 } from "react-native";
-import { CameraView, Camera } from "expo-camera";
-import { useState, useEffect } from "react";
-import { styles } from "../../theme/driver_theme/scanner";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { useState } from "react";
+import styles from "../../theme/driver_theme/scanner";
 
 export default function Scanner() {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-
-  useEffect(() => {
-    const getCameraPermissions = async () => {
-      if (Platform.OS === "web") {
-        setHasPermission(false);
-        return;
-      }
-
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
-
-    getCameraPermissions();
-  }, []);
 
   const handleBarCodeScanned = ({
     type,
@@ -129,7 +115,7 @@ export default function Scanner() {
   }
 
   // รออนุญาตกล้อง
-  if (hasPermission === null) {
+  if (!permission) {
     return (
       <View
         style={[
@@ -151,7 +137,7 @@ export default function Scanner() {
                 { color: isDark ? "#60a5fa" : "#1e40af" },
               ]}
             >
-              กำลังขออนุญาตเข้าถึงกล้อง...
+              กำลังโหลดสิทธิ์กล้อง...
             </Text>
             <Text
               style={[
@@ -167,8 +153,8 @@ export default function Scanner() {
     );
   }
 
-  // ไม่อนุญาตกล้อง
-  if (hasPermission === false) {
+  // ยังไม่ได้รับสิทธิ์กล้อง
+  if (!permission.granted) {
     return (
       <View
         style={[
@@ -191,7 +177,7 @@ export default function Scanner() {
               { color: isDark ? "#fca5a5" : "#dc2626" },
             ]}
           >
-            ไม่สามารถเข้าถึงกล้องได้
+            จำเป็นต้องใช้กล้อง
           </Text>
           <Text
             style={[
@@ -199,8 +185,23 @@ export default function Scanner() {
               { color: isDark ? "#9ca3af" : "#64748b" },
             ]}
           >
-            กรุณาอนุญาตการเข้าถึงกล้องในการตั้งค่า
+            กรุณาอนุญาตการเข้าถึงกล้องเพื่อสแกน QR Code
           </Text>
+
+          <TouchableOpacity
+            style={[
+              styles.permissionButton,
+              { backgroundColor: isDark ? "#3b82f6" : "#1e40af" },
+            ]}
+            onPress={requestPermission}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.permissionButtonIcon}>🔐</Text>
+            <Text style={styles.permissionButtonText}>
+              อนุญาตการเข้าถึงกล้อง
+            </Text>
+          </TouchableOpacity>
+
           <View
             style={[
               styles.instructionCard,
@@ -216,7 +217,7 @@ export default function Scanner() {
                 { color: isDark ? "#f3f4f6" : "#1e293b" },
               ]}
             >
-              วิธีเปิดสิทธิ์กล้อง:
+              หากไม่สามารถอนุญาตได้:
             </Text>
             <Text
               style={[
@@ -305,6 +306,18 @@ export default function Scanner() {
           style={styles.camera}
           facing="back"
           onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: [
+              "qr",
+              "pdf417",
+              "aztec",
+              "ean13",
+              "ean8",
+              "upc_e",
+              "code128",
+              "code39",
+            ],
+          }}
         >
           <View style={styles.overlay}>
             <View style={styles.scanArea}>

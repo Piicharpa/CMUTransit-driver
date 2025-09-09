@@ -1,7 +1,7 @@
 // theme/reportHistory.ts
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -11,35 +11,36 @@ export const styles = StyleSheet.create({
   },
   headerContainer: {
     marginBottom: 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   title: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
     lineHeight: 20,
   },
   statsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderRadius: 16,
     padding: 20,
     marginBottom: 24,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 6,
     borderWidth: 1,
-    width: '100%',
+    width: "100%",
   },
   statItem: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: 8,
   },
   statIcon: {
@@ -48,27 +49,27 @@ export const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 11,
-    textAlign: 'center',
-    fontWeight: '600',
+    textAlign: "center",
+    fontWeight: "600",
     lineHeight: 16,
   },
   filterContainer: {
     marginBottom: 20,
-    width: '100%',
+    width: "100%",
   },
   filterTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 16,
   },
   filterButtonsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 10,
   },
   filterButton: {
@@ -80,18 +81,19 @@ export const styles = StyleSheet.create({
   },
   filterButtonText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   reportCard: {
     borderRadius: 20,
     marginBottom: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 8,
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   priorityIndicator: {
     width: 6,
@@ -103,15 +105,15 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   categoryBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(59, 130, 246, 0.1)",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -122,11 +124,11 @@ export const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -137,17 +139,17 @@ export const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   titleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 16,
   },
   reportTitle: {
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     flex: 1,
     marginRight: 12,
     lineHeight: 24,
@@ -159,35 +161,35 @@ export const styles = StyleSheet.create({
   },
   priorityText: {
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   busInfoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 12,
   },
   busNumberText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   routeText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   dateTimeRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   dateTimeText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   expandButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 16,
     marginHorizontal: 20,
@@ -196,11 +198,11 @@ export const styles = StyleSheet.create({
   },
   expandText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   expandArrow: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   expandedContent: {
     marginTop: 0,
@@ -216,28 +218,28 @@ export const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 16,
   },
   detailsGrid: {
     gap: 12,
   },
   detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
   },
   detailLabel: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     flex: 1,
   },
   detailValue: {
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     flex: 1,
-    textAlign: 'right',
+    textAlign: "right",
   },
   reasonSection: {
     paddingHorizontal: 20,
@@ -251,11 +253,11 @@ export const styles = StyleSheet.create({
   reasonText: {
     fontSize: 14,
     lineHeight: 22,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 80,
   },
   emptyIcon: {
@@ -264,7 +266,9 @@ export const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    textAlign: 'center',
-    fontWeight: '600',
+    textAlign: "center",
+    fontWeight: "600",
   },
 });
+
+export default styles;

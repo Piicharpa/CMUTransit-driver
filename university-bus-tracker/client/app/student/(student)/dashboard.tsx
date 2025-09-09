@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useState, useEffect } from "react";
-import { styles } from "../../theme/student_theme/dashboard";
+import styles from "../../theme/student_theme/dashboard";
 
 interface BusData {
   id: string;

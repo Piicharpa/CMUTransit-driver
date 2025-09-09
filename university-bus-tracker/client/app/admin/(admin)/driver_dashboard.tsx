@@ -8,7 +8,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { styles } from "../../theme/admin_theme/driver_dashboard";
+import styles from "../../theme/admin_theme/driver_dashboard";
 
 interface DriverData {
   driverID: string;
@@ -296,6 +296,9 @@ export default function Driver_Managing() {
         {
           backgroundColor: isDark ? "#1f2937" : "#1976D2",
           shadowColor: isDark ? "#000000" : "#1976D2",
+          boxShadow: isDark
+            ? "0px 2px 4px rgba(0,0,0,0.25)"
+            : "0px 2px 4px rgba(25,118,210,0.25)",
         },
       ]}
     >

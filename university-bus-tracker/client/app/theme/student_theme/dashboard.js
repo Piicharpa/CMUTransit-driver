@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions, Platform } from "react-native";
 const { width, height } = Dimensions.get("window");
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
@@ -16,6 +16,20 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 6,
+  },
+  // Connection status indicator styles used by dashboard component
+  connectionStatus: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
   },
   subtitle: {
     fontSize: 13,
@@ -44,6 +58,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 3,
   },
   actionButtonText: {
@@ -58,6 +73,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
+    boxShadow: "0px 8px 16px rgba(59,130,246,0.3)",
     elevation: 4,
     borderWidth: 1,
   },
@@ -138,6 +154,10 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "600",
   },
+  speedText: {
+    fontSize: 10,
+    marginTop: 2,
+  },
   routeText: {
     fontSize: 11,
     textAlign: "center",
@@ -148,6 +168,10 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "500",
     lineHeight: 14,
+  },
+  lastUpdateText: {
+    fontSize: 10,
+    marginTop: 2,
   },
   reportButton: {
     paddingVertical: 6,
@@ -233,6 +257,21 @@ export const styles = StyleSheet.create({
   modalBody: {
     maxHeight: height * 0.55,
   },
+  // MQTT status row inside report modal
+  mqttStatusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    marginBottom: 12,
+  },
+  mqttStatusLabel: {
+    fontSize: 12,
+  },
+  mqttStatusValue: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
   inputContainer: {
     marginBottom: 14,
   },
@@ -262,6 +301,33 @@ export const styles = StyleSheet.create({
         paddingTop: 12,
       },
     }),
+  },
+  // Real-time bus info box in report modal
+  busInfoContainer: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 12,
+    marginTop: 8,
+  },
+  busInfoTitle: {
+    fontSize: 14,
+    fontWeight: "700",
+    marginBottom: 8,
+    textAlign: "left",
+  },
+  busInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 6,
+  },
+  busInfoLabel: {
+    fontSize: 12,
+    opacity: 0.8,
+  },
+  busInfoValue: {
+    fontSize: 12,
+    fontWeight: "600",
   },
   categorySelector: {
     flexDirection: "row",
@@ -518,3 +584,5 @@ export const styles = StyleSheet.create({
     }),
   },
 });
+
+export default styles;

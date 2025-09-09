@@ -1,7 +1,7 @@
 // theme/history.ts
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: { flex: 1 },
   title: {
     fontSize: 24,
@@ -62,3 +62,5 @@ export const styles = StyleSheet.create({
   },
   hoursText: { fontSize: 12, fontWeight: "600" },
 });
+
+export default styles;

@@ -1,6 +1,6 @@
 import { StyleSheet, Platform } from "react-native";
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   navbar: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -28,3 +28,5 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default styles;
