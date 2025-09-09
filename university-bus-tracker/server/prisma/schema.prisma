@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+//Roles
+model Student {
+  id        Int      @id @default(autoincrement())
+  name      String
+  studentId Int      @unique @map("student_id")
+  email     String   @unique
+  role      String   @default("student")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Report  Report[]
+
+  @@map("students")
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  fname      String 
+  lname      String
+  username  String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+model Driver {
+  id        Int      @id @default(autoincrement())
+  fname     String
+  lname     String
+  email     String   @unique
+  role      String   @default("driver")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  History History[]
+  DriverStatus DriverStatus?
+
+  @@map("drivers")
+}
+
+//Report
+model Report {
+  id         Int      @id @default(autoincrement())
+  studentId  Int      @map("student_id")
+  busId      Int      @map("bus_id")
+  report     String
+  categoryId Int      @map("category_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  Student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  Bus      Bus      @relation(fields: [busId], references: [id])
+  Category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("reports")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Report Report[]
+
+  @@map("categories")
+}
+
+
+//Bus
+model History {
+  id        Int      @id @default(autoincrement())   // Primary key only on id
+  busId     Int      @map("bus_id")
+  driverId  Int      @map("driver_id")
+  startTime DateTime @map("start_time")
+  endTime   DateTime? @map("end_time")
+  duration  String?      @map("duration")
+
+  Bus    Bus    @relation(fields: [busId], references: [id], onDelete: Cascade)
+  Driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@map("histories")
+}
+
+model DriverStatus {
+  id        Int      @id @default(autoincrement())
+  driverId  Int      @unique
+  status    String   @default("waiting") // waiting | driving | not_working
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Driver Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  @@map("driver_status")
+}
+
+
+
+model Bus {
+  id          Int      @id @default(autoincrement())
+  routeNumber Int      @map("route_number")
+  busNumber   Int      @map("bus_number")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  History History[]
+  Report Report[]
+
+  @@map("buses")
+}

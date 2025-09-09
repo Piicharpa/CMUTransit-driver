@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    container_name: cmu_postgres
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_DB: cmutransit
+      POSTGRES_USER: piicharpa
+      POSTGRES_PASSWORD: secret123
+      TZ: "Asian/Bangkok"
+      POSTGRES_SHARED_PRELOAD_LIBRARIES: "timescaledb"
+      # - LOCAL_DATABASE_URL="postgresql://piicharpa:secret123@postgres:5432/cmutransit?schema=public"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - cmu-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U piicharpa -d cmutransit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: cmu_backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=piicharpa
+      - DB_NAME=cmutransit
+      - DB_PASSWORD=secret123
+      - DB_PORT=5431
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - "5001:5001"
+    networks:
+      - cmu-network
+
+volumes:
+  pgdata:
+
+networks:
+  cmu-network:
